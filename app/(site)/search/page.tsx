@@ -2,6 +2,7 @@
 import axios, { AxiosError } from "axios";
 import { Search } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CiHeart } from "react-icons/ci";
@@ -23,6 +24,7 @@ const Page = () => {
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState<Products[]>([]);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const fetchAllProducts = async () => {
     setLoading(true);
@@ -52,8 +54,16 @@ const Page = () => {
 
   return (
     <div className="min-h-screen w-full">
-      <div className="flex items-center justify-center flex-col h-[50vh]">
-        <h1 className="my-2 text-3xl text-center w-full mx-4 md:text-4xl">
+      <div
+        className={` flex items-center justify-center flex-col transition-all duration-300 ${
+          query.length > 0 ? "" : "h-[50vh]"
+        } `}
+      >
+        <h1
+          className={`${
+            query.length > 0 ? "hidden" : "block"
+          }  my-2 text-3xl text-center w-full mx-4 md:text-4xl`}
+        >
           What do you want today?
         </h1>
         <div className="flex items-center gap-2 border border-black my-6 w-[90%] md:w-[50%] rounded">
@@ -86,7 +96,7 @@ const Page = () => {
                 searchedProducts.map((product) => (
                   <div
                     key={product._id}
-                    className=" h-64 w-42 sm:w-52 md:size-64 rounded  bg-gray-100 flex items-start justify-center  border-purple-100 border hover:scale-90 transition-all duration-300 overflow-hidden cursor-pointer p-2 flex-col relative"
+                    className=" min-h-64 min-w-42 sm:min-w-52 md:size-64 rounded  bg-gray-100 flex items-start justify-center  border-purple-100 border hover:scale-90 transition-all duration-300 overflow-hidden cursor-pointer p-2 flex-col relative"
                   >
                     <div className="flex items-center justify-between w-full">
                       <div className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md">
@@ -99,11 +109,28 @@ const Page = () => {
                     <Image
                       src={product.image}
                       alt={product.title}
+                      width={200}
+                      height={200}
+                      onClick={() => {
+                        router.push(`/product/${product._id}`);
+                      }}
                       className="object-contain size-36 w-full text-center  p-2 rounded"
                     />
 
-                    <h3 className="font-bold mt-4">{product.title}</h3>
-                    <div className="flex items-center gap-4">
+                    <h3
+                      className="font-bold mt-4"
+                      onClick={() => {
+                        router.push(`/product/${product._id}`);
+                      }}
+                    >
+                      {product.title}
+                    </h3>
+                    <div
+                      className="flex items-center gap-4"
+                      onClick={() => {
+                        router.push(`/product/${product._id}`);
+                      }}
+                    >
                       <p className="text-red-500 line-through">
                         ₹{product.price}
                       </p>
@@ -131,7 +158,7 @@ const Page = () => {
                 products.map((product) => (
                   <div
                     key={product._id}
-                    className=" h-64 w-42 sm:w-52 md:size-64 rounded  bg-gray-100 flex items-start justify-center  border-purple-100 border hover:scale-90 transition-all duration-300 overflow-hidden cursor-pointer p-2 flex-col relative"
+                    className=" min-h-64 min-w-42 sm:min-w-52 md:size-64 rounded  bg-gray-100 flex items-start justify-center  border-purple-100 border hover:scale-90 transition-all duration-300 overflow-hidden cursor-pointer p-2 flex-col relative"
                   >
                     <div className="flex items-center justify-between w-full">
                       <div className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md">
@@ -144,11 +171,28 @@ const Page = () => {
                     <Image
                       src={product.image}
                       alt={product.title}
+                      width={200}
+                      height={200}
+                      onClick={() => {
+                        router.push(`/product/${product._id}`);
+                      }}
                       className="object-contain size-36 w-full text-center  p-2 rounded"
                     />
 
-                    <h3 className="font-bold mt-4">{product.title}</h3>
-                    <div className="flex items-center gap-4">
+                    <h3
+                      className="font-bold mt-4"
+                      onClick={() => {
+                        router.push(`/product/${product._id}`);
+                      }}
+                    >
+                      {product.title}
+                    </h3>
+                    <div
+                      className="flex items-center gap-4"
+                      onClick={() => {
+                        router.push(`/product/${product._id}`);
+                      }}
+                    >
                       <p className="text-red-500 line-through">
                         ₹{product.price}
                       </p>

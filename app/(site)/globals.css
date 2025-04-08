@@ -1,9 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-
 @custom-variant dark (&:is(.dark *));
 /* Apply Geist Sans as the default font */
+
+* {
+  user-select: none;
+}
 @layer base {
   body {
     font-family: var(--font-geist-mono), sans-serif;

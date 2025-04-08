@@ -22,14 +22,16 @@ const HeaderSection = () => {
         Special offer: 15% off on the first purchase
       </div>
       <nav className="flex items-center justify-between p-4 border-b border-gray-300 ">
-        <div className="font-bold">BASICS</div>
+        <div className="font-bold">
+          <Link href={"/"}>BASICS</Link>
+        </div>
         <div
           className={` ${
             menu ? "translate-x-0" : "-translate-x-[100%]"
           } lg:translate-x-0 duration-300 transition-all absolute top-0 left-0 flex-col w-full h-screen bg-white gap-2 p-4  lg:p-0  flex lg:static lg:bg-transparent  lg:flex-row lg:w-auto lg:h-auto lg:items-center lg:justify-center lg:gap-8 z-[999]`}
         >
           <p
-            className=" absolute top-4 right-4  lg:hidden border border-gray-300 rounded text-gray-600"
+            className=" absolute top-4 right-4  lg:hidden   rounded text-gray-600"
             onClick={() => {
               setMenu(false);
             }}
@@ -50,7 +52,7 @@ const HeaderSection = () => {
               setMenu(false);
             }}
           >
-            Categories
+            <Link href={"/category"}>Categories</Link>
           </p>
           <p
             className="cursor-pointer hover:text-purple-700"
@@ -58,7 +60,7 @@ const HeaderSection = () => {
               setMenu(false);
             }}
           >
-            New Arrivals
+            <Link href={"/newarrivals"}>New Arrivals</Link>
           </p>
           <p
             className="cursor-pointer hover:text-purple-700"

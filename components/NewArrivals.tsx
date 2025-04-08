@@ -1,6 +1,7 @@
 "use client";
 import axios, { AxiosError } from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CiHeart } from "react-icons/ci";
@@ -20,6 +21,7 @@ type Products = {
 const NewArrivals = () => {
   const [products, setProducts] = useState<Products[]>([]);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const fetchAllProducts = async () => {
     setLoading(true);
@@ -55,7 +57,7 @@ const NewArrivals = () => {
           products.map((product) => (
             <div
               key={product._id}
-              className=" h-64 w-42 sm:w-52 md:size-64 rounded  bg-gray-100 flex items-start justify-center  border-purple-100 border hover:scale-90 transition-all duration-300 overflow-hidden cursor-pointer p-2 flex-col relative"
+              className=" min-h-64 min-w-42 sm:min-w-52 md:size-64 rounded  bg-gray-100 flex items-start justify-center  border-purple-100 border hover:scale-90 transition-all duration-300 overflow-hidden cursor-pointer p-2 flex-col relative"
             >
               <div className="flex items-center justify-between w-full">
                 <div className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md">
@@ -68,11 +70,28 @@ const NewArrivals = () => {
               <Image
                 src={product.image}
                 alt={product.title}
+                width={200}
+                height={200}
+                onClick={() => {
+                  router.push(`/product/${product._id}`);
+                }}
                 className="object-contain size-36 w-full text-center  p-2 rounded"
               />
 
-              <h3 className="font-bold mt-4">{product.title}</h3>
-              <div className="flex items-center gap-4">
+              <h3
+                className="font-bold mt-4"
+                onClick={() => {
+                  router.push(`/product/${product._id}`);
+                }}
+              >
+                {product.title}
+              </h3>
+              <div
+                className="flex items-center gap-4"
+                onClick={() => {
+                  router.push(`/product/${product._id}`);
+                }}
+              >
                 <p className="text-red-500 line-through">₹{product.price}</p>
                 <p className="text-purple-700">₹{product.discountedPrice}</p>
               </div>
