@@ -6,7 +6,7 @@ export async function DELETE(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  databaseConnection();
+  await databaseConnection();
   try {
     const { id } = await context.params;
     console.log(id);

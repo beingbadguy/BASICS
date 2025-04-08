@@ -3,7 +3,7 @@ import { databaseConnection } from "@/config/databseConnection";
 import User from "@/models/user.model";
 import crypto from "crypto";
 import { sendEmailVerificationMail } from "@/services/sendMail";
-databaseConnection();
+await databaseConnection();
 
 export async function POST(request: NextRequest) {
   try {

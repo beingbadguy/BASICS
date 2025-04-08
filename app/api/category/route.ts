@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import cloudinary from "cloudinary";
 
 export async function POST(request: NextRequest) {
-  databaseConnection();
+  await databaseConnection();
   cloudinaryConnection();
   try {
     const formData = await request.formData();
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  databaseConnection();
+  await databaseConnection();
   try {
     const categories = await Category.find();
     return NextResponse.json(

@@ -5,7 +5,7 @@ export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  databaseConnection();
+  await databaseConnection();
   try {
     const { id } = await context.params;
     if (!id) {
@@ -38,7 +38,7 @@ export async function DELETE(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  databaseConnection();
+  await databaseConnection();
   try {
     const { id } = await context.params;
     if (!id) {

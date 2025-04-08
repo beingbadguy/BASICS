@@ -1,32 +1,37 @@
 import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI!;
+if (!MONGODB_URI) throw new Error("Please define MONGODB_URI in environment.");
 
-if (!MONGODB_URI) {
-  throw new Error("Please define MONGODB_URI in your environment variables.");
+let cached = (global as any).mongoose;
+
+if (!cached) {
+  cached = (global as any).mongoose = { conn: null, promise: null };
 }
 
-let isConnected = false; // Track if MongoDB is connected
-
 export const databaseConnection = async () => {
-  if (isConnected) {
-    console.log("Using existing MongoDB connection ✅.");
-    return;
+  if (cached.conn) {
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
+    cached.promise = mongoose
+      .connect(MONGODB_URI, {
+        dbName: "Basics", // optional
+        bufferCommands: false,
+      })
+      .then((mongoose) => {
+        console.log("🔌 MongoDB Connected");
+        return mongoose;
+      });
   }
 
   try {
-    const db = await mongoose.connect(MONGODB_URI);
-
-    isConnected = !!db.connections[0].readyState;
-    console.log("Connected to MongoDB ✅");
-
-    // Optional: Handle disconnection events
-    mongoose.connection.on("disconnected", () => {
-      console.log("MongoDB disconnected ❌");
-      isConnected = false;
-    });
-  } catch (error: any) {
-    console.error("MongoDB connection error ❌:", error.message);
-    process.exit(1);
+    cached.conn = await cached.promise;
+    return cached.conn;
+  } catch (err) {
+    console.error("MongoDB connection failed ❌", err);
+    cached.promise = null; // Reset the promise to retry next time
+    throw err;
   }
 };

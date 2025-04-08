@@ -26,7 +26,7 @@ export async function POST(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  databaseConnection();
+  await databaseConnection();
   try {
     const decoded = await fetchTokenDetails(request);
     const { id } = await context.params;
@@ -80,7 +80,7 @@ export async function DELETE(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  databaseConnection();
+  await databaseConnection();
   try {
     const decoded = await fetchTokenDetails(request);
     const { id } = await context.params;

@@ -33,7 +33,7 @@ const Page = () => {
     setLoading(true);
     try {
       const response = await axios.get("/api/product");
-      console.log(response.data);
+      // console.log(response.data);
 
       setProducts(response.data.products);
     } catch (error: unknown) {

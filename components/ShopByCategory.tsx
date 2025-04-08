@@ -24,7 +24,7 @@ const ShopByCategory = () => {
     setCatLoading(true);
     try {
       const response = await axios.get("/api/category");
-      console.log(response.data);
+      // console.log(response.data);
       setCategories(response.data.categories);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -60,6 +60,7 @@ const ShopByCategory = () => {
                 alt={category.name}
                 width={100}
                 height={100}
+                style={{ height: "auto", width: "auto" }}
                 className="object-cover "
               />
             </div>

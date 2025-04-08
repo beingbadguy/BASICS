@@ -2,10 +2,8 @@ import { databaseConnection } from "@/config/databseConnection";
 import { fetchTokenDetails } from "@/lib/fetchTokenDetails";
 import User from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
-import "@/models/wishlist.model";
-import "@/models/product.model";
 
-databaseConnection();
+await databaseConnection();
 
 export async function GET(request: NextRequest) {
   try {

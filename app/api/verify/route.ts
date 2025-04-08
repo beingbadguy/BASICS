@@ -3,7 +3,7 @@ import { databaseConnection } from "@/config/databseConnection";
 import User from "@/models/user.model";
 import { userVerifiedMail } from "@/services/sendMail";
 import { generateTokenAndSetCookie } from "@/lib/generateTokenAndSetCookie";
-databaseConnection();
+await databaseConnection();
 
 export async function POST(request: NextRequest) {
   try {

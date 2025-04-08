@@ -4,7 +4,7 @@ import { databaseConnection } from "@/config/databseConnection";
 import { NextRequest, NextResponse } from "next/server";
 import { generateTokenAndSetCookie } from "@/lib/generateTokenAndSetCookie";
 import crypto from "crypto";
-databaseConnection();
+await databaseConnection();
 
 export async function POST(request: NextRequest) {
   try {
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
       data: user,
     });
 
-    user.passsword = undefined;
+    user.password = undefined;
     generateTokenAndSetCookie(user._id, user.isVerified, user.role, response);
     return response;
   } catch (error) {

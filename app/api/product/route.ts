@@ -5,7 +5,7 @@ import { cloudinaryConnection } from "@/config/cloudinaryConnection";
 import cloudinary from "cloudinary";
 
 export async function GET() {
-  databaseConnection();
+  await databaseConnection();
   cloudinaryConnection();
   try {
     const products = await Product.find();
@@ -30,7 +30,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  databaseConnection();
+  await databaseConnection();
   cloudinaryConnection();
   try {
     const formData = await request.formData();

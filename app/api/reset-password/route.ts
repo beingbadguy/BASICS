@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { databaseConnection } from "@/config/databseConnection";
 import User from "@/models/user.model";
 import bcrypt from "bcrypt";
-databaseConnection();
+await databaseConnection();
 
 export async function POST(request: NextRequest) {
   try {
