@@ -43,7 +43,7 @@ const ProductsPage = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [layout, setLayout] = useState<"grid" | "list">("grid");
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [maxValue, setMaxValue] = useState(100000);
   const [sortBy, setSortBy] = useState<string>("default");
 

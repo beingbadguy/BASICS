@@ -3,6 +3,7 @@ import { fetchTokenDetails } from "@/lib/fetchTokenDetails";
 import User from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import "@/models/wishlist.model";
+import "@/models/product.model";
 
 databaseConnection();
 
