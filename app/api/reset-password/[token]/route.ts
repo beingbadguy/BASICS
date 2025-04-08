@@ -3,12 +3,12 @@ import { databaseConnection } from "@/config/databseConnection";
 import User from "@/models/user.model";
 import bcrypt from "bcrypt";
 import { passwordResetSuccessMail } from "@/services/sendMail";
-await databaseConnection();
 
 export async function POST(
   request: NextRequest,
   context: { params: Promise<{ token: string }> }
 ) {
+  await databaseConnection();
   try {
     const { token } = await context.params;
 

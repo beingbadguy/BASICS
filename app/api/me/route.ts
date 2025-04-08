@@ -2,10 +2,12 @@ import { databaseConnection } from "@/config/databseConnection";
 import { fetchTokenDetails } from "@/lib/fetchTokenDetails";
 import User from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
-
-await databaseConnection();
+import "@/models/wishlist.model";
+import "@/models/product.model";
+import "@/models/category.model";
 
 export async function GET(request: NextRequest) {
+  await databaseConnection();
   try {
     const decodedToken = await fetchTokenDetails(request);
     if (!decodedToken) {

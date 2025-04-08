@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { databaseConnection } from "@/config/databseConnection";
 import User from "@/models/user.model";
 import bcrypt from "bcrypt";
-await databaseConnection();
 
 export async function POST(request: NextRequest) {
+  await databaseConnection();
   try {
     // Extract token from the URL
     const token = request.nextUrl.pathname.split("/").pop(); // Gets the last part of the URL

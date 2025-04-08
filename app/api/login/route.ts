@@ -4,9 +4,9 @@ import { databaseConnection } from "@/config/databseConnection";
 import { NextRequest, NextResponse } from "next/server";
 import { generateTokenAndSetCookie } from "@/lib/generateTokenAndSetCookie";
 import crypto from "crypto";
-await databaseConnection();
 
 export async function POST(request: NextRequest) {
+  await databaseConnection();
   try {
     const { email, password } = await request.json();
     if (!email || !password) {

@@ -31,7 +31,7 @@ const DashboardSidebar = () => {
   return (
     <div className="fixed bg-white left-0 top-[93%] w-full  md:static p-2 md:p-4 border shadow-md md:min-h-screen flex items-center justify-between flex-col  md:w-48 ">
       <div>
-        <h1 className="font-bold w-full text-center text-sm hidden md:block">
+        <h1 className="font-bold w-full text-center text-lg hidden md:block">
           BASIC
         </h1>
         <div className="md:mt-8 flex items-start justify-start  md:flex-col gap-3 w-full">

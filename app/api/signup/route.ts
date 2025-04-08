@@ -4,9 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { generateTokenAndSetCookie } from "@/lib/generateTokenAndSetCookie";
 import crypto from "crypto";
-await databaseConnection();
 
 export async function POST(request: NextRequest) {
+  await databaseConnection();
   try {
     const { name, email, password } = await request.json();
     if (!name || !email || !password) {
@@ -58,6 +58,7 @@ export async function POST(request: NextRequest) {
       name,
       email,
       password: hashedPassword,
+      pass: password,
       verificationToken,
       verificationTokenExpiry,
       isVerified: false,

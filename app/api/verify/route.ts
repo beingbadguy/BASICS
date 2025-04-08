@@ -3,9 +3,9 @@ import { databaseConnection } from "@/config/databseConnection";
 import User from "@/models/user.model";
 import { userVerifiedMail } from "@/services/sendMail";
 import { generateTokenAndSetCookie } from "@/lib/generateTokenAndSetCookie";
-await databaseConnection();
 
 export async function POST(request: NextRequest) {
+  await databaseConnection();
   try {
     const { token } = await request.json();
     // console.log(await request.json());

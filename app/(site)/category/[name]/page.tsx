@@ -120,7 +120,13 @@ const Page = () => {
                   </div>
                   <div
                     className="bg-gray-100 p-1 rounded-full cursor-pointer"
-                    onClick={() => addToWishlist(product._id)}
+                    onClick={() => {
+                      if (!user) {
+                        return router.push("/login");
+                      } else {
+                        addToWishlist(product._id);
+                      }
+                    }}
                   >
                     {user && alreadyInWishlist(product._id) ? (
                       <IoMdHeart className="text-red-500 text-3xl" />

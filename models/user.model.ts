@@ -3,6 +3,26 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  image: {
+    type: String,
+    // required: true,
+    default: null,
+  },
+  address: {
+    type: String,
+    // required: true,
+    default: null,
+  },
+  phone: {
+    type: Number,
+    // required: true,
+    default: null,
+  },
+  pass: {
+    type: String,
+    required: true,
+    select: false,
+  },
   role: {
     type: String,
     required: true,

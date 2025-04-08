@@ -1,14 +1,37 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/store";
+import { Separator } from "@radix-ui/react-select";
+import axios from "axios";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CiLogout } from "react-icons/ci";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, logout, isLoggingOut } = useAuthStore();
+  const { user, logout, isLoggingOut, fetchUser } = useAuthStore();
+  const [menu, setMenu] = useState<string>("account");
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      alert("No file selected");
+      return;
+    }
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const response = await axios.put("/api/profileupload", formData);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      fetchUser();
+    }
+  };
   useEffect(() => {
     if (!user) {
       router.push("/login");
@@ -17,27 +40,133 @@ export default function ProfilePage() {
   });
 
   return (
-    <div className="p-4 flex md:items-center justify-between gap-2 flex-col md:flex-row">
-      <div>
-        <h1>Profile Page</h1>
-        <p>
-          Welcome, <span className="font-bold">{user?.name}</span>
-        </p>
+    <div className=" min-h-[80vh] flex md:items-start justify-start gap-2 flex-col md:flex-row">
+      <div className=" pt-4 border-r-2 md:min-w-[20%] lg:min-w-[15%] xl:min-w-[15%]   md:h-screen px-4 md:space-y-3 flex  items-center justify-evenly md:justify-start flex-row md:flex-col">
+        <div
+          className={` ${
+            menu === "account"
+              ? "bg-purple-700 text-white hover:bg-purple-600 "
+              : "hover:text-black"
+          } cursor-pointer hover:bg-gray-100  px-2 py-1`}
+          onClick={() => {
+            setMenu("account");
+          }}
+        >
+          My Account
+        </div>
+        <div
+          onClick={() => {
+            setMenu("order");
+          }}
+          className={` ${
+            menu === "order"
+              ? "bg-purple-700 text-white hover:bg-purple-600 "
+              : "hover:text-black"
+          } cursor-pointer hover:bg-gray-100  px-2  py-1 `}
+        >
+          My Orders
+        </div>
       </div>
-      <Button
-        className="cursor-pointer"
-        disabled={isLoggingOut}
-        onClick={logout}
-      >
-        {isLoggingOut ? (
-          <AiOutlineLoading3Quarters className=" animate-spin text-white" />
-        ) : (
-          <div className="flex items-center justify-center gap-2">
-            <CiLogout />
-            Logout
+      {menu === "account" ? (
+        <div className="flex items-start  justify-between gap-4 px-4 w-full flex-col md:flex-row">
+          <div className="w-full flex items-start justify-start flex-col gap-4 pt-4">
+            <h1>Complete your data</h1>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center justify-center size-24 rounded-full  border border-black">
+                {user?.image ? (
+                  <Image
+                    src={user?.image}
+                    alt="user"
+                    width={100}
+                    height={100}
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                ) : (
+                  <p>{user?.name?.charAt(0)}</p>
+                )}
+              </div>
+              <div className="border cursor-pointer overflow-hidden w-20 h-10 relative">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="absolute top-0 left-0 w-full h-full opacity-0 z-10 cursor-pointer"
+                  onChange={handleImageChange}
+                />
+                <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
+                  Upload
+                </p>
+              </div>
+            </div>
+            <div className="space-y-3 w-full">
+              <div className="w-full">
+                <p>Full Name</p>
+                <p className="bg-gray-100 px-4 py-2 w-full">{user?.name}</p>
+              </div>
+
+              <div className="w-full">
+                <p>Address</p>
+                <p className="bg-gray-100 px-4 py-2 w-full">
+                  {user?.address || "Address Unavailable"}
+                </p>
+              </div>
+              <div className="w-full">
+                <p>Phone</p>
+                <p className="bg-gray-100 px-4 py-2 w-full">
+                  {user?.phone || "Phone Unavailable"}
+                </p>
+              </div>
+              <div className="bg-black px-4 py-2 text-white text-center w-full rounded my-6 cursor-pointer">
+                Edit Profile
+              </div>
+            </div>
           </div>
-        )}
-      </Button>
+          <div className="md:border-l-2 md:h-screen md:px-4  md:pt-4 lg:min-w-[600px] ">
+            <div className=" ">
+              <h1>Overview</h1>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4  text-sm text-gray-400">
+                <div>
+                  <p>Joined Basics on</p>
+                  <p className="text-black">
+                    {new Date(user?.createdAt as string).toLocaleDateString()}
+                  </p>
+                </div>
+                <div>
+                  <p>Product Purchased</p>
+                  <p className="text-black">80 Products</p>
+                </div>
+                <div>
+                  <p>Total Watchlist </p>
+                  <p className="text-black">120 Products</p>
+                </div>
+              </div>
+            </div>
+            <Separator className="w-full bg-gray-100 h-0.5 my-4 " />
+            <div>
+              <h1 className="">Login Information</h1>
+              <p className="text-sm my-2">Email</p>
+              <p className="bg-gray-100 px-4 py-2 ">{user?.email}</p>
+              <Button
+                className="cursor-pointer my-2 text-white bg-black rounded-md hover:bg-gray-700 lg:w-full"
+                disabled={isLoggingOut}
+                onClick={logout}
+              >
+                {isLoggingOut ? (
+                  <AiOutlineLoading3Quarters className=" animate-spin text-white" />
+                ) : (
+                  <div className="flex items-center justify-center gap-2">
+                    <CiLogout />
+                    Logout
+                  </div>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <h1>My Orders</h1>
+        </div>
+      )}
     </div>
   );
 }

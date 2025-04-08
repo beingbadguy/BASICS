@@ -8,6 +8,10 @@ interface AuthState {
     email: string;
     isVerified: boolean;
     role: string;
+    createdAt: string;
+    address: string;
+    phone: number;
+    image: string;
     wishlist?: { products: WishlistItem[] }[];
   } | null;
   isLoggingOut: boolean;

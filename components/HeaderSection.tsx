@@ -16,17 +16,12 @@ import React, { useEffect, useState } from "react";
 
 const HeaderSection = () => {
   const { user, fetchUser } = useAuthStore();
-  // console.log(user);
 
   const [menu, setMenu] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
     fetchUser(); // Fetch user when the component mounts
-
-    if (user && !user.isVerified) {
-      router.push("/verify");
-    }
   }, [fetchUser]);
 
   return (
@@ -44,7 +39,7 @@ const HeaderSection = () => {
           } lg:translate-x-0 duration-300 transition-all absolute top-0 left-0 flex-col w-full h-screen bg-white gap-2 p-4  lg:p-0  flex lg:static lg:bg-transparent  lg:flex-row lg:w-auto lg:h-auto lg:items-center lg:justify-center lg:gap-8 z-[999]`}
         >
           <p
-            className=" absolute top-4 right-4  lg:hidden   rounded text-gray-600"
+            className=" absolute top-4 right-4  lg:hidden cursor-pointer   rounded text-gray-600"
             onClick={() => {
               setMenu(false);
             }}
@@ -158,12 +153,12 @@ const HeaderSection = () => {
             ""
           )}
           <div
-            className="block lg:hidden"
+            className="block lg:hidden cursor-pointer"
             onClick={() => {
               setMenu(true);
             }}
           >
-            <AlignJustify />
+            <AlignJustify className="cursor-pointer" />
           </div>
         </div>
       </nav>

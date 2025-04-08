@@ -6,7 +6,6 @@ import { FaThLarge, FaList } from "react-icons/fa";
 import { IoCloseOutline, IoFilterSharp } from "react-icons/io5";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Separator } from "@radix-ui/react-select";
 import { Progress } from "@radix-ui/react-progress";
 import { useAuthStore } from "@/store/store";
 import { IoMdHeart } from "react-icons/io";
@@ -314,11 +313,17 @@ const ProductsPage = () => {
               key={product._id}
               className={`p-4 min-h-64 min-w-42 sm:min-w-52 md:min-size-64 border rounded-md shadow-sm hover:shadow-md cursor-pointer transition-all ${
                 layout === "list"
-                  ? "flex gap-4 items-center justify-evenly w-full "
+                  ? "flex gap-4 items-center relative justify-evenly w-full "
                   : ""
               }`}
             >
-              <div className="flex items-center justify-between w-full">
+              <div
+                className={` ${
+                  layout === "list"
+                    ? " absolute top-4 right-4"
+                    : "flex items-center justify-between w-full"
+                } ""`}
+              >
                 <div
                   className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md"
                   onClick={() => {
@@ -328,8 +333,14 @@ const ProductsPage = () => {
                   {Math.floor(product.discountPercentage)}% Off
                 </div>
                 <div
-                  className="bg-gray-100 p-1 rounded-full cursor-pointer"
-                  onClick={() => addToWishlist(product._id)}
+                  className="bg-gray-100 p-1 rounded-full cursor-pointer flex items-center justify-center"
+                  onClick={() => {
+                    if (!user) {
+                      return router.push("/login");
+                    } else {
+                      addToWishlist(product._id);
+                    }
+                  }}
                 >
                   {user && alreadyInWishlist(product._id) ? (
                     <IoMdHeart className="text-red-500 text-3xl" />
@@ -355,14 +366,14 @@ const ProductsPage = () => {
                 onClick={() => router.push(`/product/${product._id}`)}
               >
                 <h2 className="text-lg font-semibold mt-2">{product.title}</h2>
-                {layout === "list" && (
+                {/* {layout === "list" && (
                   <div>
                     <p className="text-sm text-gray-500 mt-2">
                       {product.description}
                     </p>
                     <Separator className="bg-gray-300 w-full my-2 h-[1px]" />
                   </div>
-                )}
+                )} */}
                 <div className="mt-2">
                   <p className="text-purple-700 font-bold text-lg">
                     ₹{product.discountedPrice}

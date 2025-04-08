@@ -198,7 +198,13 @@ const ProductPage = () => {
             </button>
             <button
               className="bg-gray-100 hover:bg-gray-200 cursor-pointer text-black border px-4 py-3 md:py-2 rounded flex items-center gap-2"
-              onClick={() => addToWishlist(product._id)}
+              onClick={() => {
+                if (!user) {
+                  return router.push("/login");
+                } else {
+                  addToWishlist(product._id);
+                }
+              }}
             >
               <div className="bg-gray-100  rounded-full cursor-pointer">
                 {user && alreadyInWishlist(product._id) ? (
@@ -238,7 +244,13 @@ const ProductPage = () => {
                   </div>
                   <div
                     className="bg-gray-100 p-1 rounded-full cursor-pointer"
-                    onClick={() => addToWishlist(product._id)}
+                    onClick={() => {
+                      if (!user) {
+                        return router.push("/login");
+                      } else {
+                        addToWishlist(product._id);
+                      }
+                    }}
                   >
                     {user && alreadyInWishlist(product._id) ? (
                       <IoMdHeart className="text-red-500 text-3xl" />
