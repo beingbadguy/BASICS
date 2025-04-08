@@ -1,4 +1,6 @@
 import Banner from "@/components/Banner";
+import BannerWall from "@/components/BannerWall";
+import Faqs from "@/components/Faqs";
 import NewArrivals from "@/components/NewArrivals";
 import Newsletter from "@/components/Newsletter";
 import OverlapCards from "@/components/OverlapCards";
@@ -24,7 +26,9 @@ export default function Home() {
       <ShopByCategory />
       <NewArrivals />
       <Banner />
+      <BannerWall />
       <Newsletter />
+      <Faqs />
     </div>
   );
 }

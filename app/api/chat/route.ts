@@ -64,12 +64,12 @@ export async function POST(req: Request) {
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(
       {
         success: false,
-        message: error.message || "Failed to fetch response",
+        message: "Failed to fetch response",
       },
       { status: 500 }
     );

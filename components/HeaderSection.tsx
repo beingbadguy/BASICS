@@ -3,16 +3,19 @@
 import {
   AlignJustify,
   Heart,
+  LayoutDashboard,
   Search,
   ShoppingBag,
   UserRound,
   X,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const HeaderSection = () => {
   const [menu, setMenu] = useState<boolean>(false);
+  const router = useRouter();
   return (
     <div className="">
       <div className="text-[10px] bg-black text-white w-full text-center sm:text-[12px] py-2 ">
@@ -83,10 +86,20 @@ const HeaderSection = () => {
           </p>
         </div>
         <div className="flex items-center justify-center gap-5">
-          <Search />
+          <Search
+            className="cursor-pointer"
+            onClick={() => {
+              router.push("/search");
+            }}
+          />
           <Heart />
           <ShoppingBag />
           <UserRound />
+          <LayoutDashboard
+            onClick={() => {
+              router.push("/dashboard");
+            }}
+          />
           <div
             className="block lg:hidden"
             onClick={() => {
