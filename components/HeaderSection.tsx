@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuthStore } from "@/store/store";
 import {
   AlignJustify,
   Heart,
@@ -11,11 +12,22 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const HeaderSection = () => {
+  const { user, fetchUser } = useAuthStore();
+
   const [menu, setMenu] = useState<boolean>(false);
   const router = useRouter();
+
+  useEffect(() => {
+    fetchUser(); // Fetch user when the component mounts
+
+    if (user && !user.isVerified) {
+      router.push("/verify");
+    }
+  }, [fetchUser]);
+
   return (
     <div className="">
       <div className="text-[10px] bg-black text-white w-full text-center sm:text-[12px] py-2 ">
@@ -94,14 +106,56 @@ const HeaderSection = () => {
               router.push("/search");
             }}
           />
-          <Heart />
-          <ShoppingBag />
-          <UserRound />
-          <LayoutDashboard
+          <Heart
+            className="cursor-pointer"
             onClick={() => {
-              router.push("/dashboard");
+              if (user) {
+                router.push("/wishlist");
+              } else {
+                router.push("/login");
+              }
             }}
           />
+          <ShoppingBag
+            className="cursor-pointer"
+            onClick={() => {
+              if (user) {
+                router.push("/cart");
+              } else {
+                router.push("/login");
+              }
+            }}
+          />
+          <UserRound
+            className="cursor-pointer"
+            onClick={() => {
+              if (user) {
+                router.push("/profile");
+              } else {
+                router.push("/login");
+              }
+            }}
+          />
+          {user && user.role === "admin" ? (
+            <LayoutDashboard
+              className={`${
+                user?.role === "admin" ? "" : "hidden"
+              } cursor-pointer ${user ? "" : "hidden"}`}
+              onClick={() => {
+                if (!user) {
+                  router.push("/login");
+                  console.log("not logged in");
+                } else {
+                  if (user.role === "admin") {
+                    router.push("/dashboard");
+                    console.log("admin");
+                  }
+                }
+              }}
+            />
+          ) : (
+            ""
+          )}
           <div
             className="block lg:hidden"
             onClick={() => {

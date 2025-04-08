@@ -8,7 +8,7 @@ export async function POST() {
     });
 
     // Properly setting an expired cookie to remove it
-    response.cookies.set("nextToken", "", {
+    response.cookies.set("basics", "", {
       httpOnly: true,
       expires: new Date(0), // Expire the cookie
       path: "/", // Ensure it covers the whole app

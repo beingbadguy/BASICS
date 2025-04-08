@@ -3,11 +3,31 @@ import axios from "axios";
 
 // Define the shape of your authentication state
 interface AuthState {
-  user: { name: string; email: string; isVerified: boolean } | null;
+  user: {
+    name: string;
+    email: string;
+    isVerified: boolean;
+    role: string;
+    wishlist: any;
+  } | null;
   isLoggingOut: boolean;
   fetchUser: () => Promise<void>;
   logout: () => void;
   setUser: (user: any) => void;
+  addToWishlist: (id: string) => void;
+}
+interface Products {
+  _id: string;
+  title: string;
+  description: string;
+  price: number;
+  discountedPrice: number;
+  countInStock: number;
+  rating: number;
+  numReviews: number;
+  image: string;
+  discountPercentage: number;
+  isActive: boolean;
 }
 
 // Create Zustand store
@@ -35,6 +55,25 @@ export const useAuthStore = create<AuthState>((set) => ({
       console.error("Failed to logout", error);
     } finally {
       set({ isLoggingOut: false });
+    }
+  },
+
+  addToWishlist: async (id: string) => {
+    const user = useAuthStore.getState().user;
+    if (!id) {
+      console.log("You must provide a product id.");
+      return;
+    }
+    if (!user) {
+      console.log("You must be logged in to add to wishlist.");
+      return;
+    }
+    try {
+      const response = await axios.post(`/api/wishlist/${id}`);
+      console.log(response.data);
+      useAuthStore.getState().fetchUser();
+    } catch (error) {
+      console.error("Failed to add to wishlist:", error);
     }
   },
 }));

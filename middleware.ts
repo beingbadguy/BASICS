@@ -15,7 +15,7 @@ async function verifyJWT(token: string) {
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const token = request.cookies.get("nextToken")?.value || "";
+  const token = request.cookies.get("basics")?.value || "";
 
   // Public routes (user shouldn't be redirected if logged in)
   const restrictedForLoggedIn = [
@@ -27,7 +27,26 @@ export async function middleware(request: NextRequest) {
   ];
 
   // Protected routes (only accessible if logged in)
-  const protectedRoutes = ["/profile"];
+  const protectedRoutes = [
+    "/profile",
+    "/cart",
+    "/checkout",
+    "/orders",
+    "/wishlist",
+    "/successfull",
+  ];
+  const onlyForAdmins = [
+    "/dashboard",
+    "/orders",
+    "/customers",
+    "/settings",
+    "/products",
+    "/categories",
+    "/addproduct",
+    "/addcategory",
+    "/editproduct",
+    "/editcategory",
+  ];
 
   if (!token) {
     // If no token, restrict access to protected routes
@@ -43,17 +62,17 @@ export async function middleware(request: NextRequest) {
   if (!decoded) {
     // If JWT is invalid or expired, clear cookie and redirect to login
     const response = NextResponse.redirect(new URL("/login", request.url));
-    response.cookies.delete("nextToken");
+    response.cookies.delete("basics");
     return response;
-  }
-
-  // Redirect unverified users to verification page
-  if (!decoded.isVerified && path !== "/verify") {
-    return NextResponse.redirect(new URL("/verify", request.url));
   }
 
   // Redirect already logged-in users away from auth pages
   if (restrictedForLoggedIn.includes(path)) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+  const isAdmin = decoded.role === "admin";
+
+  if (onlyForAdmins.some((route) => path.startsWith(route)) && !isAdmin) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
@@ -67,10 +86,27 @@ export const config = {
     "/about",
     "/login",
     "/profile",
+    "/cart",
+    "/checkout",
+    "/orders",
+    "/wishlist",
+    "/successfull",
     "/signup",
     "/confirm",
     "/forget",
     "/reset",
     "/verify",
+    "/dashboard",
+    "/orders",
+    "/customers",
+    "/settings",
+    "/products",
+    "/categories",
+    "/addproduct",
+    "/addcategory",
+    "/editproduct/:id",
+    "/editcategory/:id",
+    "/product/:id",
+    "/category/:id",
   ],
 };

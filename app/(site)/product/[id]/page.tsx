@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { FaStar, FaHeart } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 import { MdShoppingCart } from "react-icons/md";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Separator } from "@radix-ui/react-select";

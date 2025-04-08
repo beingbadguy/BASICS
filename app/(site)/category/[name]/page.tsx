@@ -19,7 +19,7 @@ type Product = {
   category: string;
 };
 
-const page = () => {
+const Page = () => {
   const { name } = useParams();
   const [loading, setLoading] = React.useState(false);
   const [fullProducts, setFullProducts] = React.useState<Product[]>([]);
@@ -131,4 +131,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

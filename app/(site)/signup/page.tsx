@@ -33,7 +33,7 @@ export default function SignupPage() {
       const response = await axios.post("/api/signup", data);
       // console.log(response.data);
       setUser(response.data.data);
-      router.push("/verify");
+      router.push("/");
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.log(error.response?.data);

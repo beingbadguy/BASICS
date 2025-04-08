@@ -75,7 +75,12 @@ export async function POST(request: NextRequest) {
       }
     );
     await sendEmailVerificationMail(newUser.email, verificationToken);
-    generateTokenAndSetCookie(newUser._id, newUser.isVerified, response);
+    generateTokenAndSetCookie(
+      newUser._id,
+      newUser.isVerified,
+      newUser.role,
+      response
+    );
     return response;
   } catch (error) {
     console.log(error);

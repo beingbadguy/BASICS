@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
 
-    generateTokenAndSetCookie(user._id, user.isVerified, response);
+    generateTokenAndSetCookie(user._id, user.isVerified, user.role, response);
 
     return response;
   } catch (error) {

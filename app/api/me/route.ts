@@ -17,7 +17,15 @@ export async function GET(request: NextRequest) {
         { status: 401 }
       );
     }
-    const user = await User.findById(decodedToken.userId);
+    // const user = await User.findById(decodedToken.userId)
+    const user = await User.findById(decodedToken.userId).populate({
+      path: "wishlist",
+      populate: {
+        path: "products.productId",
+        model: "Product",
+      },
+    });
+
     if (!user) {
       return NextResponse.json(
         {

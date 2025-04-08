@@ -119,7 +119,7 @@ const ProductsPage = () => {
   }, []);
 
   useEffect(() => {
-    let sorted = [...products];
+    const sorted = [...products];
 
     if (sortBy === "priceLowToHigh") {
       sorted.sort((a, b) => a.discountedPrice - b.discountedPrice);

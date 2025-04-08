@@ -4,7 +4,7 @@ import ShopByCategory from "@/components/ShopByCategory";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   return (
     <div className="m-4 min-h-[70vh]">
@@ -25,4 +25,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

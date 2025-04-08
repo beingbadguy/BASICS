@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
     });
 
     user.passsword = undefined;
-    generateTokenAndSetCookie(user._id, user.isVerified, response);
+    generateTokenAndSetCookie(user._id, user.isVerified, user.role, response);
     return response;
   } catch (error) {
     console.log(error);

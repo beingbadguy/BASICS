@@ -1,4 +1,5 @@
 "use client";
+import { useAuthStore } from "@/store/store";
 import axios, { AxiosError } from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -19,6 +20,7 @@ type Products = {
 };
 
 const NewArrivals = () => {
+  const { addToWishlist } = useAuthStore();
   const [products, setProducts] = useState<Products[]>([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -63,7 +65,12 @@ const NewArrivals = () => {
                 <div className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md">
                   {Math.floor(product.discountPercentage)}% Off
                 </div>
-                <div className="bg-gray-100 p-1 rounded-full ">
+                <div
+                  className="bg-gray-100 p-1 rounded-full cursor-pointer"
+                  onClick={() => {
+                    addToWishlist(product._id);
+                  }}
+                >
                   <CiHeart className="text-black text-3xl" />
                 </div>
               </div>
