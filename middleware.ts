@@ -28,11 +28,11 @@ export async function middleware(request: NextRequest) {
 
   // Protected routes (only accessible if logged in)
   const protectedRoutes = [
-    "/profile",
-    "/cart",
+    // "/profile",
+    // "/cart",
     "/checkout",
     "/orders",
-    "/wishlist",
+    // "/wishlist",
     "/successfull",
   ];
   const onlyForAdmins = [

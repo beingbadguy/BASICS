@@ -8,7 +8,8 @@ import { MdShoppingCart } from "react-icons/md";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Separator } from "@radix-ui/react-select";
 import { CiHeart } from "react-icons/ci";
-import { FiHeart } from "react-icons/fi";
+import { useAuthStore } from "@/store/store";
+import { IoMdHeart } from "react-icons/io";
 
 type Product = {
   _id: string;
@@ -25,6 +26,8 @@ type Product = {
 };
 
 const ProductPage = () => {
+  const { addToWishlist, user } = useAuthStore();
+
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [product, setProduct] = useState<Product | null>(null);
@@ -65,6 +68,21 @@ const ProductPage = () => {
   };
 
   const similarProducts = products.filter((p) => p._id !== id);
+
+  const allProductsOfWishlist = user?.wishlist?.[0]?.products || [];
+
+  type WishlistItemFlexible = {
+    productId: string | { _id: string };
+  };
+  const alreadyInWishlist = (id: string) => {
+    return allProductsOfWishlist.some((item: WishlistItemFlexible) => {
+      if (typeof item.productId === "string") {
+        return item.productId === id;
+      } else {
+        return item.productId._id === id;
+      }
+    });
+  };
 
   useEffect(() => {
     fetchProductById();
@@ -178,9 +196,22 @@ const ProductPage = () => {
               <MdShoppingCart className="text-lg" />
               Buy Now
             </button>
-            <button className="bg-gray-100 hover:bg-gray-200 cursor-pointer text-black border px-4 py-3 md:py-2 rounded flex items-center gap-2">
-              <FiHeart className="text-red-500" />
-              <p className="hidden xl:block">Add to Wishlist</p>
+            <button
+              className="bg-gray-100 hover:bg-gray-200 cursor-pointer text-black border px-4 py-3 md:py-2 rounded flex items-center gap-2"
+              onClick={() => addToWishlist(product._id)}
+            >
+              <div className="bg-gray-100  rounded-full cursor-pointer">
+                {user && alreadyInWishlist(product._id) ? (
+                  <IoMdHeart className="text-red-500 text-2xl" />
+                ) : (
+                  <CiHeart className="text-black text-2xl hover:text-red-500" />
+                )}
+              </div>
+              <p className="hidden xl:block">
+                {user && alreadyInWishlist(product._id)
+                  ? "Added to wishlist"
+                  : "Add to Wishlist"}
+              </p>
             </button>
           </div>
         </div>
@@ -199,14 +230,21 @@ const ProductPage = () => {
             similarProducts.map((product) => (
               <div
                 key={product._id}
-                className=" min-h-64 min-w-42 sm:min-w-52 md:size-64 rounded  bg-gray-100 flex items-start justify-center  border-purple-100 border hover:scale-90 transition-all duration-300 overflow-hidden cursor-pointer p-2 flex-col relative"
+                className=" min-h-64 min-w-42 sm:min-w-52 md:size-64 rounded  bg-gray-100 flex items-start justify-center  border-purple-100 border  overflow-hidden cursor-pointer p-2 flex-col relative"
               >
                 <div className="flex items-center justify-between w-full">
                   <div className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md">
                     {Math.floor(product.discountPercentage)}% Off
                   </div>
-                  <div className="bg-gray-100 p-1 rounded-full ">
-                    <CiHeart className="text-black text-3xl" />
+                  <div
+                    className="bg-gray-100 p-1 rounded-full cursor-pointer"
+                    onClick={() => addToWishlist(product._id)}
+                  >
+                    {user && alreadyInWishlist(product._id) ? (
+                      <IoMdHeart className="text-red-500 text-3xl" />
+                    ) : (
+                      <CiHeart className="text-black text-3xl hover:text-red-500" />
+                    )}
                   </div>
                 </div>
                 <Image
@@ -217,7 +255,7 @@ const ProductPage = () => {
                   onClick={() => {
                     router.push(`/product/${product._id}`);
                   }}
-                  className="object-contain size-36 w-full text-center  p-2 rounded"
+                  className="object-contain size-36 w-full text-center  p-2 rounded hover:scale-90 transition-all duration-300"
                 />
 
                 <h3

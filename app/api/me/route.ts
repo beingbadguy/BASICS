@@ -2,6 +2,7 @@ import { databaseConnection } from "@/config/databseConnection";
 import { fetchTokenDetails } from "@/lib/fetchTokenDetails";
 import User from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
+import "@/models/wishlist.model";
 
 databaseConnection();
 

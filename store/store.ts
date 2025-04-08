@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 // Define the shape of your authentication state
 interface AuthState {
@@ -8,7 +8,7 @@ interface AuthState {
     email: string;
     isVerified: boolean;
     role: string;
-    wishlist: any;
+    wishlist?: { products: WishlistItem[] }[];
   } | null;
   isLoggingOut: boolean;
   fetchUser: () => Promise<void>;
@@ -16,6 +16,9 @@ interface AuthState {
   setUser: (user: any) => void;
   addToWishlist: (id: string) => void;
 }
+type WishlistItem = {
+  productId: string;
+};
 interface Products {
   _id: string;
   title: string;
@@ -40,8 +43,12 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       const response = await axios.get("/api/me");
       set({ user: response.data.user });
-    } catch (error) {
-      console.error("Failed to fetch user", error);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      } else {
+        console.error("Failed to fetch user", error);
+      }
       set({ user: null });
     }
   },

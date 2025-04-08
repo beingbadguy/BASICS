@@ -1,4 +1,5 @@
 "use client";
+import { useAuthStore } from "@/store/store";
 import axios, { AxiosError } from "axios";
 import { Search } from "lucide-react";
 import Image from "next/image";
@@ -6,6 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CiHeart } from "react-icons/ci";
+import { IoMdHeart } from "react-icons/io";
 
 type Products = {
   _id: string;
@@ -21,6 +23,7 @@ type Products = {
 };
 
 const Page = () => {
+  const { user, addToWishlist } = useAuthStore();
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState<Products[]>([]);
   const [loading, setLoading] = useState(false);
@@ -42,6 +45,21 @@ const Page = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const allProductsOfWishlist = user?.wishlist?.[0]?.products || [];
+
+  type WishlistItemFlexible = {
+    productId: string | { _id: string };
+  };
+  const alreadyInWishlist = (id: string) => {
+    return allProductsOfWishlist.some((item: WishlistItemFlexible) => {
+      if (typeof item.productId === "string") {
+        return item.productId === id;
+      } else {
+        return item.productId._id === id;
+      }
+    });
   };
 
   const searchedProducts = products.filter((product) => {
@@ -102,8 +120,15 @@ const Page = () => {
                       <div className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md">
                         {Math.floor(product.discountPercentage)}% Off
                       </div>
-                      <div className="bg-gray-100 p-1 rounded-full ">
-                        <CiHeart className="text-black text-3xl" />
+                      <div
+                        className="bg-gray-100 p-1 rounded-full cursor-pointer"
+                        onClick={() => addToWishlist(product._id)}
+                      >
+                        {user && alreadyInWishlist(product._id) ? (
+                          <IoMdHeart className="text-red-500 text-3xl" />
+                        ) : (
+                          <CiHeart className="text-black text-3xl hover:text-red-500" />
+                        )}
                       </div>
                     </div>
                     <Image
@@ -164,8 +189,15 @@ const Page = () => {
                       <div className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md">
                         {Math.floor(product.discountPercentage)}% Off
                       </div>
-                      <div className="bg-gray-100 p-1 rounded-full ">
-                        <CiHeart className="text-black text-3xl" />
+                      <div
+                        className="bg-gray-100 p-1 rounded-full cursor-pointer"
+                        onClick={() => addToWishlist(product._id)}
+                      >
+                        {user && alreadyInWishlist(product._id) ? (
+                          <IoMdHeart className="text-red-500 text-3xl" />
+                        ) : (
+                          <CiHeart className="text-black text-3xl hover:text-red-500" />
+                        )}
                       </div>
                     </div>
                     <Image

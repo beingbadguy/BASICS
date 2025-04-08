@@ -3,7 +3,6 @@ import { databaseConnection } from "@/config/databseConnection";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { generateTokenAndSetCookie } from "@/lib/generateTokenAndSetCookie";
-import { sendEmailVerificationMail } from "@/services/sendMail";
 import crypto from "crypto";
 databaseConnection();
 
@@ -74,7 +73,6 @@ export async function POST(request: NextRequest) {
         status: 200,
       }
     );
-    await sendEmailVerificationMail(newUser.email, verificationToken);
     generateTokenAndSetCookie(
       newUser._id,
       newUser.isVerified,

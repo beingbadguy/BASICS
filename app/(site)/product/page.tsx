@@ -8,6 +8,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Separator } from "@radix-ui/react-select";
 import { Progress } from "@radix-ui/react-progress";
+import { useAuthStore } from "@/store/store";
+import { IoMdHeart } from "react-icons/io";
+import { CiHeart } from "react-icons/ci";
 
 type Product = {
   _id: string;
@@ -32,6 +35,8 @@ interface Category {
 }
 
 const ProductsPage = () => {
+  const { addToWishlist, user } = useAuthStore();
+
   const [products, setProducts] = useState<Product[]>([]);
   const [fullProducts, setFullProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
@@ -131,6 +136,20 @@ const ProductsPage = () => {
 
     setProducts(sorted);
   }, [sortBy]);
+
+  const allProductsOfWishlist = user?.wishlist?.[0]?.products || [];
+  type WishlistItemFlexible = {
+    productId: string | { _id: string };
+  };
+  const alreadyInWishlist = (id: string) => {
+    return allProductsOfWishlist.some((item: WishlistItemFlexible) => {
+      if (typeof item.productId === "string") {
+        return item.productId === id;
+      } else {
+        return item.productId._id === id;
+      }
+    });
+  };
 
   useEffect(() => {
     if (showFilter) {
@@ -299,6 +318,26 @@ const ProductsPage = () => {
                   : ""
               }`}
             >
+              <div className="flex items-center justify-between w-full">
+                <div
+                  className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md"
+                  onClick={() => {
+                    alert(product._id);
+                  }}
+                >
+                  {Math.floor(product.discountPercentage)}% Off
+                </div>
+                <div
+                  className="bg-gray-100 p-1 rounded-full cursor-pointer"
+                  onClick={() => addToWishlist(product._id)}
+                >
+                  {user && alreadyInWishlist(product._id) ? (
+                    <IoMdHeart className="text-red-500 text-3xl" />
+                  ) : (
+                    <CiHeart className="text-black text-3xl hover:text-red-500" />
+                  )}
+                </div>
+              </div>
               <Image
                 src={product.image || "/placeholder.png"}
                 alt={product.title}

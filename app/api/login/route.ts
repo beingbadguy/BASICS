@@ -3,7 +3,6 @@ import User from "@/models/user.model";
 import { databaseConnection } from "@/config/databseConnection";
 import { NextRequest, NextResponse } from "next/server";
 import { generateTokenAndSetCookie } from "@/lib/generateTokenAndSetCookie";
-import { sendEmailVerificationMail } from "@/services/sendMail";
 import crypto from "crypto";
 databaseConnection();
 
@@ -64,8 +63,6 @@ export async function POST(request: NextRequest) {
       user.verificationToken = verificationToken;
       user.verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
       await user.save();
-
-      await sendEmailVerificationMail(user.email, verificationToken);
     }
 
     const response = NextResponse.json({

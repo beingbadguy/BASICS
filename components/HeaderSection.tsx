@@ -16,6 +16,7 @@ import React, { useEffect, useState } from "react";
 
 const HeaderSection = () => {
   const { user, fetchUser } = useAuthStore();
+  console.log(user);
 
   const [menu, setMenu] = useState<boolean>(false);
   const router = useRouter();
