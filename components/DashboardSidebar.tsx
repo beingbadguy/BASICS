@@ -1,4 +1,5 @@
 "use client";
+import { useAuthStore } from "@/store/store";
 import {
   AlignVerticalJustifyEnd,
   LayoutDashboard,
@@ -8,11 +9,13 @@ import {
   ShoppingCart,
   User,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 
 const DashboardSidebar = () => {
+  const {  fetchUser } = useAuthStore();
   const pathname = usePathname();
   console.log(pathname);
   const MenuBar = [
@@ -28,12 +31,23 @@ const DashboardSidebar = () => {
     { label: "Settings", path: "/settings", icons: <Settings /> },
     // { label: "Logout", path: "/logout", icons: <LogOut /> },
   ];
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   return (
     <div className="fixed bg-white left-0 top-[93%] w-full  md:static p-2 md:p-4 border shadow-md md:min-h-screen flex items-center justify-between flex-col  md:w-48 ">
       <div>
-        <h1 className="font-bold w-full text-center text-lg hidden md:block">
-          BASIC
-        </h1>
+        <div className="w-full hidden md:flex  items-center justify-center pt-1">
+          <Image
+            src="/basiclogo.png"
+            alt="logo"
+            width={100}
+            height={100}
+            className=""
+          />
+        </div>
         <div className="md:mt-8 flex items-start justify-start  md:flex-col gap-3 w-full">
           {MenuBar.map((item, index) => {
             const isActive = item.path === pathname;

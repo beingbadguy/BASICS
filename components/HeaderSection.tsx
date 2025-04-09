@@ -10,6 +10,7 @@ import {
   UserRound,
   X,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -34,7 +35,6 @@ const HeaderSection = () => {
     }
   }, [userCart]);
 
-  
   useEffect(() => {
     if (!user) {
       fetchUser();
@@ -48,7 +48,17 @@ const HeaderSection = () => {
       </div>
       <nav className="flex items-center justify-between p-4 border-b border-gray-300 ">
         <div className="font-bold">
-          <Link href={"/"}>BASICS</Link>
+          <Link href={"/"}>
+            <Image
+              src="/basiclogo.png"
+              alt="logo"
+              width={100}
+              height={100}
+              className="object-cover"
+              priority
+              placeholder="empty"
+            />
+          </Link>
         </div>
         <div
           className={` ${
@@ -109,7 +119,7 @@ const HeaderSection = () => {
               setMenu(false);
             }}
           >
-            Contact
+            <Link href={"/contact"}>Contact</Link>
           </p>
         </div>
         <div className="flex items-center justify-center gap-5">

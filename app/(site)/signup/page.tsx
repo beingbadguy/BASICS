@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { MdArrowRightAlt } from "react-icons/md";
 
 export default function SignupPage() {
   const { setUser, fetchUserCart } = useAuthStore();
@@ -50,8 +51,17 @@ export default function SignupPage() {
   };
   return (
     <div className="flex items-center justify-center gap-4 min-h-[70vh] flex-col bg-white text-black w-full">
-      <h1 className="text-3xl font-bold">Sign up</h1>
-      <p>Welcome, Create account to get started.</p>
+      {/* <Image
+        src="/basiclogo.png"
+        alt="logo"
+        width={100}
+        height={100}
+        className=""
+      /> */}
+      <h1 className="text-3xl font-bold">Sign Up</h1>
+      <p className="text-center w-full mx-2 text-sm md:text-md">
+        Welcome, Create account to get started.
+      </p>
 
       <form
         className=" flex items-center justify-center gap-2 flex-col w-[80%] md:w-[50%] lg:w-[30%]"
@@ -106,13 +116,18 @@ export default function SignupPage() {
           {loading ? (
             <AiOutlineLoading3Quarters className=" animate-spin text-white" />
           ) : (
-            "Sign Up"
+            <div className="flex items-center gap-4">
+              <p>Create Account</p>
+              <MdArrowRightAlt />
+            </div>
           )}
         </Button>
         {signupError && (
           <div className="text-red-500 font-light text-sm">{signupError}</div>
         )}
-        <Link href="/login">Already have an account? Login</Link>
+        <Link href="/login " className="text-sm md:text-md">
+          Already have an account? Login
+        </Link>
       </form>
     </div>
   );

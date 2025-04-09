@@ -1,5 +1,4 @@
 import Banner from "@/components/Banner";
-import BannerWall from "@/components/BannerWall";
 import Faqs from "@/components/Faqs";
 import NewArrivals from "@/components/NewArrivals";
 import Newsletter from "@/components/Newsletter";
@@ -10,8 +9,8 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="mx-4">
-      <div className="min-h-[80vh] flex items-center justify-center  text-center mx-4 flex-col gap-4">
+    <div className="px-4">
+      <div className="min-h-[80vh] flex items-center justify-center  text-center px-4 flex-col gap-4 ">
         <h1 className="text-3xl">A Place where you can buy anything.</h1>
         <OverlapCards />
         <p>Welcome to the world of e-commerce!</p>
@@ -19,17 +18,19 @@ export default function Home() {
           <Button className="px-4 py-2 text-white bg-purple-700 rounded-md hover:bg-purple-600 cursor-pointer">
             <Link href={"/product"}>Start Shopping</Link>
           </Button>
-          <Button className="px-4 py-2 text-white bg-black rounded-md hover:bg-gray-700 cursor-pointer">
+          {/* <Button className="px-4 py-2 text-white bg-black rounded-md hover:bg-gray-700 cursor-pointer">
             Learn More
-          </Button>
+          </Button> */}
         </div>
       </div>
-      <ShopByCategory />
-      <NewArrivals />
-      <Banner />
-      <BannerWall />
-      <Newsletter />
-      <Faqs />
+      <div className="">
+        <ShopByCategory />
+        <NewArrivals />
+        <Banner />
+        {/* <BannerWall /> */}
+        <Newsletter />
+        <Faqs />
+      </div>
     </div>
   );
 }

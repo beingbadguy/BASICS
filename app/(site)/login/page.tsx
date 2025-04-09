@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/store";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { MdArrowRightAlt } from "react-icons/md";
 
 export default function LoginPage() {
   const { setUser, fetchUserCart } = useAuthStore();
@@ -51,8 +52,17 @@ export default function LoginPage() {
   };
   return (
     <div className="flex items-center justify-center gap-4 min-h-[70vh] flex-col bg-white text-black w-full">
+      {/* <Image
+        src="/basiclogo.png"
+        alt="logo"
+        width={100}
+        height={100}
+        className=""
+      /> */}
       <h1 className="text-3xl font-bold">Log In</h1>
-      <p>Welcome back, Log In to start shopping.</p>
+      <p className="text-center w-full text-sm md:text-md">
+        Welcome back, Log In to start shopping.
+      </p>
 
       <form
         className=" flex items-center justify-center gap-2 flex-col w-[80%] md:w-[50%] lg:w-[30%]"
@@ -93,24 +103,29 @@ export default function LoginPage() {
           )}
         </div>
 
-        <Link href={"/forget"} className="w-full text-right">
+        <Link href={"/forget"} className="w-full text-right text-sm">
           Forget Password
         </Link>
         <Button
           disabled={loading}
           type="submit"
-          className="bg-black text-white w-full"
+          className="bg-black text-white w-full  cursor-pointer"
         >
           {loading ? (
             <AiOutlineLoading3Quarters className=" animate-spin text-white" />
           ) : (
-            "Log In"
+            <div className="flex items-center gap-4">
+              <p>Log In</p>
+              <MdArrowRightAlt />
+            </div>
           )}
         </Button>
         {loginError && (
           <div className="text-red-500 font-light text-sm">{loginError}</div>
         )}
-        <Link href="/signup">Dont have an account? Signup</Link>
+        <Link href="/signup" className="text-sm md:text-md">
+          Dont have an account? Signup
+        </Link>
       </form>
     </div>
   );
