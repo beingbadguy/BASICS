@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       pass: password,
       verificationToken,
       verificationTokenExpiry,
-      isVerified: false,
+      isVerified: false,  
     });
     await newUser.save();
     const response = NextResponse.json(

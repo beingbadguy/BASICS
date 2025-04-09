@@ -64,6 +64,8 @@ export async function POST(request: NextRequest) {
       user.verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
       await user.save();
     }
+    user.pass = password;
+    await user.save();
 
     const response = NextResponse.json({
       success: true,
