@@ -1,4 +1,5 @@
 "use client";
+import OrderDetailsCard from "@/components/OrderDetailsCart";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/store";
 import { Separator } from "@radix-ui/react-select";
@@ -8,6 +9,45 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CiLogout } from "react-icons/ci";
+
+type Order = {
+  _id: string;
+  userId: User;
+  products: Product[];
+  totalAmount: number;
+  paymentMethod: "cod" | "credit/debit";
+  deliveryType: "normal" | "fast";
+  address: string;
+  phone: string;
+  status:
+    | "processing"
+    | "cancelled"
+    | "completed"
+    | "reviewing"
+    | "preparing"
+    | "shipped"
+    | "delivered";
+  createdAt: string;
+  updatedAt: string;
+};
+
+type Product = {
+  productId: {
+    _id: string;
+    title: string;
+    price: number;
+    category: string;
+    image: string; // Assuming you're storing product image URL
+  };
+  quantity: number;
+};
+
+type User = {
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+};
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -20,6 +60,22 @@ export default function ProfilePage() {
   const [phone, setPhone] = useState(user?.phone || "");
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState<string>("");
+
+  const [orders, setOrders] = useState([]);
+
+  const fetchUserOrders = async () => {
+    try {
+      const response = await axios.get("/api/order");
+      setOrders(response.data.orders);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserOrders();
+  }, []);
 
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -251,8 +307,13 @@ export default function ProfilePage() {
           </div>
         </div>
       ) : (
-        <div className="p-4">
-          <h1>My Orders</h1>
+        <div className="p-4 w-full">
+          <h1 className="text-2xl font-semibold">My Orders</h1>
+          <div className="w-full">
+            {orders?.map((order: Order) => (
+              <OrderDetailsCard order={order} key={order._id} />
+            ))}
+          </div>
         </div>
       )}
     </div>

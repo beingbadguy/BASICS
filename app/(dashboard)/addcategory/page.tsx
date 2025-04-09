@@ -112,7 +112,7 @@ const Page = () => {
           )}
           {error && <div className="mt-2 text-red-500">{error}</div>}
 
-          <Button type="submit" disabled={loading} className="my-2 min-w-20">
+          <Button type="submit" disabled={loading} className="my-2 min-w-20 cursor-pointer">
             {loading ? (
               <VscLoading className="animate-spin text-white" />
             ) : (

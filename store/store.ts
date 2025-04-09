@@ -12,6 +12,7 @@ interface AuthState {
     address: string;
     phone: number;
     image: string;
+    firstPurchase: boolean;
     wishlist?: { products: WishlistItem[] }[];
   } | null;
   isLoggingOut: boolean;

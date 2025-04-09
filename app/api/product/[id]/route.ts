@@ -68,3 +68,42 @@ export async function DELETE(
 }
 
 // FIXME: single product update
+
+export async function PUT(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  await databaseConnection();
+  try {
+    const { id } = await context.params;
+    const { title, discountedPrice, countInStock } = await request.json();
+    if (!id) {
+      return NextResponse.json(
+        { message: "Product id is required", success: false },
+        { status: 400 }
+      );
+    }
+    const product = await Product.findById(id);
+    if (!product) {
+      return NextResponse.json(
+        { message: "Product not found", success: false },
+        { status: 404 }
+      );
+    }
+    product.title = title;
+    product.discountedPrice = discountedPrice;
+    product.countInStock = countInStock;
+
+    await product.save();
+    return NextResponse.json(
+      { product, success: true, message: "Product updated successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { message: "Error fetching product", success: false },
+      { status: 500 }
+    );
+  }
+}

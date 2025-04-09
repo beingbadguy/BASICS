@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
     const category = formData.get("category") as string;
     const countInStock = formData.get("countInStock") as string;
     const discountedPrice = formData.get("discountedPrice") as string;
+    const info = formData.get("info") as string;
 
     if (
       !title ||
@@ -49,7 +50,8 @@ export async function POST(request: NextRequest) {
       !image ||
       !category ||
       !countInStock ||
-      !discountedPrice
+      !discountedPrice ||
+      !info
     ) {
       return NextResponse.json(
         { message: "All fields are required", sucess: false },
@@ -79,6 +81,7 @@ export async function POST(request: NextRequest) {
       discountedPrice,
       discountPercentage,
       isActive: true,
+      info,
     });
 
     await product.save();
@@ -95,6 +98,39 @@ export async function POST(request: NextRequest) {
     console.log(error);
     return NextResponse.json(
       { message: "Error creating product", success: false },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  await databaseConnection();
+  try {
+    const { id,isActive } = await request.json();
+    if (!id) {
+      return NextResponse.json(
+        { message: "Product id is required", success: false },
+        { status: 400 }
+      );
+    }
+    const product = await Product.findById(id);
+    if (!product) {
+      return NextResponse.json(
+        { message: "Product not found", success: false },
+        { status: 404 }
+      );
+    }
+    product.isActive = isActive;
+    
+    await product.save();
+    return NextResponse.json(
+      { product, success: true, message: "Product updated successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { message: "Error fetching product", success: false },
       { status: 500 }
     );
   }

@@ -1,70 +1,136 @@
 import React from "react";
-import {
-  FaServer,
-  FaLock,
-  FaTools,
-  FaCloudUploadAlt,
-  FaCss3Alt,
-  FaEnvelope,
-} from "react-icons/fa";
-import { SiMongodb, SiNextdotjs, SiJsonwebtokens } from "react-icons/si";
+import Image from "next/image";
+import { FaQuoteLeft } from "react-icons/fa";
+import { HiOutlineSparkles } from "react-icons/hi";
 
-const techStack = [
-  {
-    icon: <SiNextdotjs />,
-    title: "Frontend",
-    description: "Next.js 14 (App Router, Server Components)",
-  },
-  { icon: <FaCss3Alt />, title: "Styling", description: "Tailwind CSS" },
-  { icon: <FaTools />, title: "State Management", description: "Zustand" },
-  {
-    icon: <SiMongodb />,
-    title: "Database",
-    description: "MongoDB (via Mongoose)",
-  },
-  {
-    icon: <FaServer />,
-    title: "Backend API",
-    description: "Next.js API Routes",
-  },
-  {
-    icon: <SiJsonwebtokens />,
-    title: "Authentication",
-    description: "JWT (JSON Web Token)",
-  },
-  {
-    icon: <FaLock />,
-    title: "Middleware",
-    description: "Next.js Middleware (for auth protection)",
-  },
-  { icon: <FaEnvelope />, title: "Mailing Service", description: "Nodemailer" },
-  { icon: <FaCloudUploadAlt />, title: "Deployment", description: "Vercel" },
-];
-
-const Page = () => {
+const AboutUs = () => {
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-center">
-        🚀 Tech Stack Used in This Project
-      </h1>
+    <div className="py-10 md:py-16 lg:py-20 bg-white">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Hero Section */}
+        <section className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+            Discover a World of Possibilities
+          </h2>
+          <p className="text-gray-600 text-sm md:text-base">
+            Your ultimate destination for finding just about anything online.
+          </p>
+        </section>
 
-      {/* Tech stack grid layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {techStack.map((item, index) => (
-          <div
-            key={index}
-            className="flex items-center space-x-3 bg-gray-100 p-4 rounded-lg shadow-md"
-          >
-            <div className="text-black text-2xl">{item.icon}</div>
+        {/* Image Grid */}
+        <section className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8 md:mb-12">
+          <div className="relative overflow-hidden rounded-md shadow-md aspect-w-1 aspect-h-1">
+            <Image
+              src={"/demo1.avif"}
+              alt="Diverse Product 1"
+              layout="fill"
+              objectFit="cover"
+              className="transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+          <div className="relative overflow-hidden rounded-md shadow-md aspect-w-1 aspect-h-1">
+            <Image
+              src={"/demo2.avif"}
+              alt="Diverse Product 2"
+              layout="fill"
+              objectFit="cover"
+              className="transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+          <div className="relative overflow-hidden rounded-md shadow-md aspect-w-1 aspect-h-1 hidden md:block">
+            <Image
+              src={"/demo2.avif"}
+              alt="Diverse Product 3"
+              layout="fill"
+              objectFit="cover"
+              className="transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+          <div className="relative overflow-hidden rounded-md shadow-md aspect-w-1 aspect-h-1">
+            <Image
+              src={"/demo2.avif"}
+              alt="Diverse Product 4"
+              layout="fill"
+              objectFit="cover"
+              className="transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+          <div className="relative overflow-hidden rounded-md shadow-md aspect-w-1 aspect-h-1">
+            <Image
+              src={"/demo2.avif"}
+              alt="Diverse Product 5"
+              layout="fill"
+              objectFit="cover"
+              className="transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+          <div className="relative overflow-hidden rounded-md shadow-md aspect-w-1 aspect-h-1 hidden md:block">
+            <Image
+              src={"/demo2.avif"}
+              alt="Diverse Product 6"
+              layout="fill"
+              objectFit="cover"
+              className="transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+        </section>
+
+        {/* Quote Section */}
+        <section className="bg-gray-100 rounded-md py-8 px-6 md:py-12 md:px-10 mb-8 md:mb-12 flex flex-col md:flex-row items-center gap-6">
+          <FaQuoteLeft className="text-purple-700 text-4xl md:text-5xl" />
+          <blockquote className="text-gray-700 italic text-center md:text-left">
+            <p className="mb-4">
+              &quot;We&apos;re very much of the &apos;buy anything but buy
+              wisely&apos; persuasion. We believe in offering a vast selection
+              while ensuring quality and value for every customer.&quot;
+            </p>
+            <cite className="text-gray-500">- The Basics Team</cite>
+          </blockquote>
+        </section>
+
+        {/* Our Vision Section */}
+        <section className="py-6 md:py-10">
+          <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4 flex items-center justify-center md:justify-start">
+            <HiOutlineSparkles className="text-purple-700 mr-2" /> Our Vision
+          </h3>
+          <p className="text-gray-600 leading-relaxed">
+            At Basics, our vision is to create the most comprehensive and
+            user-friendly online marketplace where you can effortlessly find and
+            purchase anything your heart desires. From the latest tech gadgets
+            and trendy fashion apparel to essential home goods and unique
+            artisanal crafts, we aim to be your trusted source for all your
+            needs and wants.
+          </p>
+          <p className="text-gray-600 leading-relaxed mt-4">
+            We are committed to providing a seamless shopping experience with
+            secure transactions, fast shipping, and exceptional customer
+            support. Our goal is to empower you with choice and convenience,
+            making online shopping a delightful and rewarding experience.
+          </p>
+        </section>
+
+        {/* Optional Blog/Update Snippet (Similar to the example) */}
+        {/* <section className="bg-gray-100 rounded-md py-6 px-6 md:py-8 md:px-8 mt-8 md:mt-12 flex flex-col md:flex-row items-center justify-between">
+          <div className="flex items-center mb-4 md:mb-0">
+            <span className="text-purple-700 text-3xl font-bold mr-4">01</span>
             <div>
-              <p className="font-semibold">{item.title}</p>
-              <p className="text-sm text-gray-600">{item.description}</p>
+              <p className="text-gray-500 text-sm">April 9, 2025 - Blog</p>
+              <h4 className="text-gray-900 font-semibold">
+                Exciting New Arrivals Across All Categories!
+              </h4>
+              <p className="text-gray-600 text-sm">
+                Discover the latest additions to our ever-expanding catalog,
+                from electronics to home decor...
+              </p>
             </div>
           </div>
-        ))}
+          <button className="bg-white text-gray-900 font-semibold py-2 px-4 rounded-md shadow-md hover:bg-gray-200 transition-colors duration-300 flex items-center">
+            Read More <FaArrowRight className="ml-2 text-black" />
+          </button>
+        </section> */}
       </div>
     </div>
   );
 };
 
-export default Page;
+export default AboutUs;

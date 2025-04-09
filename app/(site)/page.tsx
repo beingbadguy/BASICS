@@ -6,6 +6,8 @@ import OverlapCards from "@/components/OverlapCards";
 import ShopByCategory from "@/components/ShopByCategory";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { MdArrowRightAlt } from "react-icons/md";
+import { VscWand } from "react-icons/vsc";
 
 export default function Home() {
   return (
@@ -16,11 +18,23 @@ export default function Home() {
         <p>Welcome to the world of e-commerce!</p>
         <div className="flex items-center justify-center gap-4">
           <Button className="px-4 py-2 text-white bg-purple-700 rounded-md hover:bg-purple-600 cursor-pointer">
-            <Link href={"/product"}>Start Shopping</Link>
+            <Link
+              href={"/product"}
+              className="flex items-center justify-center gap-2"
+            >
+              Start Shopping
+              <VscWand />
+            </Link>
           </Button>
-          {/* <Button className="px-4 py-2 text-white bg-black rounded-md hover:bg-gray-700 cursor-pointer">
-            Learn More
-          </Button> */}
+          <Button className="px-4 py-2 text-white bg-black rounded-md hover:bg-gray-700 cursor-pointer">
+            <Link
+              href={"/about"}
+              className="flex items-center justify-center gap-2"
+            >
+              Learn More
+              <MdArrowRightAlt />
+            </Link>
+          </Button>
         </div>
       </div>
       <div className="">

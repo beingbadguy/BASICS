@@ -15,6 +15,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { VscLoading } from "react-icons/vsc";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
 
 type Products = {
   _id: string;
@@ -34,12 +35,22 @@ const Page = () => {
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState<Products[]>([]);
   const [loading, setLoading] = useState(false);
+  const [updateModal, setUpdateModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Products | null>(null);
+
+  const [form, setForm] = useState({
+    title: "",
+    discountedPrice: "",
+    countInStock: "",
+  });
+
+  const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fetchAllProducts = async () => {
     setLoading(true);
     try {
       const response = await axios.get("/api/product");
-      console.log(response.data);
       setProducts(response.data.products);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -54,7 +65,8 @@ const Page = () => {
 
   const handleToggleStatus = async (id: string, newStatus: boolean) => {
     try {
-      await axios.patch(`/api/product/${id}/status`, {
+      await axios.put(`/api/product`, {
+        id: id,
         isActive: newStatus,
       });
       setProducts((prev) =>
@@ -67,13 +79,54 @@ const Page = () => {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
-
     try {
       await axios.delete(`/api/product/${id}`);
       fetchAllProducts();
-      console.log("Product deleted successfully");
     } catch (error) {
       console.error("Delete failed", error);
+    }
+  };
+
+  const openEditModal = (product: Products) => {
+    setSelectedProduct(product);
+    setForm({
+      title: product.title,
+      discountedPrice: String(product.discountedPrice),
+      countInStock: String(product.countInStock),
+    });
+    setUpdateModal(true);
+  };
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!form.title || !form.discountedPrice || !form.countInStock) {
+      setFormError("Please fill all fields.");
+      return;
+    }
+
+    setFormError("");
+    setIsSubmitting(true);
+
+    try {
+      await axios.put(`/api/product/${selectedProduct?._id}`, {
+        title: form.title,
+        discountedPrice: Number(form.discountedPrice),
+        countInStock: Number(form.countInStock),
+      });
+
+      setUpdateModal(false);
+      setSelectedProduct(null);
+      fetchAllProducts();
+    } catch (error) {
+      console.error("Update failed", error);
+      setFormError("Failed to update product.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -85,8 +138,8 @@ const Page = () => {
     <div className="mt-2 pt-20 pb-20 md:pt-0 md:mb-0 px-2 md:px-6 overflow-y-scroll max-h-[90vh]">
       <div className="flex items-start justify-start flex-col md:items-center md:justify-between md:flex-row gap-2">
         <h1 className="font-bold text-2xl text-purple-700">Products</h1>
-        <div className="flex items-center  justify-between md:justify-center w-full md:w-auto gap-2 my-2 md:my-0">
-          <div className="flex items-center  gap-2 px-3 py-[6px] rounded border border-purple-700">
+        <div className="flex items-center justify-between md:justify-center w-full md:w-auto gap-2 my-2 md:my-0">
+          <div className="flex items-center gap-2 px-3 py-[6px] rounded border border-purple-700">
             <Search className="text-purple-700" />
             <input
               type="text"
@@ -103,9 +156,10 @@ const Page = () => {
           </Link>
         </div>
       </div>
+
       {loading ? (
-        <div className="h-screen flex items-center justify-center w-full ">
-          <VscLoading className="animate-spin flex items-center justify-center w-full text-3xl  text-purple-700 " />
+        <div className="h-screen flex items-center justify-center w-full">
+          <VscLoading className="animate-spin text-3xl text-purple-700" />
         </div>
       ) : (
         <div className="mt-6 w-full overflow-x-auto">
@@ -148,6 +202,7 @@ const Page = () => {
                     <TableCell>{product.countInStock}</TableCell>
                     <TableCell>
                       <Switch
+                        className="cursor-pointer"
                         checked={product.isActive}
                         onCheckedChange={(checked) =>
                           handleToggleStatus(product._id, checked)
@@ -155,15 +210,18 @@ const Page = () => {
                       />
                     </TableCell>
                     <TableCell className="flex gap-2">
-                      <Link href={`/editproduct/${product._id}`}>
-                        <Button size="sm" variant="outline">
-                          <Pencil className="w-4 h-4" />
-                        </Button>
-                      </Link>
                       <Button
                         size="sm"
                         className="cursor-pointer"
+                        variant="outline"
+                        onClick={() => openEditModal(product)}
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        size="sm"
                         variant="destructive"
+                        className="cursor-pointer"
                         onClick={() => handleDelete(product._id)}
                       >
                         <Trash2 className="w-4 h-4" />
@@ -175,7 +233,73 @@ const Page = () => {
           </Table>
         </div>
       )}
-      {/* Product Table */}
+
+      {/* Update Modal */}
+      {updateModal && selectedProduct && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white p-6 rounded-2xl w-[90%] max-w-md">
+            <form onSubmit={handleUpdate}>
+              <div className="space-y-3">
+                <div>
+                  <p className="font-medium mb-1">Title</p>
+                  <Input
+                    type="text"
+                    name="title"
+                    value={form.title}
+                    onChange={handleFormChange}
+                  />
+                </div>
+                <div>
+                  <p className="font-medium mb-1">Discount Price</p>
+                  <Input
+                    type="number"
+                    name="discountedPrice"
+                    value={form.discountedPrice}
+                    onChange={handleFormChange}
+                  />
+                </div>
+                <div>
+                  <p className="font-medium mb-1">Stock</p>
+                  <Input
+                    type="number"
+                    name="countInStock"
+                    value={form.countInStock}
+                    onChange={handleFormChange}
+                  />
+                </div>
+                {formError && (
+                  <p className="text-sm text-red-500 font-medium">
+                    {formError}
+                  </p>
+                )}
+                <div className="flex items-center justify-between gap-2 pt-4">
+                  <Button
+                    type="submit"
+                    className="cursor-pointer flex items-center gap-2"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting && (
+                      <VscLoading className="animate-spin h-4 w-4" />
+                    )}
+                    Update
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setUpdateModal(false);
+                      setSelectedProduct(null);
+                      setFormError("");
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

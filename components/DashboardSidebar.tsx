@@ -11,12 +11,13 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const DashboardSidebar = () => {
-  const {  fetchUser } = useAuthStore();
+  const { fetchUser, logout } = useAuthStore();
   const pathname = usePathname();
+  const router = useRouter();
   console.log(pathname);
   const MenuBar = [
     { label: "Dashboard", path: "/dashboard", icons: <LayoutDashboard /> },
@@ -71,10 +72,16 @@ const DashboardSidebar = () => {
       </div>
 
       <div className="mb-4 hidden md:block">
-        <Link href="/logout" className="flex items-center justify-center gap-2">
-          <LogOut className="text-purple-700" />
+        <div
+          className="flex items-center justify-center gap-2 cursor-pointer border border-red-500 px-4 py-2 text-black rounded hover:border-none"
+          onClick={() => {
+            logout();
+            router.push("/login");
+          }}
+        >
+          <LogOut className="" />
           <p className="hidden md:block">Logout</p>
-        </Link>
+        </div>
       </div>
     </div>
   );

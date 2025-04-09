@@ -6,6 +6,7 @@ import "@/models/wishlist.model";
 import "@/models/product.model";
 import "@/models/category.model";
 import "@/models/cart.model";
+import "@/models/order.model";
 
 export async function GET(request: NextRequest) {
   await databaseConnection();
@@ -35,6 +36,15 @@ export async function GET(request: NextRequest) {
           path: "products.productId",
           model: "Product",
         },
+      })
+      .populate({
+        
+        path: "order",
+        populate: {
+          path: "products.productId",
+          model: "Product",
+        },
+      
       });
 
     if (!user) {

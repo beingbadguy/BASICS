@@ -10,6 +10,7 @@ import { Separator } from "@radix-ui/react-select";
 import { CiDiscount1, CiHeart } from "react-icons/ci";
 import { IoMdHeart } from "react-icons/io";
 import { useAuthStore } from "@/store/store";
+import { VscSparkle } from "react-icons/vsc";
 
 type Product = {
   _id: string;
@@ -23,6 +24,7 @@ type Product = {
   numReviews: number;
   isActive: boolean;
   discountPercentage: number;
+  info: string;
 };
 
 const ProductPage = () => {
@@ -32,6 +34,7 @@ const ProductPage = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [addingCart, setAddingCart] = useState<boolean>(false);
+  const [expand, setExpand] = useState(false);
   const router = useRouter();
 
   const fetchAllProducts = async () => {
@@ -78,7 +81,6 @@ const ProductPage = () => {
 
   const similarProducts = products.filter((p) => p._id !== id);
   const allProductsOfWishlist = user?.wishlist?.[0]?.products || [];
-
 
   type WishlistItem = {
     productId: Products; // or Products[]
@@ -173,7 +175,30 @@ const ProductPage = () => {
             </span>
           </div>
 
-          <p className="text-gray-700">{product.description}</p>
+          <div className="text-gray-700">
+            {expand ? (
+              <div>
+                {product.description}{" "}
+                <span
+                  className="cursor-pointer text-gray-400 hover:text-purple-800"
+                  onClick={() => setExpand(false)}
+                >
+                  read less
+                </span>
+              </div>
+            ) : (
+              <p>
+                {product.description.slice(0, 10)}
+                <span
+                  onClick={() => setExpand(true)}
+                  className="cursor-pointer text-gray-400 hover:text-purple-700"
+                >
+                  {" "}
+                  see more...
+                </span>{" "}
+              </p>
+            )}
+          </div>
           <Separator className="my-4 w-full bg-gray-400 border" />
 
           <div className="space-y-2">
@@ -203,7 +228,7 @@ const ProductPage = () => {
           <div className="flex items-center gap-4 mt-6">
             <button
               className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded disabled:opacity-50 w-[300px] flex items-center justify-center gap-2 cursor-pointer"
-              disabled={product.countInStock <= 0}
+              disabled={!product.isActive}
               onClick={() => (user ? addToCart() : router.push("/login"))}
             >
               {addingCart ? (
@@ -216,7 +241,7 @@ const ProductPage = () => {
               )}
             </button>
             <button
-              className="bg-gray-100 hover:bg-gray-200 text-black border px-4 py-3 md:py-2 rounded flex items-center gap-2"
+              className="bg-gray-100 hover:bg-gray-200 text-black border px-4 py-2 md:py-2 rounded flex items-center gap-2"
               onClick={() =>
                 user ? addToWishlist(product._id) : router.push("/login")
               }
@@ -238,8 +263,12 @@ const ProductPage = () => {
 
       {/* Product Details */}
       <div className="mt-10">
-        <h2 className="text-xl  md:text-2xl font-bold mb-4">Product Details</h2>
-        <p className="text-gray-700">{product.description}</p>
+        <h2 className="text-xl  md:text-2xl font-bold mb-4 flex items-center gap-2">
+          Product Details <VscSparkle />
+        </h2>
+        <pre className="text-gray-700 whitespace-pre-wrap break-words overflow-auto">
+          {product?.info || product.description}
+        </pre>
       </div>
 
       {/* Recommended Products */}

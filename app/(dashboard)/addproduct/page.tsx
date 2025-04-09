@@ -20,6 +20,7 @@ const initialFormData = {
   price: "",
   discountedPrice: "",
   countInStock: "",
+  info: "",
 };
 
 interface Category {
@@ -81,6 +82,7 @@ const Page = () => {
       !data.price ||
       !data.discountedPrice ||
       !data.countInStock
+      || data.info
     ) {
       setError("Please fill all the fields");
       return;
@@ -102,6 +104,7 @@ const Page = () => {
       formData.append("discountedPrice", data.discountedPrice);
       formData.append("countInStock", data.countInStock);
       formData.append("category", selectedCategory);
+      formData.append("info", data.info);
       formData.append("image", imageLink!);
 
       const response = await axios.post("/api/product", formData);
@@ -245,6 +248,14 @@ const Page = () => {
             name="countInStock"
             placeholder="Count In Stock"
             value={data.countInStock}
+            onChange={handleChange}
+            required
+          />
+
+          <Textarea
+            name="info"
+            placeholder="Long Description"
+            value={data.info}
             onChange={handleChange}
             required
           />

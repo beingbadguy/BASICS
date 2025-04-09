@@ -10,7 +10,6 @@ import {
   UserRound,
   X,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -49,14 +48,10 @@ const HeaderSection = () => {
       <nav className="flex items-center justify-between p-4 border-b border-gray-300 ">
         <div className="font-bold">
           <Link href={"/"}>
-            <Image
+            <img
               src="/basiclogo.png"
               alt="logo"
-              width={100}
-              height={100}
-              className="object-cover"
-              priority
-              placeholder="empty"
+              className=" h-[25px] w-full -ml-3 object-contain"
             />
           </Link>
         </div>
@@ -103,7 +98,7 @@ const HeaderSection = () => {
               setMenu(false);
             }}
           >
-            Best Sellers
+            <Link href={"/product"}>Products</Link>
           </p>
           <p
             className="cursor-pointer hover:text-purple-700"

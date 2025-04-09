@@ -50,17 +50,21 @@ const CartPage = () => {
 
   const subtotal =
     userCart?.products.reduce(
-      (acc, item) => acc + item.productId.price * item.quantity,
+      (acc, item) => acc + item.productId.discountedPrice * item.quantity,
       0
     ) || 0;
 
-  const discount = subtotal * 0.1; // 10% off
   const estimatedTax = 20;
-  const estimatedShipping = 0;
-  const total = subtotal + estimatedTax + estimatedShipping - discount;
+
+  const firstTimeDiscount = user?.firstPurchase
+    ? 0
+    : ((subtotal + estimatedTax) * 15) / 100;
+  const totalAfterDiscount = subtotal + estimatedTax - firstTimeDiscount;
+
+  // const total = subtotal + estimatedTax + (totalAfterDiscount);
 
   return (
-    <div className="p-4 min-h-[70vh]">
+    <div className="p-4 min-h-[90vh]">
       <div className="text-sm text-gray-500 mb-4">
         <span
           className="cursor-pointer hover:text-purple-600"
@@ -166,7 +170,9 @@ const CartPage = () => {
             ))}
           </div>
 
-          <div className="border p-4 rounded-lg shadow-sm space-y-4 h-fit">
+          <div className="border p-4 rounded-sm space-y-4 h-fit text-sm">
+            <h1 className="text-xl font-bold ">Product Summary</h1>
+            <hr className="w-full border border-gray-200 " />
             <div className="flex justify-between">
               <p>Total products</p>
               <p>{userCart?.products.length || 0} Products</p>
@@ -175,46 +181,29 @@ const CartPage = () => {
               <p>Subtotal</p>
               <p>₹{subtotal.toFixed(2)}</p>
             </div>
-            <div className="flex justify-between">
-              <p>Estimated shipping</p>
-              <p>₹{estimatedShipping.toFixed(2)}</p>
-            </div>
+
             <div className="flex justify-between">
               <p>Estimated tax</p>
               <p>₹{estimatedTax.toFixed(2)}</p>
             </div>
-            <div className="flex justify-between text-red-500">
-              <p>Discount 10% OFF</p>
-              <p>-₹{discount.toFixed(2)}</p>
-            </div>
+            {!user?.firstPurchase && (
+              <div className="flex justify-between">
+                <p>First time discount</p>
+                <p>₹{firstTimeDiscount.toFixed(2)}</p>
+              </div>
+            )}
+
             <div className="flex justify-between font-bold text-lg">
               <p>Total payment</p>
-              <p>₹{total.toFixed(2)}</p>
+              <p>₹{totalAfterDiscount.toFixed(2)}</p>
             </div>
 
-            {/* Promo Code */}
-            <div>
-              <label htmlFor="promo" className="text-sm font-medium">
-                Do you have a promo code?
-              </label>
-              <div className="flex mt-2">
-                <input
-                  id="promo"
-                  // value={promoCode}
-                  // onChange={(e) => setPromoCode(e.target.value)}
-                  placeholder="Enter code"
-                  className="border rounded-l px-3 py-2 w-full"
-                />
-                <button className="bg-black text-white px-4 py-2 rounded-r">
-                  Apply
-                </button>
-              </div>
-              <p className="text-xs text-gray-500 mt-1">
-                We share promo codes on our socials monthly.
-              </p>
-            </div>
-
-            <button className="w-full bg-black text-white py-3 font-semibold rounded">
+            <button
+              className="w-full bg-black cursor-pointer text-white py-3 font-semibold rounded"
+              onClick={() => {
+                router.push("/checkout");
+              }}
+            >
               CHECKOUT
             </button>
             <p className="text-xs text-gray-500">
