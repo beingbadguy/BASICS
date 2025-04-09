@@ -10,7 +10,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function SignupPage() {
-  const { setUser } = useAuthStore();
+  const { setUser, fetchUserCart } = useAuthStore();
   const router = useRouter();
   const [data, setData] = useState({
     name: "",
@@ -33,6 +33,8 @@ export default function SignupPage() {
       const response = await axios.post("/api/signup", data);
       // console.log(response.data);
       setUser(response.data.data);
+      fetchUserCart();
+
       router.push("/");
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

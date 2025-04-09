@@ -11,8 +11,16 @@ import { CiLogout } from "react-icons/ci";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, logout, isLoggingOut, fetchUser } = useAuthStore();
+  const { user, logout, isLoggingOut, fetchUser, userWishlist } =
+    useAuthStore();
   const [menu, setMenu] = useState<string>("account");
+
+  const [showModal, setShowModal] = useState(false);
+  const [address, setAddress] = useState(user?.address || "");
+  const [phone, setPhone] = useState(user?.phone || "");
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [error, setError] = useState<string>("");
+
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -41,7 +49,7 @@ export default function ProfilePage() {
 
   return (
     <div className=" min-h-[80vh] flex md:items-start justify-start gap-2 flex-col md:flex-row">
-      <div className=" pt-4 border-r-2 md:min-w-[20%] lg:min-w-[15%] xl:min-w-[15%]   md:h-screen px-4 md:space-y-3 flex  items-center justify-evenly md:justify-start flex-row md:flex-col">
+      <div className=" pt-4 border-r-2 md:min-w-[20%] lg:min-w-[15%] xl:min-w-[15%]   md:h-screen px-4 md:space-y-3 flex  items-center justify-evenly md:justify-start flex-row md:flex-col border-b pb-2 md:pb-0 md:border-b-0">
         <div
           className={` ${
             menu === "account"
@@ -115,12 +123,16 @@ export default function ProfilePage() {
                   {user?.phone || "Phone Unavailable"}
                 </p>
               </div>
-              <div className="bg-black px-4 py-2 text-white text-center w-full rounded my-6 cursor-pointer">
+              <div
+                className="bg-black px-4 py-2 text-white text-center w-full rounded my-6 cursor-pointer"
+                onClick={() => setShowModal(true)}
+              >
                 Edit Profile
               </div>
             </div>
           </div>
-          <div className="md:border-l-2 md:h-screen md:px-4  md:pt-4 lg:min-w-[600px] ">
+          <Separator className="w-full bg-gray-100 h-0.5 md:hidden " />
+          <div className="md:border-l-2 md:h-screen md:px-4  md:pt-4 lg:min-w-[600px] w-full">
             <div className=" ">
               <h1>Overview</h1>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4  text-sm text-gray-400">
@@ -135,8 +147,10 @@ export default function ProfilePage() {
                   <p className="text-black">80 Products</p>
                 </div>
                 <div>
-                  <p>Total Watchlist </p>
-                  <p className="text-black">120 Products</p>
+                  <p>Total Wishlist </p>
+                  <p className="text-black">
+                    {userWishlist?.products.length || 0} Products
+                  </p>
                 </div>
               </div>
             </div>
@@ -146,24 +160,98 @@ export default function ProfilePage() {
               <p className="text-sm my-2">Email</p>
               <p className="bg-gray-100 px-4 py-2 ">{user?.email}</p>
               <Button
-                className="cursor-pointer my-2 text-white bg-black rounded-md hover:bg-gray-700 lg:w-full"
+                className="cursor-pointer my-4 text-white bg-black rounded-md hover:bg-gray-700 w-full"
                 disabled={isLoggingOut}
                 onClick={logout}
               >
                 {isLoggingOut ? (
                   <AiOutlineLoading3Quarters className=" animate-spin text-white" />
                 ) : (
-                  <div className="flex items-center justify-center gap-2">
+                  <div className="flex items-center justify-center gap-2 w-full">
                     <CiLogout />
                     Logout
                   </div>
                 )}
               </Button>
             </div>
+            {showModal && (
+              <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 bg-opacity-50">
+                <div className="bg-white rounded-lg p-6 w-[90%] max-w-md shadow-xl">
+                  <h2 className="text-lg font-semibold mb-4">Edit Profile</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium">
+                        Address
+                      </label>
+                      <input
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        className="w-full px-4 py-2 border rounded-md"
+                        placeholder="Enter address"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium">Phone</label>
+                      <input
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full px-4 py-2 border rounded-md"
+                        placeholder="Enter phone"
+                      />
+                    </div>
+                  </div>
+                  {error && <p className="text-red-500 my-1">{error}</p>}
+
+                  <div className="flex justify-end gap-4 mt-6">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowModal(false)}
+                      className="bg-gray-100 cursor-pointer"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      className="bg-purple-600 text-white cursor-pointer"
+                      onClick={async () => {
+                        if (!/^\d{10}$/.test(phone.toString())) {
+                          setError("Please enter a valid phone number.");
+                          return;
+                        }
+                        if (address && address.length < 10) {
+                          setError("Please enter a valid address.");
+                          return;
+                        }
+                        setIsUpdating(true);
+                        try {
+                          await axios.put("/api/user", {
+                            address,
+                            phone,
+                          });
+                          await fetchUser();
+                          setError("");
+                          setShowModal(false);
+                        } catch (error) {
+                          console.error(error);
+                        } finally {
+                          setIsUpdating(false);
+                        }
+                      }}
+                      disabled={isUpdating}
+                    >
+                      {isUpdating ? (
+                        <AiOutlineLoading3Quarters className="animate-spin" />
+                      ) : (
+                        "Save"
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ) : (
-        <div>
+        <div className="p-4">
           <h1>My Orders</h1>
         </div>
       )}

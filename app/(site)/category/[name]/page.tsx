@@ -98,24 +98,14 @@ const Page = () => {
         <span className="text-black"> {name}</span>
       </div>
       <div className="text-sm"> {filteredProducts?.length} Products found.</div>
-      <div className="my-6 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="my-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
         {filteredProducts &&
           filteredProducts.map((product) => (
             <div key={product._id}>
-              <div
-                key={product._id}
-                className={`p-4 min-h-64 min-w-42 sm:min-w-52 md:min-size-64 border rounded-md shadow-sm hover:shadow-md cursor-pointer transition-all 
-                 flex gap-4 items-center justify-evenly w-full  flex-col
-                 
-                }`}
-              >
+              <div className="p-4 border rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col gap-4 items-center justify-between w-full cursor-pointer">
+                {/* Top: Discount & Wishlist */}
                 <div className="flex items-center justify-between w-full">
-                  <div
-                    className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md"
-                    onClick={() => {
-                      alert(product._id);
-                    }}
-                  >
+                  <div className="text-xs bg-purple-700 px-2 py-1 text-white rounded-md">
                     {Math.floor(product.discountPercentage)}% Off
                   </div>
                   <div
@@ -129,33 +119,38 @@ const Page = () => {
                     }}
                   >
                     {user && alreadyInWishlist(product._id) ? (
-                      <IoMdHeart className="text-red-500 text-3xl" />
+                      <IoMdHeart className="text-red-500 text-2xl" />
                     ) : (
-                      <CiHeart className="text-black text-3xl hover:text-red-500" />
+                      <CiHeart className="text-black text-2xl hover:text-red-500" />
                     )}
                   </div>
                 </div>
-                <Image
-                  src={product.image || "/placeholder.png"}
-                  alt={product.title}
-                  width={300}
-                  height={300}
-                  onClick={() => router.push(`/product/${product._id}`)}
-                  className={`
-                       md:min-size-64 size-64 
-                     
-                object-contain max-size-36  text-center  p-2 rounded `}
-                />
+
+                {/* Image */}
                 <div
-                  className={"w-full "}
+                  onClick={() => router.push(`/product/${product._id}`)}
+                  className="w-full flex items-center justify-center h-40 rounded-md overflow-hidden"
+                >
+                  <Image
+                    src={product.image || "/placeholder.png"}
+                    alt={product.title}
+                    width={160}
+                    height={160}
+                    className="object-cover h-full w-full rounded-md hover:scale-110 duration-300 transition-all ease-in-out"
+                  />
+                </div>
+
+                {/* Title & Price */}
+                <div
+                  className="w-full text-center"
                   onClick={() => router.push(`/product/${product._id}`)}
                 >
-                  <h2 className="text-lg font-semibold mt-2">
+                  <h2 className="text-md font-semibold truncate">
                     {product.title}
                   </h2>
 
-                  <div className="mt-2">
-                    <p className="text-purple-700 font-bold text-lg">
+                  <div className="mt-1">
+                    <p className="text-purple-700 font-bold text-md">
                       ₹{product.discountedPrice}
                       <span className="text-sm text-gray-500 line-through ml-2">
                         ₹{product.price}

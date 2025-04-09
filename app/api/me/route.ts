@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import "@/models/wishlist.model";
 import "@/models/product.model";
 import "@/models/category.model";
+import "@/models/cart.model";
 
 export async function GET(request: NextRequest) {
   await databaseConnection();
@@ -20,13 +21,21 @@ export async function GET(request: NextRequest) {
       );
     }
     // const user = await User.findById(decodedToken.userId)
-    const user = await User.findById(decodedToken.userId).populate({
-      path: "wishlist",
-      populate: {
-        path: "products.productId",
-        model: "Product",
-      },
-    });
+    const user = await User.findById(decodedToken.userId)
+      .populate({
+        path: "wishlist",
+        populate: {
+          path: "products.productId",
+          model: "Product",
+        },
+      })
+      .populate({
+        path: "cart",
+        populate: {
+          path: "products.productId",
+          model: "Product",
+        },
+      });
 
     if (!user) {
       return NextResponse.json(

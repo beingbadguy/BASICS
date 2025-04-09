@@ -5,13 +5,21 @@ import User from "@/models/user.model";
 export async function GET() {
   await databaseConnection();
   try {
-    const users = await User.find({}).populate({
-      path: "wishlist",
-      populate: {
-        path: "products.productId",
-        model: "Product",
-      },
-    });
+    const users = await User.find({})
+      .populate({
+        path: "wishlist",
+        populate: {
+          path: "products.productId",
+          model: "Product",
+        },
+      })
+      .populate({
+        path: "cart",
+        populate: {
+          path: "products.productId",
+          model: "Product",
+        },
+      });
     return NextResponse.json(
       { success: true, message: "Users fetched successfully", users },
       { status: 200 }

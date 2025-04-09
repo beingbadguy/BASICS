@@ -15,14 +15,40 @@ interface AuthState {
     wishlist?: { products: WishlistItem[] }[];
   } | null;
   isLoggingOut: boolean;
+  userCart: PopulatedCartProduct | null;
+  userWishlist: PopulatedWishlist | null;
   fetchUser: () => Promise<void>;
   logout: () => void;
   setUser: (user: any) => void;
   addToWishlist: (id: string) => void;
+  fetchUserCart: () => void;
+  fetchUserWishlist: () => void;
 }
-type WishlistItem = {
-  productId: string;
+type PopulatedCartProduct = {
+  products: CartProduct[];
 };
+
+type CartProduct = {
+  productId: Products;
+  quantity: number;
+};
+
+type PopulatedWishlist = {
+  _id: string;
+  userId: string;
+  products: {
+    _id: string;
+    productId: Products; // now fully populated with product details
+  }[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+type WishlistItem = {
+  productId: Products;
+};
+
 interface Products {
   _id: string;
   title: string;
@@ -35,10 +61,13 @@ interface Products {
   image: string;
   discountPercentage: number;
   isActive: boolean;
+  category: string;
 }
 
 // Create Zustand store
 export const useAuthStore = create<AuthState>((set) => ({
+  userWishlist: null,
+  userCart: null,
   user: null,
   isLoggingOut: false,
   setUser: (user) => set({ user }),
@@ -46,7 +75,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   fetchUser: async () => {
     try {
       const response = await axios.get("/api/me");
+      console.log(response.data.user);
       set({ user: response.data.user });
+
+      const { fetchUserCart, fetchUserWishlist } = useAuthStore.getState();
+      fetchUserWishlist();
+      fetchUserCart();
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.error(error.response?.data);
@@ -62,13 +96,14 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       await axios.post("/api/logout");
       set({ user: null });
+      set({ userCart: null });
+      set({ userWishlist: null });
     } catch (error) {
       console.error("Failed to logout", error);
     } finally {
       set({ isLoggingOut: false });
     }
   },
-
   addToWishlist: async (id: string) => {
     const user = useAuthStore.getState().user;
     if (!id) {
@@ -85,6 +120,26 @@ export const useAuthStore = create<AuthState>((set) => ({
       useAuthStore.getState().fetchUser();
     } catch (error) {
       console.error("Failed to add to wishlist:", error);
+    }
+  },
+  fetchUserCart: async () => {
+    try {
+      const response = await axios.get(`/api/cart`);
+      console.log("user cart is called");
+      set({ userCart: response.data.cart });
+    } catch (error) {
+      console.error("Failed to add to cart", error);
+    }
+  },
+
+  fetchUserWishlist: async () => {
+    try {
+      const response = await axios.get(`/api/wishlist`);
+      console.log("user wishlist is called");
+      console.log(response.data.wishlist);
+      set({ userWishlist: response.data.wishlist });
+    } catch (error) {
+      console.error("Failed to add to cart", error);
     }
   },
 }));

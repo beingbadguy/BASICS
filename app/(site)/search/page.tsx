@@ -114,14 +114,14 @@ const Page = () => {
                 searchedProducts.map((product) => (
                   <div
                     key={product._id}
-                    className=" min-h-64 min-w-42 sm:min-w-52 md:size-64 rounded  bg-gray-100 flex items-start justify-center  border-purple-100 border hover:scale-90 transition-all duration-300 overflow-hidden cursor-pointer p-2 flex-col relative"
+                    className="bg-white border border-purple-100 rounded-xl shadow-sm p-4 cursor-pointer flex flex-col relative"
                   >
-                    <div className="flex items-center justify-between w-full">
-                      <div className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-xs bg-purple-700 text-white px-2 py-1 rounded">
                         {Math.floor(product.discountPercentage)}% Off
-                      </div>
+                      </span>
                       <div
-                        className="bg-gray-100 p-1 rounded-full cursor-pointer"
+                        className="bg-gray-100 p-1 rounded-full"
                         onClick={() => {
                           if (!user) {
                             return router.push("/login");
@@ -131,48 +131,46 @@ const Page = () => {
                         }}
                       >
                         {user && alreadyInWishlist(product._id) ? (
-                          <IoMdHeart className="text-red-500 text-3xl" />
+                          <IoMdHeart className="text-red-500 text-2xl" />
                         ) : (
-                          <CiHeart className="text-black text-3xl hover:text-red-500" />
+                          <CiHeart className="text-black text-2xl hover:text-red-500" />
                         )}
                       </div>
                     </div>
-                    <Image
-                      src={product.image}
-                      alt={product.title}
-                      width={200}
-                      height={200}
-                      onClick={() => {
-                        router.push(`/product/${product._id}`);
-                      }}
-                      className="object-contain size-36 w-full text-center  p-2 rounded"
-                    />
+
+                    <div className="overflow-hidden rounded-md">
+                      <Image
+                        src={product.image || "/placeholder.png"}
+                        alt={product.title}
+                        width={300}
+                        height={300}
+                        className="w-full h-40 object-cover rounded mb-2  transform transition-transform duration-300 hover:scale-110"
+                        onClick={() => router.push(`/product/${product._id}`)}
+                      />
+                    </div>
 
                     <h3
-                      className="font-bold mt-4"
-                      onClick={() => {
-                        router.push(`/product/${product._id}`);
-                      }}
+                      className="font-semibold text-sm md:text-base mt-2"
+                      onClick={() => router.push(`/product/${product._id}`)}
                     >
                       {product.title}
                     </h3>
+
                     <div
-                      className="flex items-center gap-4"
-                      onClick={() => {
-                        router.push(`/product/${product._id}`);
-                      }}
+                      className="flex items-center justify-between mt-2"
+                      onClick={() => router.push(`/product/${product._id}`)}
                     >
-                      <p className="text-red-500 line-through">
-                        ₹{product.price}
-                      </p>
-                      <p className="text-purple-700">
+                      <p className="text-purple-700 font-semibold text-sm">
                         ₹{product.discountedPrice}
+                      </p>
+                      <p className="text-xs line-through text-red-500">
+                        ₹{product.price}
                       </p>
                     </div>
                   </div>
                 ))
               ) : (
-                <div>No products found</div>
+                <div>No products found.</div>
               )}
             </ul>
           </div>
@@ -189,14 +187,14 @@ const Page = () => {
                 products.map((product) => (
                   <div
                     key={product._id}
-                    className=" min-h-64 min-w-42 sm:min-w-52 md:size-64 rounded  bg-gray-100 flex items-start justify-center  border-purple-100 border hover:scale-90 transition-all duration-300 overflow-hidden cursor-pointer p-2 flex-col relative"
+                    className="bg-white border border-purple-100 rounded-xl shadow-sm p-4 cursor-pointer  flex flex-col relative"
                   >
-                    <div className="flex items-center justify-between w-full">
-                      <div className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-xs bg-purple-700 text-white px-2 py-1 rounded">
                         {Math.floor(product.discountPercentage)}% Off
-                      </div>
+                      </span>
                       <div
-                        className="bg-gray-100 p-1 rounded-full cursor-pointer"
+                        className="bg-gray-100 p-1 rounded-full"
                         onClick={() => {
                           if (!user) {
                             return router.push("/login");
@@ -206,42 +204,40 @@ const Page = () => {
                         }}
                       >
                         {user && alreadyInWishlist(product._id) ? (
-                          <IoMdHeart className="text-red-500 text-3xl" />
+                          <IoMdHeart className="text-red-500 text-2xl" />
                         ) : (
-                          <CiHeart className="text-black text-3xl hover:text-red-500" />
+                          <CiHeart className="text-black text-2xl hover:text-red-500" />
                         )}
                       </div>
                     </div>
-                    <Image
-                      src={product.image}
-                      alt={product.title}
-                      width={200}
-                      height={200}
-                      onClick={() => {
-                        router.push(`/product/${product._id}`);
-                      }}
-                      className="object-contain size-36 w-full text-center  p-2 rounded"
-                    />
+
+                    <div className="overflow-hidden rounded-md">
+                      <Image
+                        src={product.image || "/placeholder.png"}
+                        alt={product.title}
+                        width={300}
+                        height={300}
+                        className="w-full h-40 object-cover rounded mb-2  transform transition-transform duration-300 hover:scale-110"
+                        onClick={() => router.push(`/product/${product._id}`)}
+                      />
+                    </div>
 
                     <h3
-                      className="font-bold mt-4"
-                      onClick={() => {
-                        router.push(`/product/${product._id}`);
-                      }}
+                      className="font-semibold text-sm md:text-base mt-2"
+                      onClick={() => router.push(`/product/${product._id}`)}
                     >
                       {product.title}
                     </h3>
+
                     <div
-                      className="flex items-center gap-4"
-                      onClick={() => {
-                        router.push(`/product/${product._id}`);
-                      }}
+                      className="flex items-center justify-between mt-2"
+                      onClick={() => router.push(`/product/${product._id}`)}
                     >
-                      <p className="text-red-500 line-through">
-                        ₹{product.price}
-                      </p>
-                      <p className="text-purple-700">
+                      <p className="text-purple-700 font-semibold text-sm">
                         ₹{product.discountedPrice}
+                      </p>
+                      <p className="text-xs line-through text-red-500">
+                        ₹{product.price}
                       </p>
                     </div>
                   </div>

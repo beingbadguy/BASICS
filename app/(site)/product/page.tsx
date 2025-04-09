@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { Progress } from "@radix-ui/react-progress";
 import { useAuthStore } from "@/store/store";
 import { IoMdHeart } from "react-icons/io";
-import { CiHeart } from "react-icons/ci";
+import { CiDiscount1, CiHeart } from "react-icons/ci";
 
 type Product = {
   _id: string;
@@ -304,36 +304,33 @@ const ProductsPage = () => {
         <section
           className={`flex-1 grid gap-6 ${
             layout === "grid"
-              ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3"
+              ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
               : "grid-cols-1"
           }`}
         >
           {products.map((product) => (
             <div
               key={product._id}
-              className={`p-4 min-h-64 min-w-42 sm:min-w-52 md:min-size-64 border rounded-md shadow-sm hover:shadow-md cursor-pointer transition-all ${
+              className={`border rounded-2xl shadow-sm p-4 transition-all hover:shadow-md cursor-pointer group bg-white ${
                 layout === "list"
-                  ? "flex gap-4 items-center relative justify-evenly w-full "
-                  : ""
+                  ? "flex gap-6 items-start relative"
+                  : "flex flex-col items-center text-center"
               }`}
             >
+              {/* Discount badge and wishlist */}
               <div
-                className={` ${
-                  layout === "list"
-                    ? " absolute top-4 right-4"
-                    : "flex items-center justify-between w-full"
-                } ""`}
+                className={`w-full flex justify-between items-start mb-2 z-[99] ${
+                  layout === "list" ? "absolute top-2 left-2" : "px-1"
+                }`}
               >
-                <div
-                  className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md"
-                  onClick={() => {
-                    alert(product._id);
-                  }}
-                >
+                <div className="flex items-center gap-1 bg-purple-600 text-white text-xs px-2 py-1 rounded-full ">
+                  <CiDiscount1 className="text-base" />
                   {Math.floor(product.discountPercentage)}% Off
                 </div>
                 <div
-                  className="bg-gray-100 p-1 rounded-full cursor-pointer flex items-center justify-center"
+                  className={`bg-gray-100 p-1 rounded-full cursor-pointer hover:bg-gray-200  ${
+                    layout === "list" ? "mr-3" : ""
+                  } `}
                   onClick={() => {
                     if (!user) {
                       return router.push("/login");
@@ -343,48 +340,49 @@ const ProductsPage = () => {
                   }}
                 >
                   {user && alreadyInWishlist(product._id) ? (
-                    <IoMdHeart className="text-red-500 text-3xl" />
+                    <IoMdHeart className="text-red-500 text-xl" />
                   ) : (
-                    <CiHeart className="text-black text-3xl hover:text-red-500" />
+                    <CiHeart className="text-black text-xl group-hover:text-red-500" />
                   )}
                 </div>
               </div>
-              <Image
-                src={product.image || "/placeholder.png"}
-                alt={product.title}
-                width={layout === "list" ? 150 : 300}
-                height={layout === "list" ? 150 : 300}
-                onClick={() => router.push(`/product/${product._id}`)}
-                className={` ${
-                  layout === "list"
-                    ? "w-[50%] md:min-size-64 size-64 "
-                    : "w-full size-48"
-                } object-contain size-24 max-size-36  text-center  p-2 rounded `}
-              />
+
+              {/* Product Image */}
+
+              <div className="overflow-hidden rounded-md w-full">
+                <Image
+                  src={product.image || "/placeholder.png"}
+                  alt={product.title}
+                  width={layout === "list" ? 140 : 220}
+                  height={layout === "list" ? 140 : 220}
+                  onClick={() => router.push(`/product/${product._id}`)}
+                  className={`object-cover rounded-lg hover:scale-110 duration-300 transition-all ${
+                    layout === "list"
+                      ? "w-[140px] h-[140px]"
+                      : "w-full h-[200px]"
+                  }`}
+                />
+              </div>
+
+              {/* Product Details */}
               <div
-                className={layout === "list" ? "flex-1" : "w-[50%]"}
+                className={`mt-3 ${
+                  layout === "list" ? "flex-1 pl-4" : "w-full"
+                }`}
                 onClick={() => router.push(`/product/${product._id}`)}
               >
-                <h2 className="text-lg font-semibold mt-2">{product.title}</h2>
-                {/* {layout === "list" && (
-                  <div>
-                    <p className="text-sm text-gray-500 mt-2">
-                      {product.description}
-                    </p>
-                    <Separator className="bg-gray-300 w-full my-2 h-[1px]" />
-                  </div>
-                )} */}
-                <div className="mt-2">
-                  <p className="text-purple-700 font-bold text-lg">
-                    ₹{product.discountedPrice}
-                    <span className="text-sm text-gray-500 line-through ml-2">
-                      ₹{product.price}
-                    </span>
-                  </p>
-                  <p className="text-xs text-green-600">
-                    {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
-                  </p>
+                <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 line-clamp-2">
+                  {product.title}
+                </h2>
+                <div className="text-purple-700 font-bold text-sm sm:text-lg">
+                  ₹{product.discountedPrice}
+                  <span className="text-gray-400 text-xs line-through ml-2">
+                    ₹{product.price}
+                  </span>
                 </div>
+                <p className="text-xs text-green-600 mt-1">
+                  {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
+                </p>
               </div>
             </div>
           ))}

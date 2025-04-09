@@ -54,14 +54,12 @@ const ShopByCategory = () => {
             className="flex items-center justify-center gap-4 flex-col mt-2"
             onClick={() => router.push(`/category/${category.name}`)}
           >
-            <div className="size-32 md:size-42 rounded-full bg-gray-300 flex items-center justify-center   border-purple-100 border hover:scale-90 transition-all duration-300 overflow-hidden cursor-pointer p-2">
+            <div className="size-32 md:size-42 rounded-full overflow-hidden border border-purple-100 hover:scale-90 transition-transform duration-300 cursor-pointer relative">
               <Image
                 src={category.categoryImage}
                 alt={category.name}
-                width={100}
-                height={100}
-                style={{ height: "auto", width: "auto" }}
-                className="object-cover "
+                fill
+                className="object-cover"
               />
             </div>
             <li className="hover:underline cursor-pointer">{category.name}</li>

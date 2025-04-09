@@ -7,9 +7,9 @@ import { FaStar } from "react-icons/fa";
 import { MdShoppingCart } from "react-icons/md";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Separator } from "@radix-ui/react-select";
-import { CiHeart } from "react-icons/ci";
-import { useAuthStore } from "@/store/store";
+import { CiDiscount1, CiHeart } from "react-icons/ci";
 import { IoMdHeart } from "react-icons/io";
+import { useAuthStore } from "@/store/store";
 
 type Product = {
   _id: string;
@@ -26,19 +26,18 @@ type Product = {
 };
 
 const ProductPage = () => {
-  const { addToWishlist, user } = useAuthStore();
-
+  const { addToWishlist, user, fetchUserCart } = useAuthStore();
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [product, setProduct] = useState<Product | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
+  const [addingCart, setAddingCart] = useState<boolean>(false);
   const router = useRouter();
 
   const fetchAllProducts = async () => {
     setLoading(true);
     try {
       const response = await axios.get("/api/product");
-      console.log(response.data);
       setProducts(response.data.products);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -52,10 +51,7 @@ const ProductPage = () => {
   };
 
   const fetchProductById = async () => {
-    if (!id) {
-      console.log("You must provide a product id.");
-      return;
-    }
+    if (!id) return;
     setLoading(true);
     try {
       const response = await axios.get(`/api/product/${id}`);
@@ -67,21 +63,48 @@ const ProductPage = () => {
     }
   };
 
-  const similarProducts = products.filter((p) => p._id !== id);
+  const addToCart = async () => {
+    if (!id) return;
+    setAddingCart(true);
+    try {
+      await axios.post(`/api/cart/${id}`);
+      fetchUserCart();
+    } catch (error) {
+      console.error("Failed to add to cart", error);
+    } finally {
+      setAddingCart(false);
+    }
+  };
 
+  const similarProducts = products.filter((p) => p._id !== id);
   const allProductsOfWishlist = user?.wishlist?.[0]?.products || [];
 
-  type WishlistItemFlexible = {
-    productId: string | { _id: string };
+
+  type WishlistItem = {
+    productId: Products; // or Products[]
   };
+
+  interface Products {
+    _id: string;
+    title: string;
+    description: string;
+    price: number;
+    discountedPrice: number;
+    countInStock: number;
+    rating: number;
+    numReviews: number;
+    image: string;
+    discountPercentage: number;
+    isActive: boolean;
+    category: string;
+  }
+
   const alreadyInWishlist = (id: string) => {
-    return allProductsOfWishlist.some((item: WishlistItemFlexible) => {
-      if (typeof item.productId === "string") {
-        return item.productId === id;
-      } else {
-        return item.productId._id === id;
-      }
-    });
+    return allProductsOfWishlist.some((item: WishlistItem) =>
+      Array.isArray(item.productId)
+        ? item.productId.some((product) => product._id === id)
+        : item.productId._id === id
+    );
   };
 
   useEffect(() => {
@@ -90,25 +113,10 @@ const ProductPage = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
-  if (loading) {
+  if (loading || !product) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">
         <AiOutlineLoading3Quarters className="animate-spin text-3xl text-purple-600" />
-      </div>
-    );
-  }
-
-  if (!product) {
-    return (
-      <div className="min-h-[70vh] flex items-center justify-center">
-        <AiOutlineLoading3Quarters className="animate-spin text-3xl text-purple-600" />
-      </div>
-    );
-  }
-  if (!id) {
-    return (
-      <div className="min-h-[70vh] flex items-center justify-center text-gray-600">
-        Product not found.
       </div>
     );
   }
@@ -135,22 +143,22 @@ const ProductPage = () => {
 
       <div className="flex flex-col md:flex-row gap-10 mt-5">
         {/* Product Image */}
-        <div className="flex-1 text-center w-full  flex items-center justify-center md:items-start md:justify-start relative">
-          <div className="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 rounded">
-            {Math.floor(product.discountPercentage)}% Off
+        <div className="flex-1 flex items-center justify-center relative">
+          <div className="relative w-64 h-64 md:w-72 md:h-72 bg-white p-4 rounded-xl shadow-sm">
+            <Image
+              src={product.image}
+              alt={product.title}
+              fill
+              className="object-cover rounded-lg"
+            />
           </div>
-          <Image
-            src={product.image}
-            alt={product.title}
-            width={500}
-            height={500}
-            className="rounded-xl object-contain size-64 md:size-72 ml-10"
-          />
         </div>
 
         {/* Product Info */}
         <div className="flex-1 space-y-4">
-          <h1 className="text-2xl font-bold">{product.title}</h1>
+          <div className="flex items-center justify-between w-full">
+            <h1 className="text-2xl font-bold">{product.title}</h1>
+          </div>
           <div className="flex items-center gap-2 text-yellow-500">
             {Array.from({ length: 5 }, (_, i) => (
               <FaStar
@@ -166,7 +174,7 @@ const ProductPage = () => {
           </div>
 
           <p className="text-gray-700">{product.description}</p>
-          <Separator className="my-4 w-full  bg-gray-400 border " />
+          <Separator className="my-4 w-full bg-gray-400 border" />
 
           <div className="space-y-2">
             <p className="text-lg font-semibold text-green-600">
@@ -175,6 +183,10 @@ const ProductPage = () => {
                 ₹{product.price.toLocaleString()}
               </span>
             </p>
+            <div className="  text-purple-500 text-sm rounded z-[999] flex items-center gap-1">
+              <CiDiscount1 className="text-xl" />
+              {Math.floor(product.discountPercentage)}% Off
+            </div>
             <p className="text-sm text-gray-600">
               {product.countInStock > 0 ? "In stock" : "Out of stock"}
             </p>
@@ -192,27 +204,28 @@ const ProductPage = () => {
             <button
               className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded disabled:opacity-50 w-[300px] flex items-center justify-center gap-2 cursor-pointer"
               disabled={product.countInStock <= 0}
+              onClick={() => (user ? addToCart() : router.push("/login"))}
             >
-              <MdShoppingCart className="text-lg" />
-              Buy Now
+              {addingCart ? (
+                <AiOutlineLoading3Quarters className="animate-spin" />
+              ) : (
+                <>
+                  <MdShoppingCart className="text-lg" />
+                  Buy Now
+                </>
+              )}
             </button>
             <button
-              className="bg-gray-100 hover:bg-gray-200 cursor-pointer text-black border px-4 py-3 md:py-2 rounded flex items-center gap-2"
-              onClick={() => {
-                if (!user) {
-                  return router.push("/login");
-                } else {
-                  addToWishlist(product._id);
-                }
-              }}
+              className="bg-gray-100 hover:bg-gray-200 text-black border px-4 py-3 md:py-2 rounded flex items-center gap-2"
+              onClick={() =>
+                user ? addToWishlist(product._id) : router.push("/login")
+              }
             >
-              <div className="bg-gray-100  rounded-full cursor-pointer">
-                {user && alreadyInWishlist(product._id) ? (
-                  <IoMdHeart className="text-red-500 text-2xl" />
-                ) : (
-                  <CiHeart className="text-black text-2xl hover:text-red-500" />
-                )}
-              </div>
+              {user && alreadyInWishlist(product._id) ? (
+                <IoMdHeart className="text-red-500 text-2xl" />
+              ) : (
+                <CiHeart className="text-black text-2xl hover:text-red-500" />
+              )}
               <p className="hidden xl:block">
                 {user && alreadyInWishlist(product._id)
                   ? "Added to wishlist"
@@ -225,70 +238,69 @@ const ProductPage = () => {
 
       {/* Product Details */}
       <div className="mt-10">
-        <h2 className="text-2xl font-bold mb-4">Product Details</h2>
+        <h2 className="text-xl  md:text-2xl font-bold mb-4">Product Details</h2>
         <p className="text-gray-700">{product.description}</p>
       </div>
 
+      {/* Recommended Products */}
       <div>
-        <h2 className="text-2xl font-bold mb-4 mt-10">Recommended Products</h2>
-        <div className="my-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
-          {similarProducts &&
-            similarProducts.map((product) => (
+        <h2 className=" text-xl  md:text-2xl font-bold mb-4 mt-10 ">
+          Recommended Products
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 my-4">
+          {similarProducts.map((product) => (
+            <div
+              key={product._id}
+              className="relative bg-white border border-gray-200 rounded-xl p-3 shadow-sm hover:shadow-md transition-all"
+            >
+              <div className="absolute top-2 left-2 bg-purple-700 text-white text-xs px-2 py-1 rounded z-[999] flex items-center gap-1">
+                <CiDiscount1 className="text-base" />
+                {Math.floor(product.discountPercentage)}% Off
+              </div>
               <div
-                key={product._id}
-                className=" min-h-64 min-w-42 sm:min-w-52 md:size-64 rounded  bg-gray-100 flex items-start justify-center  border-purple-100 border  overflow-hidden cursor-pointer p-2 flex-col relative"
+                className="absolute top-2 right-2 bg-white p-1 rounded-full cursor-pointer shadow"
+                onClick={() =>
+                  user ? addToWishlist(product._id) : router.push("/login")
+                }
               >
-                <div className="flex items-center justify-between w-full">
-                  <div className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md">
-                    {Math.floor(product.discountPercentage)}% Off
-                  </div>
-                  <div
-                    className="bg-gray-100 p-1 rounded-full cursor-pointer"
-                    onClick={() => {
-                      if (!user) {
-                        return router.push("/login");
-                      } else {
-                        addToWishlist(product._id);
-                      }
-                    }}
-                  >
-                    {user && alreadyInWishlist(product._id) ? (
-                      <IoMdHeart className="text-red-500 text-3xl" />
-                    ) : (
-                      <CiHeart className="text-black text-3xl hover:text-red-500" />
-                    )}
-                  </div>
-                </div>
+                {user && alreadyInWishlist(product._id) ? (
+                  <IoMdHeart className="text-red-500 text-xl" />
+                ) : (
+                  <CiHeart className="text-black text-xl hover:text-red-500" />
+                )}
+              </div>
+
+              <div
+                className="relative w-full h-44 bg-gray-50 rounded-lg overflow-hidden mb-3 cursor-pointer"
+                onClick={() => router.push(`/product/${product._id}`)}
+              >
                 <Image
                   src={product.image}
                   alt={product.title}
-                  width={200}
-                  height={200}
-                  onClick={() => {
-                    router.push(`/product/${product._id}`);
-                  }}
-                  className="object-contain size-36 w-full text-center  p-2 rounded hover:scale-90 transition-all duration-300"
+                  fill
+                  className="object-cover"
                 />
-
-                <h3
-                  className="font-bold mt-4"
-                  onClick={() => {
-                    router.push(`/product/${product._id}`);
-                  }}
-                >
-                  {product.title}
-                </h3>
-                <div
-                  className="flex items-center gap-4"
-                  onClick={() => {
-                    router.push(`/product/${product._id}`);
-                  }}
-                >
-                  <p className="text-red-500 line-through">₹{product.price}</p>
-                  <p className="text-purple-700">₹{product.discountedPrice}</p>
-                </div>
               </div>
-            ))}
+
+              <h3
+                className="font-semibold text-sm md:text-base line-clamp-2 cursor-pointer"
+                onClick={() => router.push(`/product/${product._id}`)}
+              >
+                {product.title}
+              </h3>
+              <div
+                className="flex items-center gap-2 text-sm mt-1 cursor-pointer"
+                onClick={() => router.push(`/product/${product._id}`)}
+              >
+                <span className="text-red-500 line-through">
+                  ₹{product.price}
+                </span>
+                <span className="text-purple-700 font-semibold">
+                  ₹{product.discountedPrice}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

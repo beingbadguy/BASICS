@@ -10,7 +10,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function LoginPage() {
-  const { setUser } = useAuthStore();
+  const { setUser, fetchUserCart } = useAuthStore();
   const router = useRouter();
   const [data, setData] = useState({
     email: "",
@@ -31,6 +31,7 @@ export default function LoginPage() {
       const response = await axios.post("/api/login", data);
       // console.log(response.data);
       setUser(response.data.data); // Update  user state with the returned user object
+      fetchUserCart();
       router.push("/"); // Redirect to home page after successful login
       // if (await response.data.data.isVerified) {
       // } else {

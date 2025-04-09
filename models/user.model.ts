@@ -21,7 +21,6 @@ const userSchema = new mongoose.Schema({
   pass: {
     type: String,
     required: true,
-    select: false,
   },
   role: {
     type: String,

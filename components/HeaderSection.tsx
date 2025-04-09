@@ -15,14 +15,31 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const HeaderSection = () => {
-  const { user, fetchUser } = useAuthStore();
+  const { user, fetchUser, userCart } = useAuthStore();
+
+  const [totalNumberOfProducts, setTotalNumberOfProducts] = useState(0);
 
   const [menu, setMenu] = useState<boolean>(false);
   const router = useRouter();
 
+  if (userCart) {
+    console.log(userCart.products);
+  }
+
   useEffect(() => {
-    fetchUser(); // Fetch user when the component mounts
-  }, [fetchUser]);
+    if (userCart?.products?.length) {
+      setTotalNumberOfProducts(userCart?.products.length);
+    } else {
+      setTotalNumberOfProducts(0);
+    }
+  }, [userCart]);
+
+  
+  useEffect(() => {
+    if (!user) {
+      fetchUser();
+    }
+  }, []);
 
   return (
     <div className="">
@@ -112,8 +129,9 @@ const HeaderSection = () => {
               }
             }}
           />
-          <ShoppingBag
-            className="cursor-pointer"
+
+          <div
+            className="cursor-pointer relative"
             onClick={() => {
               if (user) {
                 router.push("/cart");
@@ -121,7 +139,13 @@ const HeaderSection = () => {
                 router.push("/login");
               }
             }}
-          />
+          >
+            <ShoppingBag />
+            <p className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full size-6 flex items-center text-sm justify-center">
+              {totalNumberOfProducts}
+            </p>
+          </div>
+
           <UserRound
             className="cursor-pointer"
             onClick={() => {

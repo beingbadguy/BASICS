@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { CiHeart } from "react-icons/ci";
+import { CiDiscount1, CiHeart } from "react-icons/ci";
 import { IoMdHeart } from "react-icons/io";
 
 type Products = {
@@ -20,9 +20,11 @@ type Products = {
   image: string;
   discountPercentage: number;
 };
+
 type WishlistItemFlexible = {
   productId: string | { _id: string };
 };
+
 const NewArrivals = () => {
   const { addToWishlist, user } = useAuthStore();
   const [products, setProducts] = useState<Products[]>([]);
@@ -46,6 +48,7 @@ const NewArrivals = () => {
   };
 
   const allProductsOfWishlist = user?.wishlist?.[0]?.products || [];
+
   const alreadyInWishlist = (id: string) => {
     return allProductsOfWishlist.some((item: WishlistItemFlexible) => {
       if (typeof item.productId === "string") {
@@ -61,80 +64,80 @@ const NewArrivals = () => {
   }, []);
 
   return (
-    <div className="my-4">
-      <h2 className="text-2xl">New Arrivals</h2>
-      <ul className="my-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
-        {loading && (
-          <p className="flex w-full items-center justify-center h-20 col-span-full">
-            <AiOutlineLoading3Quarters className="animate-spin text-purple-700 text-2xl" />
-          </p>
-        )}
+    <div className="my-6">
+      <h2 className="text-2xl  mb-4">New Arrivals</h2>
 
-        {!loading && products.length === 0 && (
-          <p className="col-span-full text-center text-gray-500">
-            No new arrivals found.
-          </p>
-        )}
-
-        {!loading &&
-          products.map((product) => (
+      {loading ? (
+        <div className="flex justify-center items-center h-40">
+          <AiOutlineLoading3Quarters className="animate-spin text-3xl text-purple-600" />
+        </div>
+      ) : products.length === 0 ? (
+        <p className="text-center text-gray-500">No new arrivals found.</p>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {products.map((product) => (
             <div
               key={product._id}
-              className="min-h-64 min-w-42 sm:min-w-52 md:min-size-64 rounded bg-gray-100 flex flex-col items-start justify-center border border-purple-100 transition-all duration-300 overflow-hidden cursor-pointer p-2 relative"
+              className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-3 flex flex-col justify-between"
             >
-              <div className="flex items-center justify-between w-full">
-                <div
-                  className="my-2 text-sm bg-purple-700 px-2 py-1 text-white rounded-md"
-                  onClick={() => {
-                    alert(product._id);
-                  }}
-                >
+              {/* Badge & Wishlist */}
+              <div className="flex justify-between items-start mb-2">
+                <div className="flex items-center gap-1 bg-purple-600 text-white text-xs px-2 py-1 rounded">
+                  <CiDiscount1 className="text-base" />
                   {Math.floor(product.discountPercentage)}% Off
                 </div>
+
                 <div
-                  className="bg-gray-100 p-1 rounded-full cursor-pointer"
-                  onClick={() => {
-                    if (!user) {
-                      return router.push("/login");
-                    } else {
-                      addToWishlist(product._id);
-                    }
-                  }}
+                  className="cursor-pointer p-1 rounded-full bg-white shadow"
+                  onClick={() =>
+                    user ? addToWishlist(product._id) : router.push("/login")
+                  }
                 >
                   {user && alreadyInWishlist(product._id) ? (
-                    <IoMdHeart className="text-red-500 text-3xl" />
+                    <IoMdHeart className="text-red-500 text-xl" />
                   ) : (
-                    <CiHeart className="text-black text-3xl hover:text-red-500" />
+                    <CiHeart className="text-black text-xl hover:text-red-500" />
                   )}
                 </div>
               </div>
 
-              <Image
-                src={product.image}
-                alt={product.title}
-                width={200}
-                height={200}
+              {/* Product Image */}
+              <div
+                className="relative w-full h-40 bg-gray-100 rounded-lg overflow-hidden mb-3 cursor-pointer"
                 onClick={() => router.push(`/product/${product._id}`)}
-                className="object-contain size-36 hover:scale-90 transition-all duration-300 w-full text-center p-2 rounded"
-              />
+              >
+                <Image
+                  src={product.image}
+                  alt={product.title}
+                  fill
+                  className="object-cover transition-transform hover:scale-110"
+                />
+              </div>
 
+              {/* Product Title */}
               <h3
-                className="font-bold mt-4"
+                className="font-semibold text-sm md:text-base line-clamp-2 cursor-pointer mb-1"
                 onClick={() => router.push(`/product/${product._id}`)}
               >
                 {product.title}
               </h3>
 
+              {/* Pricing */}
               <div
-                className="flex items-center gap-4"
+                className="flex items-center gap-2 text-sm"
                 onClick={() => router.push(`/product/${product._id}`)}
               >
-                <p className="text-red-500 line-through">₹{product.price}</p>
-                <p className="text-purple-700">₹{product.discountedPrice}</p>
+                <span className="text-red-500 line-through">
+                  ₹{product.price}
+                </span>
+                <span className="text-purple-700 font-semibold">
+                  ₹{product.discountedPrice}
+                </span>
               </div>
             </div>
           ))}
-      </ul>
+        </div>
+      )}
     </div>
   );
 };
