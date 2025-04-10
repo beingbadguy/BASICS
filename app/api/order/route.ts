@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
     await newOrder.save();
 
     user.order.push(newOrder._id);
+    if (user.firstPurchase === true) user.firstPurchase = false;
     user.cart = [];
     await user.save();
 
@@ -70,6 +71,7 @@ export async function GET(request: NextRequest) {
     }
 
     const orders = await Order.find({ userId: decoded?.userId })
+      .sort({ createdAt: -1 })
       .populate({
         path: "userId",
       })

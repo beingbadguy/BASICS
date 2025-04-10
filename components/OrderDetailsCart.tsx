@@ -1,6 +1,6 @@
+import { Copy } from "lucide-react";
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp, FaCcVisa } from "react-icons/fa";
-
 
 type Order = {
   _id: string;
@@ -43,26 +43,40 @@ type User = {
 
 export default function OrderDetailsCard({ order }: { order: Order }) {
   const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   return (
     <div className="border rounded my-4  p-4 mb-4 w-full ">
+      <div className="flex items-center gap-2">
+        <p className="text-sm font-semibold text-purple-700">
+          ID: #{order._id}
+        </p>
+        <Copy
+          className={` size-4 cursor-pointer transform transition-all duration-300 ${
+            copied ? "scale-125" : "scale-100"
+          }  `}
+          onClick={() => {
+            if (order._id) navigator.clipboard.writeText(order._id);
+            setCopied(true);
+            setTimeout(() => {
+              setCopied(false);
+            }, 100);
+          }}
+        />
+      </div>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
         <div className="space-y-1">
-          <p className="text-sm font-semibold">ID: #{order._id.slice(-10)}</p>
           <p className="text-xs text-gray-500">
             Date: {new Date(order.createdAt).toLocaleString()}
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 mt-3 md:mt-0 text-sm w-full md:justify-between">
+        <div className="flex flex-col sm:flex-row gap-3 mt-3 md:mt-0 text-sm w-full md:justify-evenly">
           <p>
             <span className="font-semibold">Total payment:</span> ₹
             {order.totalAmount}
           </p>
-          <p>
-            <span className="font-semibold">Payment type:</span>{" "}
-            {order.paymentMethod}
-          </p>
+
           <p className="flex items-center gap-1">
             <span className="font-semibold">Status order:</span>
             <span
@@ -120,9 +134,9 @@ export default function OrderDetailsCard({ order }: { order: Order }) {
               <p>Total products: {order.products.length}</p>
               <p>Subtotal: ₹{order.totalAmount}</p>
               <p>Shipping: ₹ 0.00</p>
-              <p>Tax: ₹ 0.00</p>
+              <p>Tax: ₹ 20.00</p>
               <p className="text-green-600 font-semibold">
-                Total: ${order.totalAmount}
+                Total: ₹{order.totalAmount}
               </p>
             </div>
 

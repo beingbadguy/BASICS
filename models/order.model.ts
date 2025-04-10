@@ -22,7 +22,15 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: "pending",
-    enum: ["processing", "pending", "dispatched", "delivered"],
+    enum: [
+      "processing",
+      "reviewing",
+      "preparing",
+      "shipped",
+      "delivered",
+      "completed",
+      "cancelled",
+    ],
   },
   deliveryType: {
     type: String,

@@ -11,7 +11,7 @@ const DashboardNavbar = () => {
 
   if (!user) {
     return (
-      <div className="min-h-20 w-full mt-6 flex ictems-center justify-center">
+      <div className="min-h-10 w-full mt-6 flex ictems-center justify-center">
         <VscLoading className="animate-spin text-purple-700 text-xl" />
       </div>
     );

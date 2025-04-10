@@ -1,19 +1,22 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { VscPass } from "react-icons/vsc";
 import { useAuthStore } from "@/store/store";
+import { Copy } from "lucide-react";
 
 export default function Page() {
   const { user } = useAuthStore();
-  const { id } = useParams();
+  const params = useParams();
+  const id = Array.isArray(params.id) ? params.id[0] : params.id;
   const router = useRouter();
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (!id) router.push("/");
-  }, [id, router]);
+    if (!id || !user || id.length < 23) router.push("/");
+  }, [id, user]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[90vh] bg-white text-center px-4">
@@ -21,8 +24,22 @@ export default function Page() {
         <div className="flex justify-center mb-6">
           <VscPass className="text-purple-600 text-6xl" />
         </div>
-        <p className="text-sm md:text-base my-2">Order ID: {id}</p>
-        <h1 className="text-2xl md:text-3xl font-semibold text-black mb-2">
+        <div className="flex items-center justify-center gap-2 w-full">
+          <p className="text-sm md:text-base my-2">Order ID: {id}</p>
+          <Copy
+            className={` size-4 cursor-pointer transform transition-all duration-300 ${
+              copied ? "scale-125" : "scale-100"
+            }  `}
+            onClick={() => {
+              if (id) navigator.clipboard.writeText(id);
+              setCopied(true);
+              setTimeout(() => {
+                setCopied(false);
+              }, 100);
+            }}
+          />
+        </div>
+        <h1 className="text-xl md:text-2xl font-semibold text-black mb-2">
           Thanks {user?.name}, Your Order was Placed Successfully.
         </h1>
         <p className="text-gray-600 mb-6 text-sm md:text-base">

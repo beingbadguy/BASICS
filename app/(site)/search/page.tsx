@@ -1,7 +1,7 @@
 "use client";
 import { useAuthStore } from "@/store/store";
 import axios, { AxiosError } from "axios";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -92,7 +92,12 @@ const Page = () => {
             onChange={(e) => setQuery(e.target.value)}
             value={query}
           />
-          <Search className="mr-2" />
+
+          {query.length > 0 ? (
+            <X className="mr-2 cursor-pointer" onClick={() => setQuery("")} />
+          ) : (
+            <Search className="mr-2 cursor-pointer" />
+          )}
         </div>
       </div>
       {/* //all the products */}

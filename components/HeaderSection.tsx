@@ -3,8 +3,11 @@
 import { useAuthStore } from "@/store/store";
 import {
   AlignJustify,
+  GalleryVerticalEnd,
   Heart,
   LayoutDashboard,
+  LucideCableCar,
+  PackagePlus,
   Search,
   ShoppingBag,
   UserRound,
@@ -13,6 +16,10 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { BiHomeAlt2 } from "react-icons/bi";
+import { MdOutlineCategory } from "react-icons/md";
+import { IoPhonePortraitOutline } from "react-icons/io5";
+import { Separator } from "@radix-ui/react-select";
 
 const HeaderSection = () => {
   const { user, fetchUser, userCart } = useAuthStore();
@@ -25,6 +32,14 @@ const HeaderSection = () => {
   if (userCart) {
     console.log(userCart.products);
   }
+
+  useEffect(() => {
+    if (menu) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [menu]);
 
   useEffect(() => {
     if (userCart?.products?.length) {
@@ -51,14 +66,14 @@ const HeaderSection = () => {
             <img
               src="/basiclogo.png"
               alt="logo"
-              className=" h-[25px] w-full -ml-3 object-contain"
+              className=" h-[27px] w-full -ml-3 object-contain"
             />
           </Link>
         </div>
         <div
           className={` ${
             menu ? "translate-x-0" : "-translate-x-[100%]"
-          } lg:translate-x-0 duration-300 transition-all absolute top-0 left-0 flex-col w-full h-screen bg-white gap-2 p-4  lg:p-0  flex lg:static lg:bg-transparent  lg:flex-row lg:w-auto lg:h-auto lg:items-center lg:justify-center lg:gap-8 z-[999]`}
+          } lg:translate-x-0 duration-300 transition-all absolute top-0 left-0 pt-4 md:mt-0 flex-col w-full h-screen bg-white gap-2 p-4  lg:p-0  flex lg:static lg:bg-transparent  lg:flex-row lg:w-auto lg:h-auto lg:items-center lg:justify-center lg:gap-8 z-[999]`}
         >
           <p
             className=" absolute top-4 right-4  lg:hidden cursor-pointer   rounded text-gray-600"
@@ -66,56 +81,87 @@ const HeaderSection = () => {
               setMenu(false);
             }}
           >
-            <X />
+            <X className="w-6 h-6" />
           </p>
+          <div className="flex items-center justify-start  md:hidden ">
+            <img
+              src="/basiclogo.png"
+              alt="logo"
+              className=" h-[27px]   object-contain"
+            />
+          </div>
+          <Separator className="bg-gray-100 h-0.5 w-full md:hidden" />
           <p
-            className="cursor-pointer hover:text-purple-700"
+            className="cursor-pointer hover:text-purple-700 flex items-center gap-2"
             onClick={() => {
               setMenu(false);
             }}
           >
+            <BiHomeAlt2 className="size-4 md:hidden" />
             <Link href={"/"}>Home</Link>
           </p>
           <p
-            className="cursor-pointer hover:text-purple-700"
+            className="cursor-pointer hover:text-purple-700 flex items-center gap-2"
             onClick={() => {
               setMenu(false);
             }}
           >
+            <MdOutlineCategory className="size-4 md:hidden" />
             <Link href={"/category"}>Categories</Link>
           </p>
           <p
-            className="cursor-pointer hover:text-purple-700"
+            className="cursor-pointer hover:text-purple-700 flex items-center gap-2"
             onClick={() => {
               setMenu(false);
             }}
           >
+            <PackagePlus className="size-4 md:hidden" />
             <Link href={"/newarrivals"}>New Arrivals</Link>
           </p>
           <p
-            className="cursor-pointer hover:text-purple-700"
+            className="cursor-pointer hover:text-purple-700 flex items-center gap-2"
             onClick={() => {
               setMenu(false);
             }}
           >
+            <GalleryVerticalEnd className="size-4 md:hidden" />
             <Link href={"/product"}>Products</Link>
           </p>
           <p
-            className="cursor-pointer hover:text-purple-700"
+            className="cursor-pointer hover:text-purple-700 flex items-center gap-2"
             onClick={() => {
               setMenu(false);
             }}
           >
-            Track Order
+            <LucideCableCar className="size-4 md:hidden" />
+            <Link href={"track"}>Track Order</Link>
           </p>
           <p
-            className="cursor-pointer hover:text-purple-700"
+            className="cursor-pointer hover:text-purple-700 flex items-center gap-2"
             onClick={() => {
               setMenu(false);
             }}
           >
+            <IoPhonePortraitOutline className="size-4 md:hidden" />
             <Link href={"/contact"}>Contact</Link>
           </p>
+          <Separator className="bg-gray-100 h-0.5 w-full md:hidden my-2" />
+
+          <div
+            className="aspect-video w-full mx-auto md:hidden"
+            onClick={() => {
+              router.push("/product");
+            }}
+          >
+            <video
+              src="/BASICS.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full h-full rounded-lg"
+            />
+          </div>
         </div>
         <div className="flex items-center justify-center gap-5">
           <Search

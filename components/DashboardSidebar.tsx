@@ -4,7 +4,7 @@ import {
   AlignVerticalJustifyEnd,
   LayoutDashboard,
   LogOut,
-  Settings,
+  ScanBarcode,
   ShoppingBag,
   ShoppingCart,
   User,
@@ -29,7 +29,7 @@ const DashboardSidebar = () => {
     },
     { label: "Orders", path: "/orders", icons: <ShoppingCart /> },
     { label: "Customers", path: "/customers", icons: <User /> },
-    { label: "Settings", path: "/settings", icons: <Settings /> },
+    { label: "Analysis", path: "/analysis", icons: <ScanBarcode /> },
     // { label: "Logout", path: "/logout", icons: <LogOut /> },
   ];
 
@@ -73,7 +73,7 @@ const DashboardSidebar = () => {
 
       <div className="mb-4 hidden md:block">
         <div
-          className="flex items-center justify-center gap-2 cursor-pointer border border-red-500 px-4 py-2 text-black rounded hover:border-none"
+          className="flex items-center justify-center gap-2 cursor-pointer border  px-4 py-2 text-black rounded hover:border-none"
           onClick={() => {
             logout();
             router.push("/login");

@@ -232,7 +232,7 @@ const ProductPage = () => {
               onClick={() => (user ? addToCart() : router.push("/login"))}
             >
               {addingCart ? (
-                <AiOutlineLoading3Quarters className="animate-spin" />
+                <AiOutlineLoading3Quarters className="animate-spin size-6" />
               ) : (
                 <>
                   <MdShoppingCart className="text-lg" />

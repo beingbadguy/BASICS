@@ -304,7 +304,7 @@ const ProductsPage = () => {
         <section
           className={`flex-1 grid gap-6 ${
             layout === "grid"
-              ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+              ? " grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
               : "grid-cols-1"
           }`}
         >

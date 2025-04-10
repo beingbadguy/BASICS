@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AiOutlineEdit, AiOutlineLoading3Quarters } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { VscLoading } from "react-icons/vsc";
 
 export default function CheckoutPage() {
-  const { user, fetchUserCart, userCart, fetchUser } =
-    useAuthStore();
+  const { user, fetchUserCart, userCart, fetchUser } = useAuthStore();
   const router = useRouter();
 
   const [showModal, setShowModal] = useState(false);
@@ -19,6 +19,8 @@ export default function CheckoutPage() {
   const [promoCode, setPromoCode] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState("");
+  const [placingOrder, setPlacingOrder] = useState(false);
+  const [orderError, setOrderError] = useState("");
 
   useEffect(() => {
     if (!user) router.push("/login");
@@ -62,6 +64,16 @@ export default function CheckoutPage() {
   const totalAfterDiscount = subtotal + estimatedTax - firstTimeDiscount;
 
   const placeOrder = async () => {
+    if (!userCart?.products.length) {
+      setOrderError("Your cart is empty");
+      return;
+    }
+    if (!address || address.length < 5) {
+      setOrderError("Please enter a valid address.");
+      return;
+    }
+
+    setPlacingOrder(true);
     try {
       const response = await axios.post("/api/order", {
         totalAmount: totalAfterDiscount,
@@ -80,10 +92,24 @@ export default function CheckoutPage() {
       console.log(response.data);
       useAuthStore.setState({ userCart: null });
       router.push(`/success/${response.data.order._id}`);
-    } catch (error) {
-      console.log(error);
+      setOrderError("");
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.log(error.response?.data);
+        setOrderError(error.response?.data.message);
+      } else {
+        console.log(error);
+      }
+    } finally {
+      setPlacingOrder(false);
     }
   };
+
+  useEffect(() => {
+    if (!userCart) {
+      router.push("/");
+    }
+  }, []);
 
   return (
     <div className="p-4 min-h-[80vh]">
@@ -179,12 +205,22 @@ export default function CheckoutPage() {
               <p>Total payment</p>
               <p>₹{totalAfterDiscount.toFixed(2)}</p>
             </div>
-            <div
+
+            {orderError && (
+              <p className="text-red-500 text-sm mt-2">{orderError}</p>
+            )}
+
+            <Button
+              disabled={placingOrder}
               className="px-4 w-full py-2 bg-black text-white text-center rounded cursor-pointer my-2"
               onClick={placeOrder}
             >
-              Place Order
-            </div>
+              {placingOrder ? (
+                <VscLoading className="animate-spin text-xl" />
+              ) : (
+                "Place Order"
+              )}
+            </Button>
           </div>
 
           {/* Promo Code */}
