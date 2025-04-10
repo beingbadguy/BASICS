@@ -150,10 +150,15 @@ const HeaderSection = () => {
           <div
             className="aspect-video w-full mx-auto  lg:hidden"
             onClick={() => {
+              setMenu(false);
               router.push("/product");
             }}
           >
-            <img src="/banner.png" alt="" className="hidden md:block w-full h-[300px] object-cover mt-12" />
+            <img
+              src="/banner.png"
+              alt=""
+              className="hidden md:block w-full h-[300px] object-cover mt-12"
+            />
             <video
               src="/BASICS.mp4"
               autoPlay

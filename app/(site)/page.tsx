@@ -40,10 +40,16 @@ export default function Home() {
       <div className="">
         <ShopByCategory />
         <NewArrivals />
-        <Banner />
+
+        <div className="cursor-pointer my-6">
+          <Link href="/product">
+            <img src="/sale.png" alt="" className="rounded-xl" />
+          </Link>
+        </div>
         {/* <BannerWall /> */}
         <Newsletter />
         <Faqs />
+        <Banner />
       </div>
     </div>
   );

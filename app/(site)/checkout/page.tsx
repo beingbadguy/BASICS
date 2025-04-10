@@ -90,6 +90,7 @@ export default function CheckoutPage() {
         })),
       });
       console.log(response.data);
+
       useAuthStore.setState({ userCart: null });
       router.push(`/success/${response.data.order._id}`);
       setOrderError("");
@@ -110,6 +111,9 @@ export default function CheckoutPage() {
       router.push("/");
     }
   }, []);
+
+
+ 
 
   return (
     <div className="p-4 min-h-[80vh]">

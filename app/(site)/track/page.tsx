@@ -50,6 +50,7 @@ export default function TrackOrderPage() {
       }
     } finally {
       setLoading(false);
+      setOrderId("");
     }
   };
 
@@ -57,7 +58,7 @@ export default function TrackOrderPage() {
     <div className="min-h-[70vh] flex items-center justify-center px-4">
       <div className="w-full  bg-white rounded-xl p-6 space-y-6">
         <h1 className="md:text-2xl font-semibold text-center flex items-center justify-center gap-2">
-          <BsBoxSeam className="text-purple-600" />
+          <BsBoxSeam className="text-black" />
           Track Your Order
         </h1>
 
@@ -67,11 +68,11 @@ export default function TrackOrderPage() {
             value={orderId}
             onChange={(e) => setOrderId(e.target.value)}
             placeholder="Enter your Order ID"
-            className="flex-1 px-4 py-2 border rounded-md outline-purple-500 w-full md:w-auto"
+            className="flex-1 px-4 py-2 border rounded-md outline-black w-full md:w-auto"
           />
           <button
             onClick={handleTrackOrder}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 md:py-0 rounded-md flex items-center justify-center gap-2 w-full md:w-auto cursor-pointer my-2 md:my-0"
+            className="bg-black hover:bg-black/80 text-white px-4 py-2 md:py-0 rounded-md flex items-center justify-center gap-2 w-full md:w-auto cursor-pointer my-2 md:my-0"
             disabled={loading}
           >
             {loading ? (

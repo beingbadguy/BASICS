@@ -34,12 +34,14 @@ export async function middleware(request: NextRequest) {
     "/orders",
     "/wishlist",
     "/successfull",
+    "/success",
   ];
   const onlyForAdmins = [
     "/dashboard",
     "/orders",
     "/customers",
     "/settings",
+    "/analysis",
     "/products",
     "/categories",
     "/addproduct",
