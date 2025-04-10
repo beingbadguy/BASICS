@@ -83,21 +83,21 @@ const HeaderSection = () => {
           >
             <X className="w-6 h-6" />
           </p>
-          <div className="flex items-center justify-start  md:hidden ">
+          <div className="flex items-center justify-start  lg:hidden ">
             <img
               src="/basiclogo.png"
               alt="logo"
               className=" h-[27px]   object-contain"
             />
           </div>
-          <Separator className="bg-gray-100 h-0.5 w-full md:hidden" />
+          <Separator className="bg-gray-100 h-0.5 w-full lg:hidden" />
           <p
             className="cursor-pointer hover:text-purple-700 flex items-center gap-2"
             onClick={() => {
               setMenu(false);
             }}
           >
-            <BiHomeAlt2 className="size-4 md:hidden" />
+            <BiHomeAlt2 className="size-4 lg:hidden" />
             <Link href={"/"}>Home</Link>
           </p>
           <p
@@ -106,7 +106,7 @@ const HeaderSection = () => {
               setMenu(false);
             }}
           >
-            <MdOutlineCategory className="size-4 md:hidden" />
+            <MdOutlineCategory className="size-4 lg:hidden" />
             <Link href={"/category"}>Categories</Link>
           </p>
           <p
@@ -115,7 +115,7 @@ const HeaderSection = () => {
               setMenu(false);
             }}
           >
-            <PackagePlus className="size-4 md:hidden" />
+            <PackagePlus className="size-4 lg:hidden" />
             <Link href={"/newarrivals"}>New Arrivals</Link>
           </p>
           <p
@@ -124,7 +124,7 @@ const HeaderSection = () => {
               setMenu(false);
             }}
           >
-            <GalleryVerticalEnd className="size-4 md:hidden" />
+            <GalleryVerticalEnd className="size-4 lg:hidden" />
             <Link href={"/product"}>Products</Link>
           </p>
           <p
@@ -133,7 +133,7 @@ const HeaderSection = () => {
               setMenu(false);
             }}
           >
-            <LucideCableCar className="size-4 md:hidden" />
+            <LucideCableCar className="size-4 lg:hidden" />
             <Link href={"track"}>Track Order</Link>
           </p>
           <p
@@ -142,24 +142,25 @@ const HeaderSection = () => {
               setMenu(false);
             }}
           >
-            <IoPhonePortraitOutline className="size-4 md:hidden" />
+            <IoPhonePortraitOutline className="size-4 lg:hidden" />
             <Link href={"/contact"}>Contact</Link>
           </p>
-          <Separator className="bg-gray-100 h-0.5 w-full md:hidden my-2" />
+          <Separator className="bg-gray-100 h-0.5 w-full lg:hidden my-2" />
 
           <div
-            className="aspect-video w-full mx-auto md:hidden"
+            className="aspect-video w-full mx-auto  lg:hidden"
             onClick={() => {
               router.push("/product");
             }}
           >
+            <img src="/banner.png" alt="" className="hidden md:block w-full h-[300px] object-cover mt-12" />
             <video
               src="/BASICS.mp4"
               autoPlay
               muted
               loop
               playsInline
-              className="w-full h-full rounded-lg"
+              className="w-full h-full md:hidden rounded-lg"
             />
           </div>
         </div>
