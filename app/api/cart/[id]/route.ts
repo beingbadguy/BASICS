@@ -18,6 +18,12 @@ export async function POST(
   try {
     const { id } = await context.params;
     const decoded = await fetchTokenDetails(request);
+    if (!decoded) {
+      return NextResponse.json(
+        { message: "You must log in to add product to cart", success: false },
+        { status: 401 }
+      );
+    }
     if (!id) {
       return NextResponse.json(
         { message: "Product id is required", success: false },

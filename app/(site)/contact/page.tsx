@@ -1,5 +1,5 @@
 "use client";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import {
@@ -39,7 +39,7 @@ const ContactUs = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post("/api/contact",  data );
+      const response = await axios.post("/api/contact", data);
       console.log(response.data);
       setSuccess("Your message has been sent!");
       setData({
@@ -47,9 +47,13 @@ const ContactUs = () => {
         email: "",
         message: "",
       });
-    } catch (error) {
-      console.error(error);
-      setError("Something went wrong. Please try again later.");
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      } else {
+        console.error(error);
+        setError("Something went wrong. Please try again later.");
+      }
     } finally {
       setLoading(false);
     }

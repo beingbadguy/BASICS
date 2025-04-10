@@ -59,8 +59,12 @@ const ProductPage = () => {
     try {
       const response = await axios.get(`/api/product/${id}`);
       setProduct(response.data.product);
-    } catch (error) {
-      console.error("Failed to fetch product:", error);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      } else {
+        console.error("Failed to fetch product:", error);
+      }
     } finally {
       setLoading(false);
     }
@@ -72,8 +76,12 @@ const ProductPage = () => {
     try {
       await axios.post(`/api/cart/${id}`);
       fetchUserCart();
-    } catch (error) {
-      console.error("Failed to add to cart", error);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      } else {
+        console.error("Failed to add to cart", error);
+      }
     } finally {
       setAddingCart(false);
     }
@@ -114,6 +122,12 @@ const ProductPage = () => {
     fetchAllProducts();
     window.scrollTo(0, 0);
   }, [id]);
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    }
+  }, []);
 
   if (loading || !product) {
     return (

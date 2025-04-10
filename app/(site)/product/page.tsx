@@ -23,6 +23,7 @@ type Product = {
   image: string;
   discountPercentage: number;
   category: string;
+  isActive: boolean;
 };
 interface Category {
   _id: string;
@@ -380,8 +381,14 @@ const ProductsPage = () => {
                     ₹{product.price}
                   </span>
                 </div>
-                <p className="text-xs text-green-600 mt-1">
-                  {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
+                <p
+                  className={`text-xs text-green-600 mt-1 ${
+                    product.isActive === true
+                      ? "text-green-600 "
+                      : "text-red-600"
+                  }  `}
+                >
+                  {product.isActive === true ? "In Stock" : "Out of Stock"}
                 </p>
               </div>
             </div>

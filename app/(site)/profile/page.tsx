@@ -3,7 +3,7 @@ import OrderDetailsCard from "@/components/OrderDetailsCart";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/store";
 import { Separator } from "@radix-ui/react-select";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -71,8 +71,12 @@ export default function ProfilePage() {
     try {
       const response = await axios.get("/api/order");
       setOrders(response.data.orders);
-    } catch (error) {
-      console.log(error);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      } else {
+        console.error("Error fetching orders:", error);
+      }
     }
   };
 
@@ -97,8 +101,12 @@ export default function ProfilePage() {
       const formData = new FormData();
       formData.append("image", file);
       await axios.put("/api/profileupload", formData);
-    } catch (error) {
-      console.log(error);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      } else {
+        console.error("Error updating profile image:", error);
+      }
     } finally {
       fetchUser();
     }
@@ -198,7 +206,14 @@ export default function ProfilePage() {
               <div>
                 <p>Joined Basics on</p>
                 <p className="text-black">
-                  {new Date(user?.createdAt as string).toLocaleDateString()}
+                  {new Date(user?.createdAt as string).toLocaleDateString(
+                    "en-GB",
+                    {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    }
+                  )}
                 </p>
               </div>
               <div>
@@ -293,8 +308,12 @@ export default function ProfilePage() {
                         await fetchUser();
                         setError("");
                         setShowModal(false);
-                      } catch (error) {
-                        console.error(error);
+                      } catch (error: unknown) {
+                        if (error instanceof AxiosError) {
+                          console.error(error.response?.data);
+                        } else {
+                          console.error("Error updating profile:", error);
+                        }
                       } finally {
                         setIsUpdating(false);
                       }
@@ -313,13 +332,17 @@ export default function ProfilePage() {
           )}
         </div>
       ) : (
-        <div className="max-h-[80vh] bg-white overflow-y-scroll p-4 w-full">
+        <div className="max-h-[90vh] bg-white overflow-y-scroll p-4 w-full">
           <h1 className="text-xl md:text-2xl font-semibold">
             My Orders ({orders?.length || 0})
           </h1>
           <div className="w-full select-text">
             {orders?.map((order: Order) => (
-              <OrderDetailsCard order={order} key={order._id} />
+              <OrderDetailsCard
+                order={order}
+                key={order._id}
+                fetchUserOrders={fetchUserOrders}
+              />
             ))}
           </div>
         </div>

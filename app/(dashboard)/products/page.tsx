@@ -72,8 +72,12 @@ const Page = () => {
       setProducts((prev) =>
         prev.map((p) => (p._id === id ? { ...p, isActive: newStatus } : p))
       );
-    } catch (error) {
-      console.error("Failed to update status", error);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      } else {
+        console.error("Failed to update status", error);
+      }
     }
   };
 
@@ -82,8 +86,12 @@ const Page = () => {
     try {
       await axios.delete(`/api/product/${id}`);
       fetchAllProducts();
-    } catch (error) {
-      console.error("Delete failed", error);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      } else {
+        console.error("Delete failed", error);
+      }
     }
   };
 
@@ -122,9 +130,13 @@ const Page = () => {
       setUpdateModal(false);
       setSelectedProduct(null);
       fetchAllProducts();
-    } catch (error) {
-      console.error("Update failed", error);
-      setFormError("Failed to update product.");
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      } else {
+        console.error("Update failed", error);
+        setFormError("Failed to update product.");
+      }
     } finally {
       setIsSubmitting(false);
     }

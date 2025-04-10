@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const CartPage = () => {
   const { user, fetchUserCart, userCart } = useAuthStore();
@@ -31,8 +31,12 @@ const CartPage = () => {
       });
       console.log(response.data);
       fetchUserCart();
-    } catch (error) {
-      console.error("Failed to add to cart", error);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      } else {
+        console.error("Failed to add to cart", error);
+      }
     }
   };
 
@@ -43,8 +47,13 @@ const CartPage = () => {
       const response = await axios.delete(`/api/cart/${productId}`);
       console.log(response.data);
       fetchUserCart();
-    } catch (error) {
-      console.error("Failed to add to cart", error);
+    }catch (error: unknown) {
+          if (error instanceof AxiosError) {
+            console.error(error.response?.data);
+          } else {
+      
+            console.error("Failed to add to cart", error);
+          }
     }
   };
 
@@ -132,7 +141,7 @@ const CartPage = () => {
                             console.log("Quantity cannot be less than 1");
                           }
                         }}
-                        className="p-1 bg-gray-100 hover:bg-gray-200 cursor-pointer rounded-full size-10 flex items-center justify-center"
+                        className="p-1 bg-gray-100 active:scale-90 transition-transform duration-200 hover:bg-gray-200 cursor-pointer rounded-full size-10 flex items-center justify-center"
                       >
                         <Minus size={16} />
                       </button>
@@ -148,7 +157,7 @@ const CartPage = () => {
                             console.log("Quantity cannot be more than stock");
                           }
                         }}
-                        className="p-1 bg-gray-100 hover:bg-gray-200 cursor-pointer rounded-full size-10 flex items-center justify-center"
+                        className="p-1 bg-gray-100 hover:bg-gray-200  active:scale-90 transition-transform duration-200  cursor-pointer rounded-full size-10 flex items-center justify-center"
                       >
                         <Plus size={16} />
                       </button>
@@ -199,7 +208,7 @@ const CartPage = () => {
             </div>
 
             <button
-              className="w-full bg-black cursor-pointer text-white py-3 font-semibold rounded"
+              className="w-full bg-black hover:bg-black/80 active:scale-90 transition-transform duration-200 cursor-pointer text-white py-3 font-semibold rounded"
               onClick={() => {
                 router.push("/checkout");
               }}

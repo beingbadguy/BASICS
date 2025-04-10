@@ -112,9 +112,6 @@ export default function CheckoutPage() {
     }
   }, []);
 
-
- 
-
   return (
     <div className="p-4 min-h-[80vh]">
       <div className="text-sm text-gray-500 mb-4">
@@ -216,7 +213,7 @@ export default function CheckoutPage() {
 
             <Button
               disabled={placingOrder}
-              className="px-4 w-full py-2 bg-black text-white text-center rounded cursor-pointer my-2"
+              className="px-4 w-full py-2 bg-black hover:bg-black/80 active:scale-90 transition-transform duration-200 text-white text-center rounded cursor-pointer my-2"
               onClick={placeOrder}
             >
               {placingOrder ? (

@@ -1,6 +1,8 @@
+import axios, { AxiosError } from "axios";
 import { Copy } from "lucide-react";
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp, FaCcVisa } from "react-icons/fa";
+import { VscLoading } from "react-icons/vsc";
 
 type Order = {
   _id: string;
@@ -41,9 +43,35 @@ type User = {
   phone?: string;
 };
 
-export default function OrderDetailsCard({ order }: { order: Order }) {
+export default function OrderDetailsCard({
+  order,
+  fetchUserOrders,
+}: {
+  order: Order;
+  fetchUserOrders: () => void;
+}) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [updatingId, setUpdatingId] = useState<boolean>(false);
+
+
+  const updateStatus = async (id: string, status: string) => {
+    setUpdatingId(true);
+    try {
+      const response = await axios.put(`/api/orders/${id}`, { status });
+      console.log(response.data);
+
+      fetchUserOrders();
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message || "Failed to update status");
+      } else {
+        alert("Failed to update status");
+      }
+    } finally {
+      setUpdatingId(false);
+    }
+  };
 
   return (
     <div className="border rounded my-4  p-4 mb-4 w-full ">
@@ -154,6 +182,27 @@ export default function OrderDetailsCard({ order }: { order: Order }) {
               </p>
             </div>
           </div>
+
+          {order.status === "processing" ||
+          order.status === "preparing" ||
+          order.status === "reviewing" ? (
+            <p
+              className="bg-red-500 hover:bg-red-400 text-white py-1 px-2 rounded cursor-pointer active:scale-90 transition-all duration-300 w-[150px] text-center flex items-center justify-center"
+              onClick={() => {
+                if (window.confirm("Do you want to cancel the order ?")) {
+                  updateStatus(order._id, "cancelled");
+                }
+              }}
+            >
+              {updatingId ? (
+                <VscLoading className="animate-spin" />
+              ) : (
+                "Cacel order"
+              )}
+            </p>
+          ) : (
+            ""
+          )}
         </div>
       )}
     </div>

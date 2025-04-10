@@ -79,7 +79,7 @@ export default function Page() {
           Thanks {user?.name}, Your Order was Placed Successfully.
         </h1>
         <p className="text-gray-600 mb-6 text-sm md:text-base">
-          We will send latest information and updates about your order to @
+          We will send latest information and updates about your order to 
           {user?.email}
         </p>
         <div className="flex flex-col md:flex-row gap-4 justify-center">

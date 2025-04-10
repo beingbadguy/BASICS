@@ -61,7 +61,7 @@ const AnalysisPage = () => {
   }, []);
 
   return (
-    <div className="mt-2 p-2 max-h-[90vh] overflow-y-scroll space-y-10">
+    <div className="mt-2 overflow-y-scroll max-h-[90vh] pt-20 pb-20 md:pt-0 md:mb-0 md:px-4">
       <h1 className="text-2xl font-bold text-purple-700 mb-4">
         Analysis Dashboard
       </h1>

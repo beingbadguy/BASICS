@@ -2,7 +2,7 @@
 import { useAuthStore } from "@/store/store";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { IoCloseOutline } from "react-icons/io5";
 import { VscCoffee } from "react-icons/vsc";
 import { useEffect } from "react";
@@ -34,23 +34,25 @@ import { useEffect } from "react";
 
 const WishlistPage = () => {
   const router = useRouter();
-  const {  fetchUser, fetchUserWishlist, userWishlist } = useAuthStore();
+  const { fetchUser, fetchUserWishlist, userWishlist } = useAuthStore();
 
   const handleRemoveFromWishlist = async (productId: string) => {
     try {
       const res = await axios.delete(`/api/wishlist/${productId}`);
       console.log(res.data);
       fetchUser();
-    } catch (error) {
-      console.error("Failed to remove from wishlist", error);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      } else {
+        console.error("Failed to remove from wishlist", error);
+      }
     }
   };
   console.log(userWishlist?.products.length);
 
-   const isWishlistEmpty =
-     !userWishlist ||
-     !userWishlist.products ||
-     userWishlist.products.length < 1;
+  const isWishlistEmpty =
+    !userWishlist || !userWishlist.products || userWishlist.products.length < 1;
   useEffect(() => {
     fetchUserWishlist();
   }, []);

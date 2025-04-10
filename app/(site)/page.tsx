@@ -16,8 +16,8 @@ export default function Home() {
         <h1 className="text-3xl">A Place where you can buy anything.</h1>
         <OverlapCards />
         <p>Welcome to the world of e-commerce!</p>
-        <div className="flex items-center justify-center gap-4 flex-col md:flex-row">
-          <Button className="px-4 py-2 text-white bg-purple-700 rounded-md hover:bg-purple-600 cursor-pointer">
+        <div className="flex items-center justify-center gap-4 ">
+          <Button className="px-3 sm:px-4 py-2 text-white bg-purple-700 rounded-md hover:bg-purple-600 cursor-pointer">
             <Link
               href={"/product"}
               className="flex items-center justify-center gap-2"
@@ -41,7 +41,7 @@ export default function Home() {
         <ShopByCategory />
         <NewArrivals />
 
-        <div className="cursor-pointer my-6">
+        <div className="cursor-pointer my-10">
           <Link href="/product">
             <img src="/sale.png" alt="" className="rounded-xl" />
           </Link>

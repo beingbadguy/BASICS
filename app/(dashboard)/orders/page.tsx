@@ -41,8 +41,12 @@ export default function AdminOrdersPage() {
     try {
       const res = await axios.get("/api/order");
       setOrders(res.data.orders);
-    } catch (error) {
-      console.error("Error fetching orders:", error);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      } else {
+        console.error("Error fetching orders:", error);
+      }
     } finally {
       setLoading(false);
     }
@@ -61,6 +65,8 @@ export default function AdminOrdersPage() {
     } catch (error) {
       if (error instanceof AxiosError) {
         alert(error.response?.data?.message || "Failed to update status");
+      } else {
+        alert("Failed to update status");
       }
     } finally {
       setUpdatingId(null);
@@ -80,7 +86,9 @@ export default function AdminOrdersPage() {
 
   return (
     <div className="mt-2 overflow-y-scroll max-h-[90vh] pt-20 pb-20 md:pt-0 md:mb-0 md:px-4">
-      <h1 className="md:text-3xl font-semibold mb-4">All Orders</h1>
+      <h1 className="text-xl ml-2 md:text-2xl font-semibold mb-4 text-purple-700">
+        All Orders ({orders?.length})
+      </h1>
       <div className="space-y-6">
         {orders.map((order) => (
           <div

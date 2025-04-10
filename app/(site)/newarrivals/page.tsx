@@ -14,7 +14,7 @@ const page = () => {
           <Link href={"/product"}>Products</Link>
         </span>{" "}
         <span>/</span>
-        <span> New Arrivals</span>
+        <span className="text-black"> New Arrivals</span>
       </div>
       <NewArrivals />
     </div>
