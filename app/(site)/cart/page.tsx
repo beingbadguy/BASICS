@@ -18,6 +18,7 @@ const CartPage = () => {
       fetchUserCart();
     }
   }, [user]);
+  console.log(user?.firstPurchase);
 
   const handleChangeCartQuantity = async (
     productId: string,
@@ -42,18 +43,17 @@ const CartPage = () => {
 
   const handleDelete = async (productId: string) => {
     console.log("Delete product:", productId);
-    // TODO: Add API call to delete product from cart
+
     try {
       const response = await axios.delete(`/api/cart/${productId}`);
       console.log(response.data);
       fetchUserCart();
-    }catch (error: unknown) {
-          if (error instanceof AxiosError) {
-            console.error(error.response?.data);
-          } else {
-      
-            console.error("Failed to add to cart", error);
-          }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      } else {
+        console.error("Failed to add to cart", error);
+      }
     }
   };
 

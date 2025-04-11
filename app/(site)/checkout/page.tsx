@@ -91,7 +91,7 @@ export default function CheckoutPage() {
       });
       console.log(response.data);
 
-      useAuthStore.setState({ userCart: null });
+      useAuthStore.setState({ userCart: null });  
       router.push(`/success/${response.data.order._id}`);
       setOrderError("");
     } catch (error: unknown) {

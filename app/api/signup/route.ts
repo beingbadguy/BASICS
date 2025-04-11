@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { generateTokenAndSetCookie } from "@/lib/generateTokenAndSetCookie";
 import crypto from "crypto";
+import { welcomeUserMail } from "@/services/sendMail";
 
 export async function POST(request: NextRequest) {
   await databaseConnection();
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
       pass: password,
       verificationToken,
       verificationTokenExpiry,
-      isVerified: false,  
+      isVerified: false,
     });
     await newUser.save();
     const response = NextResponse.json(
@@ -80,6 +81,8 @@ export async function POST(request: NextRequest) {
       newUser.role,
       response
     );
+
+    await welcomeUserMail(newUser.email, newUser.name);
     return response;
   } catch (error) {
     console.log(error);

@@ -63,8 +63,6 @@ interface UserData {
   createdAt: string;
 }
 
-
-
 const groupUsersByDate = (users: UserData[]) => {
   const grouped: Record<string, number> = {};
   users.forEach((user) => {
@@ -80,9 +78,6 @@ const UserBarChart = ({ users }: { users: UserData[] }) => {
 
   return (
     <div className="w-full h-[200px] bg-white rounded-2xl p-4">
-      <h2 className="text-lg font-semibold mb-3  text-purple-700">
-        User Signups Over Time
-      </h2>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />

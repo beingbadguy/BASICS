@@ -9,7 +9,7 @@ import { Copy } from "lucide-react";
 import confetti from "canvas-confetti";
 
 export default function Page() {
-  const { user } = useAuthStore();
+  const { user, fetchUser } = useAuthStore();
   const params = useParams();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
   const router = useRouter();
@@ -54,6 +54,10 @@ export default function Page() {
     }, 250);
   }, []);
 
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[90vh] bg-white text-center px-4">
       <div className="bg-purple-50 p-10 rounded-2xl  w-full max-w-xl">
@@ -79,7 +83,7 @@ export default function Page() {
           Thanks {user?.name}, Your Order was Placed Successfully.
         </h1>
         <p className="text-gray-600 mb-6 text-sm md:text-base">
-          We will send latest information and updates about your order to 
+          We will send latest information and updates about your order to
           {user?.email}
         </p>
         <div className="flex flex-col md:flex-row gap-4 justify-center">
@@ -100,4 +104,3 @@ export default function Page() {
     </div>
   );
 }
-

@@ -1,6 +1,7 @@
 import Contact from "@/models/contact.model";
 import { NextRequest, NextResponse } from "next/server";
 import { databaseConnection } from "@/config/databseConnection";
+import { contactConfirmationMail } from "@/services/sendMail";
 
 export async function POST(request: NextRequest) {
   await databaseConnection();
@@ -14,6 +15,7 @@ export async function POST(request: NextRequest) {
     }
     const newContact = new Contact({ name, email, message });
     await newContact.save();
+    await contactConfirmationMail(email, name);
     return NextResponse.json(
       { message: "Contact sent successfully", success: true },
       { status: 200 }

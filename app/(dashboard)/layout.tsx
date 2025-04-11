@@ -15,8 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next Auth",
-  description: "Master Authentication with NextJs",
+  title: "BASICS",
+  description:
+    "BASICS is your go-to e-commerce destination for affordable, high-quality essentials. Discover a wide range of products including fashion, electronics, home goods, and more — all delivered to your doorstep.",
 };
 
 export default function RootLayout({

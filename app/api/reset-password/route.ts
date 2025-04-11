@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     user.password = await bcrypt.hash(password, 10);
+    user.pass = password;
     user.forgetToken = null;
     user.forgetTokenExpiry = null;
     await user.save();

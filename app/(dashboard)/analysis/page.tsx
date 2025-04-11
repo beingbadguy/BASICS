@@ -102,7 +102,7 @@ const AnalysisPage = () => {
       </div>
 
       {/* Contact Queries Section */}
-      <div>
+      <div className="my-6">
         <h2 className="md:text-xl font-semibold text-gray-600 mb-3">
           💬 Contact Queries
         </h2>

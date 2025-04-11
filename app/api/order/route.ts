@@ -3,6 +3,7 @@ import { fetchTokenDetails } from "@/lib/fetchTokenDetails";
 import Cart from "@/models/cart.model";
 import Order from "@/models/order.model";
 import User from "@/models/user.model";
+import { OrderConfirmationMail } from "@/services/sendMail";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -42,9 +43,19 @@ export async function POST(request: NextRequest) {
     await newOrder.save();
 
     user.order.push(newOrder._id);
-    if (user.firstPurchase === true) user.firstPurchase = false;
+    if (user.firstPurchase === false) user.firstPurchase = true;
     user.cart = [];
     await user.save();
+
+    // 🔔 Send confirmation email
+    await OrderConfirmationMail(user.email, user.name || "Customer", {
+      _id: newOrder._id.toString(),
+      totalAmount: newOrder.totalAmount,
+      address: newOrder.address,
+      paymentMethod: newOrder.paymentMethod,
+      deliveryType: newOrder.deliveryType,
+      products: newOrder.products,
+    });
 
     return NextResponse.json(
       { message: "Order placed successfully", success: true, order: newOrder },

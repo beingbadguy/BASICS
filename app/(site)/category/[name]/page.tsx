@@ -95,7 +95,10 @@ const Page = () => {
           Categories
         </span>{" "}
         <span>/</span>
-        <span className="text-black"> {name}</span>
+        <span className="text-black">
+          {" "}
+          {decodeURIComponent(name as string)}
+        </span>
       </div>
       <div className="text-sm"> {filteredProducts?.length} Products found.</div>
       <div className="my-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">

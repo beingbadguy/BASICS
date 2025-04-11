@@ -1,5 +1,6 @@
 import { databaseConnection } from "@/config/databseConnection";
 import Newsletter from "@/models/newsletter.mode";
+import { newsletterSubscriptionMail } from "@/services/sendMail";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -22,6 +23,8 @@ export async function POST(request: NextRequest) {
     }
     const newNewsletter = new Newsletter({ email });
     await newNewsletter.save();
+
+    await newsletterSubscriptionMail(email);
     return NextResponse.json(
       {
         message: "Subscribed successfully",
