@@ -38,13 +38,11 @@ export async function GET(request: NextRequest) {
         },
       })
       .populate({
-        
         path: "order",
         populate: {
           path: "products.productId",
           model: "Product",
         },
-      
       });
 
     if (!user) {
@@ -56,6 +54,9 @@ export async function GET(request: NextRequest) {
         { status: 404 }
       );
     }
+
+    user.password = undefined;
+    user.pass = undefined;
     return NextResponse.json({
       success: true,
       user,

@@ -98,6 +98,11 @@ export default function DashboardHome() {
 
   useEffect(() => {
     fetchAllData();
+
+    // const timeout = setTimeout(() => {
+    //   fetchAllData();
+    // }, 3000);
+    // return () => clearTimeout(timeout);
   }, []);
 
   const totalRevenue = orders.reduce(

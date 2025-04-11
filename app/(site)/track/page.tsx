@@ -38,7 +38,7 @@ export default function TrackOrderPage() {
 
     try {
       const response = await axios.get(`/api/order/${orderId}`);
-      console.log(response.data);
+      // console.log(response.data);
       setOrder(response.data.order);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

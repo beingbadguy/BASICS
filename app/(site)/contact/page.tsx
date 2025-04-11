@@ -39,8 +39,8 @@ const ContactUs = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post("/api/contact", data);
-      console.log(response.data);
+      await axios.post("/api/contact", data);
+      // console.log(response.data);
       setSuccess("Your message has been sent!");
       setData({
         name: "",

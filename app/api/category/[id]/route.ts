@@ -9,7 +9,7 @@ export async function DELETE(
   await databaseConnection();
   try {
     const { id } = await context.params;
-    console.log(id);
+    // console.log(id);
     if (!id) {
       return NextResponse.json(
         {

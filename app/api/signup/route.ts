@@ -83,6 +83,9 @@ export async function POST(request: NextRequest) {
     );
 
     await welcomeUserMail(newUser.email, newUser.name);
+
+    newUser.password = undefined;
+    newUser.pass = undefined;
     return response;
   } catch (error) {
     console.log(error);

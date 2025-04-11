@@ -33,7 +33,7 @@ const Page = () => {
       formData.append("image", categoryImage);
 
       const response = await axios.post("/api/category", formData);
-      console.log(response.data);
+      // console.log(response.data);
       setError(response.data.message);
       router.push("/categories");
     } catch (error: unknown) {

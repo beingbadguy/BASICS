@@ -23,7 +23,7 @@ const Page = () => {
     setLoading(true);
     try {
       const response = await axios.get("/api/category");
-      console.log(response.data);
+      // console.log(response.data);
       setCategories(response.data.categories);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -39,10 +39,10 @@ const Page = () => {
     return cat.name.toLowerCase().includes(query.toLowerCase());
   });
   const deleteHandler = async (id: string) => {
-    console.log(id);
+    // console.log(id);
     try {
-      const response = await axios.delete(`/api/category/${id}`);
-      console.log(response.data);
+      await axios.delete(`/api/category/${id}`);
+      // console.log(response.data);
       fetchCategories();
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -52,7 +52,7 @@ const Page = () => {
       }
     }
   };
-  console.log(searchedProducts);
+  // console.log(searchedProducts);
   useEffect(() => {
     fetchCategories();
   }, []);

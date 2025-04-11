@@ -85,6 +85,8 @@ export async function GET(request: NextRequest) {
       .sort({ createdAt: -1 })
       .populate({
         path: "userId",
+        select:"-password -pass"
+        
       })
       .populate({
         path: "products.productId",

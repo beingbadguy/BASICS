@@ -18,19 +18,19 @@ const CartPage = () => {
       fetchUserCart();
     }
   }, [user]);
-  console.log(user?.firstPurchase);
+  // console.log(user?.firstPurchase);
 
   const handleChangeCartQuantity = async (
     productId: string,
     quantity: number
   ) => {
-    console.log("Increase/decrease quantity for:", productId);
+    // console.log("Increase/decrease quantity for:", productId);
 
     try {
-      const response = await axios.put(`/api/cart/${productId}`, {
+      await axios.put(`/api/cart/${productId}`, {
         quantity: quantity,
       });
-      console.log(response.data);
+      // console.log(response.data);
       fetchUserCart();
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -42,11 +42,11 @@ const CartPage = () => {
   };
 
   const handleDelete = async (productId: string) => {
-    console.log("Delete product:", productId);
+    // console.log("Delete product:", productId);
 
     try {
-      const response = await axios.delete(`/api/cart/${productId}`);
-      console.log(response.data);
+      await axios.delete(`/api/cart/${productId}`);
+      // console.log(response.data);
       fetchUserCart();
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -128,7 +128,9 @@ const CartPage = () => {
                   </div> */}
 
                   <div className="mt-2 flex items-center justify-between gap-3">
-                    <p className="text-sm font-medium">Quantity</p>
+                    <p className="text-sm font-medium hidden md:block">
+                      Quantity
+                    </p>
                     <div className="flex items-center ">
                       <button
                         onClick={() => {

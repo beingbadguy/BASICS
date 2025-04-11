@@ -44,7 +44,7 @@ const Page = () => {
 
   const router = useRouter();
 
-  console.log(data);
+  // console.log(data);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -58,7 +58,7 @@ const Page = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get("/api/category");
-      console.log(response.data);
+      // console.log(response.data);
       setCategories(response.data.categories);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -108,7 +108,7 @@ const Page = () => {
       formData.append("image", imageLink!);
 
       const response = await axios.post("/api/product", formData);
-      console.log(response.data);
+      // console.log(response.data);
       setSuccess(response.data.message);
       setError("");
       router.push("/products");

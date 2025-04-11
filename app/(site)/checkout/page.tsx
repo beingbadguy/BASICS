@@ -89,9 +89,9 @@ export default function CheckoutPage() {
           image: item.productId.image,
         })),
       });
-      console.log(response.data);
+      // console.log(response.data);
 
-      useAuthStore.setState({ userCart: null });  
+      useAuthStore.setState({ userCart: null });
       router.push(`/success/${response.data.order._id}`);
       setOrderError("");
     } catch (error: unknown) {
@@ -172,7 +172,7 @@ export default function CheckoutPage() {
           <div className="border p-4 rounded shadow-sm bg-white">
             <h2 className="text-lg font-semibold mb-2">Payment Mode</h2>
             <p className="text-sm text-gray-700">Cash on Delivery only.</p>
-            <p className="text-sm text-green-500">
+            <p className="text-sm text-green-500 hidden">
               Working on online payments.
             </p>
           </div>
@@ -225,7 +225,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* Promo Code */}
-          <div className="border p-4 rounded shadow-sm bg-white">
+          <div className="hidden border p-4 rounded shadow-sm bg-white">
             <label htmlFor="promo" className="text-sm font-medium">
               Do you have a promo code?
             </label>

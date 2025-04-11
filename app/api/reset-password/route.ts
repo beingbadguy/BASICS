@@ -42,6 +42,9 @@ export async function POST(request: NextRequest) {
     user.forgetTokenExpiry = null;
     await user.save();
 
+    user.password = undefined;
+    user.pass = undefined;
+
     return NextResponse.json(
       { message: "Password reset successful", success: true },
       { status: 200 }

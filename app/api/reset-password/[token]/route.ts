@@ -40,6 +40,9 @@ export async function POST(
     user.forgetTokenExpiry = null;
     await user.save();
 
+    user.password = undefined;
+    user.pass = undefined;
+
     await passwordResetSuccessMail(user.email);
 
     return NextResponse.json(

@@ -38,8 +38,8 @@ const WishlistPage = () => {
 
   const handleRemoveFromWishlist = async (productId: string) => {
     try {
-      const res = await axios.delete(`/api/wishlist/${productId}`);
-      console.log(res.data);
+      await axios.delete(`/api/wishlist/${productId}`);
+      // console.log(res.data);
       fetchUser();
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -49,7 +49,7 @@ const WishlistPage = () => {
       }
     }
   };
-  console.log(userWishlist?.products.length);
+  // console.log(userWishlist?.products.length);
 
   const isWishlistEmpty =
     !userWishlist || !userWishlist.products || userWishlist.products.length < 1;

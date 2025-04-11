@@ -55,8 +55,8 @@ export default function AdminOrdersPage() {
   const updateStatus = async (id: string, status: string) => {
     setUpdatingId(id);
     try {
-      const response = await axios.put(`/api/orders/${id}`, { status });
-      console.log(response.data);
+      await axios.put(`/api/orders/${id}`, { status });
+      // console.log(response.data);
 
       fetchOrders();
       // setOrders((prev) =>

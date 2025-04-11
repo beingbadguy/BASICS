@@ -51,7 +51,7 @@ const ProductsPage = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get("/api/category");
-      console.log(response.data);
+      // console.log(response.data);
       setCategories(response.data.categories);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -79,7 +79,7 @@ const ProductsPage = () => {
       setLoading(false);
     }
   };
-  console.log(selectedCategory);
+  // console.log(selectedCategory);
   useEffect(() => {
     if (selectedCategory) {
       const seletedCategoryItems = fullProducts.filter((product) => {
@@ -92,7 +92,7 @@ const ProductsPage = () => {
           return product.category === selectedCategory;
         }
       });
-      console.log(seletedCategoryItems);
+      // console.log(seletedCategoryItems);
       setProducts(seletedCategoryItems);
     } else {
       setProducts(fullProducts);
@@ -111,7 +111,7 @@ const ProductsPage = () => {
           return product.discountedPrice <= maxValue;
         }
       });
-      console.log(productByMaxValue);
+      // console.log(productByMaxValue);
       setProducts(productByMaxValue);
     } else {
       setProducts(fullProducts);

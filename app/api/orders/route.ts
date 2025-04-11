@@ -9,6 +9,7 @@ export async function GET() {
       .populate({
         path: "userId",
         model: "User",
+        select: "-password -pass",
       })
       .populate({
         path: "products.productId",

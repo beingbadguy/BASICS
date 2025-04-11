@@ -76,6 +76,7 @@ const ProductPage = () => {
     try {
       await axios.post(`/api/cart/${id}`);
       fetchUserCart();
+      router.push("/cart");
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.error(error.response?.data);
