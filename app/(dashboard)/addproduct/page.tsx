@@ -81,8 +81,8 @@ const Page = () => {
       !data.description ||
       !data.price ||
       !data.discountedPrice ||
-      !data.countInStock
-      || data.info
+      !data.countInStock ||
+      !data.info
     ) {
       setError("Please fill all the fields");
       return;
