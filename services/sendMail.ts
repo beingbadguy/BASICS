@@ -219,12 +219,21 @@ export const OrderConfirmationMail = async (
   const grandTotal = order.totalAmount + TAX;
 
   const html = `
-  <div style="background-color: #f4f4f5; padding: 40px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-    <div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 12px; padding: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+  <style>
+    @media only screen and (max-width: 600px) {
+      .email-container {
+        padding: 16px !important;
+      }
+    }
+  </style>
+
+  <div style="background-color: #f4f4f5; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+    <div class="email-container" style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 12px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
       
       <h1 style="font-size: 28px; font-weight: 700; margin-bottom: 10px; color: #1a1a1a;">
         Order confirmation 🛍️
       </h1>
+
       <p style="font-size: 16px; color: #333; margin-bottom: 20px;">Hi ${name},</p>
       <p style="font-size: 15px; color: #333;">
         Thank you for shopping with us! We've received your order<br/>
@@ -241,10 +250,9 @@ export const OrderConfirmationMail = async (
               <img src="${item.image}" alt="${item.title}" width="80" height="80" style="border-radius: 10px; object-fit: cover; border: 1px solid #ddd;" />
               <div style="flex: 1;">
                 <p style="margin: 0 0 4px 0; font-weight: 600; font-size: 15px; margin-left: 8px;">${item.title}</p>
-                  <p style="margin: 0; font-weight: 600; color: #1a1a1a; font-size: 15px; margin-left: 8px;">₹${item.price}</p>
+                <p style="margin: 0; font-weight: 600; color: #1a1a1a; font-size: 15px; margin-left: 8px;">₹${item.price}</p>
                 <p style="margin: 0; font-size: 14px; color: #666; margin-left: 8px;">Quantity: ${item.quantity}</p>
               </div>
-            
             </div>
           `
           )
