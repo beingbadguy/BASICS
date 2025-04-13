@@ -22,11 +22,21 @@ export default function CheckoutPage() {
   const [error, setError] = useState("");
   const [placingOrder, setPlacingOrder] = useState(false);
   const [orderError, setOrderError] = useState("");
+  const [promoCodeError, setPromoCodeError] = useState("");
+  const [promoCodeLoading, setPromoCodeLoading] = useState(false);
+  const [finalAmount, setFinalAmount] = useState(0);
+  const [couponApplied, setCouponApplied] = useState(false);
 
   useEffect(() => {
     if (!user) router.push("/login");
     else fetchUserCart();
   }, [user]);
+
+  useEffect(() => {
+    if (!userCart) {
+      router.push("/");
+    }
+  }, []);
 
   const handleUpdate = async () => {
     if (!/^\d{10}$/.test(phone.toString())) {
@@ -66,7 +76,11 @@ export default function CheckoutPage() {
     ? 0
     : ((subtotal + estimatedTax) * 15) / 100;
 
-  const totalAfterDiscount = subtotal + estimatedTax - firstTimeDiscount;
+  const baseTotal = subtotal + estimatedTax - firstTimeDiscount;
+
+  useEffect(() => {
+    setFinalAmount(baseTotal);
+  }, [subtotal, user?.firstPurchase]);
 
   const placeOrder = async () => {
     if (!userCart?.products.length) {
@@ -89,7 +103,7 @@ export default function CheckoutPage() {
     setPlacingOrder(true);
     try {
       const response = await axios.post("/api/order", {
-        totalAmount: totalAfterDiscount,
+        totalAmount: finalAmount,
         paymentMethod: "cod",
         deliveryType,
         address,
@@ -103,7 +117,6 @@ export default function CheckoutPage() {
           image: item.productId.image,
         })),
       });
-      // console.log(response.data);
 
       useAuthStore.setState({ userCart: null });
       router.push(`/success/${response.data.order._id}`);
@@ -120,11 +133,42 @@ export default function CheckoutPage() {
     }
   };
 
-  useEffect(() => {
-    if (!userCart) {
-      router.push("/");
+  const applyCoupon = async () => {
+    if (couponApplied) {
+      setPromoCodeError("Coupon already applied.");
+      return;
     }
-  }, []);
+
+    if (!promoCode) {
+      setPromoCodeError("Please enter a valid coupon code.");
+      return;
+    }
+
+    if (!userCart?.products.length || !baseTotal) {
+      setPromoCodeError("Your cart is empty.");
+      return;
+    }
+
+    setPromoCodeLoading(true);
+    try {
+      const response = await axios.post("/api/coupon/apply", {
+        code: promoCode,
+        totalAmount: baseTotal,
+      });
+
+      setFinalAmount(response.data.finalAmount);
+      setPromoCodeError(response.data.message || "Coupon applied!");
+      setCouponApplied(true);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        setPromoCodeError(error.response?.data.message);
+      } else {
+        console.log(error);
+      }
+    } finally {
+      setPromoCodeLoading(false);
+    }
+  };
 
   return (
     <div className="p-4 min-h-[80vh]">
@@ -197,7 +241,6 @@ export default function CheckoutPage() {
 
         {/* Right Section - Cart Summary & Promo */}
         <div className="space-y-4">
-          {/* Cart Summary */}
           <div className="border p-4 rounded shadow-sm bg-white text-sm">
             <h1 className="text-xl font-bold">Product Summary</h1>
             <hr className="my-2 border-gray-200" />
@@ -221,7 +264,7 @@ export default function CheckoutPage() {
             )}
             <div className="flex justify-between font-bold text-lg">
               <p>Total payment</p>
-              <p>₹{totalAfterDiscount.toFixed(2)}</p>
+              <p>₹{finalAmount.toFixed(2)}</p>
             </div>
 
             {orderError && (
@@ -241,8 +284,7 @@ export default function CheckoutPage() {
             </Button>
           </div>
 
-          {/* Promo Code */}
-          <div className="hidden border p-4 rounded shadow-sm bg-white">
+          <div className=" border p-4 rounded shadow-sm bg-white">
             <label htmlFor="promo" className="text-sm font-medium">
               Do you have a promo code?
             </label>
@@ -253,15 +295,29 @@ export default function CheckoutPage() {
                 onChange={(e) => setPromoCode(e.target.value)}
                 placeholder="Enter code"
                 className="border rounded-l px-3 py-1 w-full"
+                disabled={couponApplied}
               />
-              <Button className="rounded-l-none bg-black text-white cursor-pointer">
-                Apply
+              <Button
+                disabled={promoCodeLoading || couponApplied}
+                onClick={applyCoupon}
+                className="rounded-l-none bg-black text-white cursor-pointer"
+              >
+                {promoCodeLoading ? (
+                  <VscLoading className="animate-spin text-xl" />
+                ) : couponApplied ? (
+                  "Applied"
+                ) : (
+                  "Apply"
+                )}
               </Button>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
-              We share promo codes on our socials monthly.
-            </p>
+            {promoCodeError && (
+              <p className="text-red-500 text-sm mt-2">{promoCodeError}</p>
+            )}
           </div>
+          <p className="text-xs text-gray-500 mt-1">
+            We share promo codes on our socials monthly.
+          </p>
         </div>
       </div>
 

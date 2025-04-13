@@ -3,6 +3,7 @@ import { useDashboardStore } from "@/store/dashboard";
 import { useAuthStore } from "@/store/store";
 import {
   AlignVerticalJustifyEnd,
+  Database,
   LayoutDashboard,
   LogOut,
   ScanBarcode,
@@ -32,7 +33,7 @@ const DashboardSidebar = () => {
     { label: "Orders", path: "/orders", icons: <ShoppingCart /> },
     { label: "Customers", path: "/customers", icons: <User /> },
     { label: "Analysis", path: "/analysis", icons: <ScanBarcode /> },
-    // { label: "Logout", path: "/logout", icons: <LogOut /> },
+    { label: "Others", path: "/others", icons: <Database /> },
   ];
 
   useEffect(() => {
