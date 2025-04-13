@@ -7,7 +7,8 @@ export async function PUT(request: NextRequest) {
   await databaseConnection();
   try {
     const decoded = await fetchTokenDetails(request);
-    const { address, phone } = await request.json();
+    const { address, phone, zip } = await request.json();
+    console.log(zip);
     const user = await User.findOne({ _id: decoded?.userId });
     if (!user) {
       return NextResponse.json(
@@ -17,6 +18,7 @@ export async function PUT(request: NextRequest) {
     }
     user.address = address;
     user.phone = phone;
+    user.zip = zip;
     await user.save();
 
     return NextResponse.json(

@@ -54,7 +54,6 @@ export default function OrderDetailsCard({
   const [copied, setCopied] = useState(false);
   const [updatingId, setUpdatingId] = useState<boolean>(false);
 
-
   const updateStatus = async (id: string, status: string) => {
     setUpdatingId(true);
     try {

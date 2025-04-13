@@ -39,6 +39,7 @@ type Product = {
     price: number;
     category: string;
     image: string;
+    discountedPrice: number;
   };
   quantity: number;
 };
@@ -64,6 +65,7 @@ export default function ProfilePage() {
   const [phone, setPhone] = useState(user?.phone || "");
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState<string>("");
+  const [zip, setZip] = useState(user?.zip || "");
 
   const [orders, setOrders] = useState([]);
 
@@ -184,6 +186,12 @@ export default function ProfilePage() {
                 </p>
               </div>
               <div>
+                <p>Pincode</p>
+                <p className="bg-gray-100 text-gray-400 px-4 py-2 w-full">
+                  {user?.zip || "Pincode Unavailable"}
+                </p>
+              </div>
+              <div>
                 <p>Phone</p>
                 <p className="bg-gray-100 text-gray-400 px-4 py-2 w-full">
                   {user?.phone || "Phone Unavailable"}
@@ -269,6 +277,15 @@ export default function ProfilePage() {
                     />
                   </div>
                   <div>
+                    <label className="block text-sm font-medium">Pincode</label>
+                    <input
+                      value={zip}
+                      onChange={(e) => setZip(e.target.value)}
+                      className="w-full px-4 py-2 border rounded-md"
+                      placeholder="Enter pincode"
+                    />
+                  </div>
+                  <div>
                     <label className="block text-sm font-medium">Phone</label>
                     <input
                       value={phone}
@@ -299,11 +316,16 @@ export default function ProfilePage() {
                         setError("Please enter a valid address.");
                         return;
                       }
+                      if (zip && zip.toString().length != 6) {
+                        setError("Please enter a valid pincode.");
+                        return;
+                      }
                       setIsUpdating(true);
                       try {
                         await axios.put("/api/user", {
                           address,
                           phone,
+                          zip,
                         });
                         await fetchUser();
                         setError("");

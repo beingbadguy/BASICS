@@ -14,6 +14,7 @@ export default function CheckoutPage() {
 
   const [showModal, setShowModal] = useState(false);
   const [address, setAddress] = useState(user?.address || "");
+  const [zip, setZip] = useState(user?.zip || "");
   const [phone, setPhone] = useState(user?.phone || "");
   const [deliveryType, setDeliveryType] = useState<"normal" | "fast">("normal");
   const [promoCode, setPromoCode] = useState("");
@@ -36,9 +37,13 @@ export default function CheckoutPage() {
       setError("Please enter a valid address.");
       return;
     }
+    if (!zip || zip.toString().length != 6) {
+      setError("Please enter a valid zip code.");
+      return;
+    }
     setIsUpdating(true);
     try {
-      await axios.put("/api/user", { address, phone });
+      await axios.put("/api/user", { address, phone, zip });
       await fetchUser();
       setError("");
       setShowModal(false);
@@ -72,6 +77,14 @@ export default function CheckoutPage() {
       setOrderError("Please enter a valid address.");
       return;
     }
+    if (!zip || zip.toString().length != 6) {
+      setOrderError("Please enter a valid zip code.");
+      return;
+    }
+    if (!phone || phone.toString().length != 10) {
+      setOrderError("Please enter a valid phone number.");
+      return;
+    }
 
     setPlacingOrder(true);
     try {
@@ -80,6 +93,7 @@ export default function CheckoutPage() {
         paymentMethod: "cod",
         deliveryType,
         address,
+        zip,
         phone,
         products: userCart?.products.map((item) => ({
           productId: item.productId._id,
@@ -139,6 +153,9 @@ export default function CheckoutPage() {
             </div>
             <p className="mt-2 text-gray-700">
               <strong>Address:</strong> {user?.address || "Not provided"}
+            </p>
+            <p className=" text-gray-700">
+              <strong>Pincode:</strong> {user?.zip || "Not provided"}
             </p>
             <p className="text-gray-700">
               <strong>Phone:</strong> {user?.phone || "Not provided"}
@@ -262,6 +279,17 @@ export default function CheckoutPage() {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="Enter address"
+                  className="w-full px-3 py-2 border rounded"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium block mb-1">
+                  Pincode
+                </label>
+                <input
+                  value={zip}
+                  onChange={(e) => setZip(e.target.value)}
+                  placeholder="Enter Pincode"
                   className="w-full px-3 py-2 border rounded"
                 />
               </div>

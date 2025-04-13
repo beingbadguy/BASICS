@@ -13,6 +13,7 @@ type Order = {
   totalAmount: number;
   status: string;
   createdAt: string;
+  zip: string;
   products: {
     productId: {
       title: string;
@@ -106,8 +107,11 @@ export default function AdminOrdersPage() {
                 <p className="text-sm text-gray-600">
                   By: {order.userId.name} ({order.userId.email})
                 </p>
-                <p className="text-sm">Phone: {order.phone}</p>
+                <p className="text-sm">
+                  Phone: {order.phone || "Pincode Unavailable"}
+                </p>
                 <p className="text-sm">Address: {order.address}</p>
+                <p className="text-sm">Pincode: {order?.zip}</p>
                 <p className="text-sm">Delivery Type: {order.deliveryType}</p>
                 <p className="text-sm">Payment Method: {order.paymentMethod}</p>
               </div>

@@ -39,6 +39,11 @@ const orderSchema = new mongoose.Schema({
     enum: ["normal", "fast"],
   },
   address: { type: String, required: true },
+  zip: {
+    type: Number,
+    // required: true,
+    default: null,
+  },
   phone: { type: Number, required: true },
 
   createdAt: { type: Date, default: Date.now },

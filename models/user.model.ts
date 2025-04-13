@@ -13,6 +13,11 @@ const userSchema = new mongoose.Schema({
     // required: true,
     default: null,
   },
+  zip: {
+    type: Number,
+    // required: true,
+    default: null,
+  },
   phone: {
     type: Number,
     // required: true,

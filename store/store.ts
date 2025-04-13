@@ -13,6 +13,7 @@ interface AuthState {
     phone: number;
     image: string;
     firstPurchase: boolean;
+    zip: number;
     wishlist?: { products: WishlistItem[] }[];
   } | null;
   isLoggingOut: boolean;
