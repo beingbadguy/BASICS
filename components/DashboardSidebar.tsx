@@ -1,4 +1,5 @@
 "use client";
+import { useDashboardStore } from "@/store/dashboard";
 import { useAuthStore } from "@/store/store";
 import {
   AlignVerticalJustifyEnd,
@@ -16,6 +17,7 @@ import React, { useEffect } from "react";
 
 const DashboardSidebar = () => {
   const { fetchUser, logout } = useAuthStore();
+  const { fetchDashboardData } = useDashboardStore();
   const pathname = usePathname();
   const router = useRouter();
   console.log(pathname);
@@ -35,6 +37,7 @@ const DashboardSidebar = () => {
 
   useEffect(() => {
     fetchUser();
+    fetchDashboardData();
   }, []);
 
   return (

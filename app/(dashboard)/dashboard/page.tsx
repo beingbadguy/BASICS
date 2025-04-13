@@ -53,7 +53,7 @@ export default function DashboardHome() {
 
   return (
     <main className="mt-2 pt-20 pb-20 md:pt-0 md:mb-0 px-2 md:px-6 overflow-y-scroll max-h-[90vh]">
-      <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-purple-800">
+      <h2 className="text-xl md:text-2xl font-semibold mb-4 text-purple-800">
         Dashboard Overview
       </h2>
 

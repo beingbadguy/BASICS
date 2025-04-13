@@ -1,13 +1,19 @@
 "use client";
+import { useDashboardStore } from "@/store/dashboard";
 import { useAuthStore } from "@/store/store";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { TbWorldShare } from "react-icons/tb";
 import { VscLoading } from "react-icons/vsc";
 
 const DashboardNavbar = () => {
   const { user } = useAuthStore();
+  const { fetchDashboardData } = useDashboardStore();
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
 
   if (!user) {
     return (

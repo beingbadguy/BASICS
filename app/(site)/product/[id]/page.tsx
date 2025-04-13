@@ -124,12 +124,6 @@ const ProductPage = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
-  useEffect(() => {
-    if (!user) {
-      router.push("/login");
-    }
-  }, []);
-
   if (loading || !product) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">
