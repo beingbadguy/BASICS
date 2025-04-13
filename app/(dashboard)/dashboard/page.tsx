@@ -1,6 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-import axios, { AxiosError } from "axios";
+import { useEffect } from "react";
 import { VscLoading } from "react-icons/vsc";
 import {
   FaUsers,
@@ -14,45 +13,6 @@ import { BsCartCheckFill } from "react-icons/bs";
 import CountCard from "@/components/CountCard";
 import Link from "next/link";
 import { useDashboardStore } from "@/store/dashboard";
-
-// Types
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  role: "user" | "admin";
-  isVerified: boolean;
-  firstPurchase: boolean;
-  createdAt: string;
-}
-
-interface Order {
-  _id: string;
-  totalAmount: number;
-  createdAt: string;
-}
-
-interface Product {
-  _id: string;
-  title: string;
-  price: number;
-}
-
-interface Category {
-  _id: string;
-  name: string;
-}
-
-interface Contact {
-  _id: string;
-  name: string;
-  message: string;
-}
-
-interface Newsletter {
-  _id: string;
-  email: string;
-}
 
 export default function DashboardHome() {
   const {
