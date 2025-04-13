@@ -12,6 +12,8 @@ import {
 import { MdCategory } from "react-icons/md";
 import { BsCartCheckFill } from "react-icons/bs";
 import CountCard from "@/components/CountCard";
+import Link from "next/link";
+import { useDashboardStore } from "@/store/dashboard";
 
 // Types
 interface User {
@@ -53,62 +55,33 @@ interface Newsletter {
 }
 
 export default function DashboardHome() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [queries, setQueries] = useState<Contact[]>([]);
-  const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const fetchAllData = async () => {
-    try {
-      const [
-        userRes,
-        orderRes,
-        productRes,
-        categoryRes,
-        contactRes,
-        newsletterRes,
-      ] = await Promise.all([
-        axios.get("/api/users"),
-        axios.get("/api/order"),
-        axios.get("/api/product"),
-        axios.get("/api/category"),
-        axios.get("/api/contact"),
-        axios.get("/api/newsletter"),
-      ]);
-
-      setUsers(userRes.data.users || []);
-      setOrders(orderRes.data.orders || []);
-      setProducts(productRes.data.products || []);
-      setCategories(categoryRes.data.categories || []);
-      setQueries(contactRes.data.contacts || []);
-      setNewsletters(newsletterRes.data.newsletters || []);
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data);
-      } else {
-        console.log(error);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    users,
+    orders,
+    products,
+    categories,
+    queries,
+    newsletters,
+    loading,
+    fetchDashboardData,
+  } = useDashboardStore();
 
   useEffect(() => {
-    fetchAllData();
-
-    // const timeout = setTimeout(() => {
-    //   fetchAllData();
-    // }, 3000);
-    // return () => clearTimeout(timeout);
+    fetchDashboardData();
   }, []);
 
   const totalRevenue = orders.reduce(
     (acc, order) => acc + (order.totalAmount || 0),
     0
   );
+
+  if (loading) {
+    return (
+      <div className="min-h-[40vh] flex items-center justify-center">
+        <VscLoading className="animate-spin text-purple-600 text-3xl" />
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -175,6 +148,9 @@ export default function DashboardHome() {
             </h3>
           </div>
         </div>
+      </div>
+      <div className="flex items-center justify-center gap-2 bg-purple-100 text-purple-700 shadow-md px-4 py-2 rounded-md cursor-pointer w-[200px] ">
+        <Link href={"/"}>Go to website</Link>
       </div>
     </main>
   );
