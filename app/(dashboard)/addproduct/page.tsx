@@ -131,6 +131,9 @@ const Page = () => {
 
   useEffect(() => {
     fetchCategories();
+    // if (!user) {
+    //   router.push("/login");
+    // }
   }, []);
 
   useEffect(() => {

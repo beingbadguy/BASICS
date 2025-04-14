@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
+import { useAuthStore } from "@/store/store";
+import { useRouter } from "next/navigation";
 
 type Coupon = {
   _id: string;
@@ -12,6 +14,8 @@ type Coupon = {
 };
 
 const CouponsPage = () => {
+  const { user } = useAuthStore();
+  const router = useRouter();
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
@@ -74,6 +78,12 @@ const CouponsPage = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    }
+  }, []);
 
   return (
     <div className="mt-2 overflow-y-scroll max-h-[90vh] pt-20 pb-20 md:pt-0 md:mb-0 md:px-4">

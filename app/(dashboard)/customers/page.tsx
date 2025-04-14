@@ -10,6 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useAuthStore } from "@/store/store";
+import { useRouter } from "next/navigation";
 
 interface User {
   _id: string;
@@ -25,8 +27,10 @@ interface User {
 }
 
 const Page = () => {
+  const { user } = useAuthStore();
   const [customers, setCustomers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const fetchAllUsers = async () => {
     setLoading(true);
@@ -46,6 +50,9 @@ const Page = () => {
 
   useEffect(() => {
     fetchAllUsers();
+    if (!user) {
+      router.push("/login");
+    }
   }, []);
 
   if (loading) {

@@ -1,9 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/store/store";
 import axios, { AxiosError } from "axios";
 import { Eraser, Plus, Search, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
@@ -16,9 +18,11 @@ interface Category {
   __v: number;
 }
 const Page = () => {
+  const { user } = useAuthStore();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [query, setQuery] = useState<string>("");
+  const router = useRouter();
   const fetchCategories = async () => {
     setLoading(true);
     try {
@@ -55,6 +59,9 @@ const Page = () => {
   // console.log(searchedProducts);
   useEffect(() => {
     fetchCategories();
+    if (!user) {
+      router.push("/login");
+    }
   }, []);
   return (
     <div className="mt-2 overflow-y-scroll max-h-[90vh] pt-20 pb-20 md:pt-0 md:mb-0">

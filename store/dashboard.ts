@@ -1,6 +1,6 @@
 // store/dashboardStore.ts
 import { create } from "zustand";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 interface User {
   _id: string;
@@ -48,7 +48,13 @@ interface DashboardStore {
   queries: Contact[];
   newsletters: Newsletter[];
   loading: boolean;
-  fetchDashboardData: () => Promise<void>;
+  // fetchDashboardData: () => Promise<void>;
+  fetchUsers: () => Promise<void>;
+  fetchOrders: () => Promise<void>;
+  fetchProducts: () => Promise<void>;
+  fetchCategories: () => Promise<void>;
+  fetchQueries: () => Promise<void>;
+  fetchNewsletters: () => Promise<void>;
 }
 
 export const useDashboardStore = create<DashboardStore>((set) => ({
@@ -59,35 +65,149 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
   queries: [],
   newsletters: [],
   loading: true,
-  fetchDashboardData: async () => {
+  // fetchDashboardData: async () => {
+  //   set({ loading: true });
+  //   try {
+  //     const [
+  //       userRes,
+  //       orderRes,
+  //       productRes,
+  //       categoryRes,
+  //       contactRes,
+  //       newsletterRes,
+  //     ] = await Promise.all([
+  //       axios.get("/api/users"),
+  //       axios.get("/api/order"),
+  //       axios.get("/api/product"),
+  //       axios.get("/api/category"),
+  //       axios.get("/api/contact"),
+  //       axios.get("/api/newsletter"),
+  //     ]);
+
+  //     set({
+  //       users: userRes.data.users || [],
+  //       orders: orderRes.data.orders || [],
+  //       products: productRes.data.products || [],
+  //       categories: categoryRes.data.categories || [],
+  //       queries: contactRes.data.contacts || [],
+  //       newsletters: newsletterRes.data.newsletters || [],
+  //     });
+  //   } catch (err) {
+  //     console.error("Error fetching dashboard data", err);
+  //   } finally {
+  //     set({ loading: false });
+  //   }
+  // },
+  fetchUsers: async () => {
     set({ loading: true });
     try {
-      const [
-        userRes,
-        orderRes,
-        productRes,
-        categoryRes,
-        contactRes,
-        newsletterRes,
-      ] = await Promise.all([
-        axios.get("/api/users"),
-        axios.get("/api/order"),
-        axios.get("/api/product"),
-        axios.get("/api/category"),
-        axios.get("/api/contact"),
-        axios.get("/api/newsletter"),
-      ]);
+      const response = await axios.get("/api/users");
+      console.log(response);
 
       set({
-        users: userRes.data.users || [],
-        orders: orderRes.data.orders || [],
-        products: productRes.data.products || [],
-        categories: categoryRes.data.categories || [],
-        queries: contactRes.data.contacts || [],
-        newsletters: newsletterRes.data.newsletters || [],
+        users: response.data.users || [],
       });
-    } catch (err) {
-      console.error("Error fetching dashboard data", err);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        console.error(err.response?.data);
+      } else {
+        console.error("Error fetching users data", err);
+      }
+    } finally {
+      set({ loading: false });
+    }
+  },
+  fetchOrders: async () => {
+    set({ loading: true });
+    try {
+      const response = await axios.get("/api/order");
+      console.log(response);
+
+      set({
+        orders: response.data.orders || [],
+      });
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        console.error(err.response?.data);
+      } else {
+        console.error("Error fetching orders data", err);
+      }
+    } finally {
+      set({ loading: false });
+    }
+  },
+  fetchProducts: async () => {
+    set({ loading: true });
+    try {
+      const response = await axios.get("/api/product");
+      console.log(response);
+
+      set({
+        products: response.data.products || [],
+      });
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        console.error(err.response?.data);
+      } else {
+        console.error("Error fetching products data", err);
+      }
+    } finally {
+      set({ loading: false });
+    }
+  },
+  fetchCategories: async () => {
+    set({ loading: true });
+    try {
+      const response = await axios.get("/api/category");
+      console.log(response);
+
+      set({
+        categories: response.data.categories || [],
+      });
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        console.error(err.response?.data);
+      } else {
+        console.error("Error fetching categories data", err);
+      }
+    } finally {
+      set({ loading: false });
+    }
+  },
+  fetchQueries: async () => {
+    set({ loading: true });
+    try {
+      const response = await axios.get("/api/contact");
+      console.log(response);
+
+      set({
+        queries: response.data.contacts || [],
+      });
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        console.error(err.response?.data);
+      } else {
+        console.error("Error fetching queries data", err);
+      }
+    } finally {
+      set({ loading: false });
+    }
+  },
+  fetchNewsletters: async () => {
+    set({ loading: true });
+    try {
+      const response = await axios.get("/api/newsletter");
+      console.log(response);
+
+      set({
+        newsletters: response.data.newsletters || [],
+      });
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        console.error(err.response?.data);
+      } else {
+        console.error("Error fetching newsletters data", err);
+      }
     } finally {
       set({ loading: false });
     }

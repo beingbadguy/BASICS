@@ -9,10 +9,25 @@ import { VscLoading } from "react-icons/vsc";
 
 const DashboardNavbar = () => {
   const { user } = useAuthStore();
-  const { fetchDashboardData } = useDashboardStore();
+  const {
+    fetchUsers,
+    fetchOrders,
+    fetchProducts,
+    fetchCategories,
+    fetchQueries,
+    fetchNewsletters,
+  } = useDashboardStore();
 
   useEffect(() => {
-    fetchDashboardData();
+    fetchUsers();
+    fetchOrders();
+    fetchProducts();
+    fetchCategories();
+    fetchQueries();
+    fetchNewsletters();
+    // if (!user) {
+    //   router.push("/login");
+    // }
   }, []);
 
   if (!user) {

@@ -60,6 +60,12 @@ const Page = () => {
       setPreviewImageUrl(null);
     }
   }, [categoryImage]);
+
+  useEffect(() => {
+    // if (!user) {
+    //   router.push("/login");
+    // }
+  }, []);
   return (
     <div className="pt-20 pb-20 md:pt-0 md:mb-0">
       <div className="mt-2 cursor-pointer flex items-center gap-2 ">
@@ -112,7 +118,11 @@ const Page = () => {
           )}
           {error && <div className="mt-2 text-red-500">{error}</div>}
 
-          <Button type="submit" disabled={loading} className="my-2 min-w-20 cursor-pointer">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="my-2 min-w-20 cursor-pointer"
+          >
             {loading ? (
               <VscLoading className="animate-spin text-white" />
             ) : (

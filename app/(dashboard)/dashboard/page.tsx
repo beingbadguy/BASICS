@@ -23,11 +23,21 @@ export default function DashboardHome() {
     queries,
     newsletters,
     loading,
-    fetchDashboardData,
+    fetchUsers,
+    fetchOrders,
+    fetchProducts,
+    fetchCategories,
+    fetchQueries,
+    fetchNewsletters,
   } = useDashboardStore();
 
   useEffect(() => {
-    fetchDashboardData();
+    fetchUsers();
+    fetchOrders();
+    fetchProducts();
+    fetchCategories();
+    fetchQueries();
+    fetchNewsletters();
   }, []);
 
   const totalRevenue = orders.reduce(

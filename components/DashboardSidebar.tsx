@@ -17,8 +17,15 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const DashboardSidebar = () => {
-  const { fetchUser, logout } = useAuthStore();
-  const { fetchDashboardData } = useDashboardStore();
+  const { fetchUser, logout,  } = useAuthStore();
+  const {
+    fetchUsers,
+    fetchOrders,
+    fetchProducts,
+    fetchCategories,
+    fetchQueries,
+    fetchNewsletters,
+  } = useDashboardStore();
   const pathname = usePathname();
   const router = useRouter();
   console.log(pathname);
@@ -38,7 +45,15 @@ const DashboardSidebar = () => {
 
   useEffect(() => {
     fetchUser();
-    fetchDashboardData();
+    fetchUsers();
+    fetchOrders();
+    fetchProducts();
+    fetchCategories();
+    fetchQueries();
+    fetchNewsletters();
+    // if (!user) {
+    //   router.push("/login");
+    // }
   }, []);
 
   return (

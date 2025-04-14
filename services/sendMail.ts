@@ -1,6 +1,6 @@
 import sendMail from "./mailer";
 
-export const sendEmailVerificationMail = (
+export const sendEmailVerificationMail = async (
   email: string,
   verificationToken: string
 ) => {
@@ -26,7 +26,7 @@ export const sendEmailVerificationMail = (
   sendMail(email, "Basics ⚡ Email Verification", "", html);
 };
 
-export const userVerifiedMail = (email: string) => {
+export const userVerifiedMail = async (email: string) => {
   const html = `
     <div style="background-color: #ffffff; padding: 24px; font-family: Arial, sans-serif; color: #000;">
       <div style="max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 12px;">
@@ -47,7 +47,7 @@ export const userVerifiedMail = (email: string) => {
   sendMail(email, "Basics ⚡ Email Verified", "", html);
 };
 
-export const forgetPasswordMail = (email: string, token: string) => {
+export const forgetPasswordMail = async (email: string, token: string) => {
   const resetLink = `https://shopbasics.vercel.app/reset/${token}`;
   const html = `
     <div style="background-color: #ffffff; padding: 24px; font-family: Arial, sans-serif; color: #000;">
@@ -72,7 +72,7 @@ export const forgetPasswordMail = (email: string, token: string) => {
   sendMail(email, "Basics ⚡ Password Reset", "", html);
 };
 
-export const passwordResetSuccessMail = (email: string) => {
+export const passwordResetSuccessMail = async (email: string) => {
   const html = `
     <div style="background-color: #ffffff; padding: 24px; font-family: Arial, sans-serif; color: #000;">
       <div style="max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 12px;">
@@ -92,7 +92,7 @@ export const passwordResetSuccessMail = (email: string) => {
   sendMail(email, "Basics ⚡ Password Changed", "", html);
 };
 
-export const welcomeUserMail = (email: string, userName: string) => {
+export const welcomeUserMail = async (email: string, userName: string) => {
   const html = `
     <div style="background-color: #ffffff; padding: 24px; font-family: Arial, sans-serif; color: #000;">
       <div style="max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 12px;">
@@ -118,7 +118,7 @@ export const welcomeUserMail = (email: string, userName: string) => {
   sendMail(email, "Welcome to Basics ⚡", "", html);
 };
 
-export const newsletterSubscriptionMail = (email: string) => {
+export const newsletterSubscriptionMail = async (email: string) => {
   const html = `
     <div style="background-color: #ffffff; padding: 24px; font-family: Arial, sans-serif; color: #000;">
       <div style="max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 12px;">
@@ -144,7 +144,7 @@ export const newsletterSubscriptionMail = (email: string) => {
 
 // utils/mails/contactConfirmation.ts
 
-export const contactConfirmationMail = (email: string, name: string) => {
+export const contactConfirmationMail = async (email: string, name: string) => {
   const html = `
     <div style="background-color: #ffffff; padding: 24px; font-family: Arial, sans-serif; color: #000;">
       <div style="max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 12px;">

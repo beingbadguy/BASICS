@@ -16,6 +16,8 @@ import React, { useEffect, useState } from "react";
 import { VscLoading } from "react-icons/vsc";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
+import { useAuthStore } from "@/store/store";
+import { useRouter } from "next/navigation";
 
 type Products = {
   _id: string;
@@ -32,6 +34,8 @@ type Products = {
 };
 
 const Page = () => {
+  const { user } = useAuthStore();
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState<Products[]>([]);
   const [loading, setLoading] = useState(false);
@@ -144,6 +148,9 @@ const Page = () => {
 
   useEffect(() => {
     fetchAllProducts();
+    if (!user) {
+      router.push("/login");
+    }
   }, []);
 
   return (

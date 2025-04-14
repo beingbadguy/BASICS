@@ -2,6 +2,8 @@
 import axios, { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useAuthStore } from "@/store/store";
+import { useRouter } from "next/navigation";
 
 interface Newsletter {
   _id: string;
@@ -18,10 +20,12 @@ interface ContactQuery {
 }
 
 const AnalysisPage = () => {
+  const { user } = useAuthStore();
   const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
   const [newslettersLoading, setNewslettersLoading] = useState(false);
   const [queries, setQueries] = useState<ContactQuery[]>([]);
   const [queriesLoading, setQueriesLoading] = useState(false);
+  const router = useRouter();
 
   const fetchQueries = async () => {
     setQueriesLoading(true);
@@ -58,6 +62,9 @@ const AnalysisPage = () => {
   useEffect(() => {
     fetchNewsletter();
     fetchQueries();
+    if (!user) {
+      router.push("/login");
+    }
   }, []);
 
   return (

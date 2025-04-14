@@ -1,5 +1,7 @@
 "use client";
+import { useAuthStore } from "@/store/store";
 import axios, { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
@@ -25,6 +27,8 @@ type Order = {
 };
 
 export default function AdminOrdersPage() {
+  const { user } = useAuthStore();
+  const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -76,6 +80,9 @@ export default function AdminOrdersPage() {
 
   useEffect(() => {
     fetchOrders();
+    if (!user) {
+      router.push("/login");
+    }
   }, []);
 
   if (loading)

@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     await user.save();
 
     // Send reset email
-    forgetPasswordMail(user.email, verificationToken);
+    await forgetPasswordMail(email, verificationToken);
 
     return NextResponse.json({
       success: true,

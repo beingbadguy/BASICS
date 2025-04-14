@@ -186,7 +186,7 @@ const ProductsPage = () => {
       {/* Header Controls */}
       {showFilter && (
         <div
-          className="fixed inset-0 top-22 bg-black/50 bg-opacity-10 z-40"
+          className="fixed inset-0 top-22 bg-black/50 bg-opacity-10 z-[999]"
           onClick={() => {
             setShowFilter(false);
           }}
@@ -324,12 +324,12 @@ const ProductsPage = () => {
                   layout === "list" ? "absolute top-2 left-2" : "px-1"
                 }`}
               >
-                <div className="flex items-center gap-1 bg-purple-600 text-white text-xs px-2 py-1 rounded-full ">
+                <div className="flex items-center gap-1 bg-purple-600 text-white text-xs px-2 py-1 rounded-full z-0">
                   <CiDiscount1 className="text-base" />
                   {Math.floor(product.discountPercentage)}% Off
                 </div>
                 <div
-                  className={`bg-gray-100 p-1 rounded-full cursor-pointer hover:bg-gray-200  ${
+                  className={`bg-gray-100 p-1 z-0 rounded-full cursor-pointer hover:bg-gray-200  ${
                     layout === "list" ? "mr-3" : ""
                   } `}
                   onClick={() => {
