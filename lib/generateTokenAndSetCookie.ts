@@ -11,7 +11,7 @@ export const generateTokenAndSetCookie = async (
     { userId, isVerified, role },
     process.env.JWT_SECRET!,
     {
-      expiresIn: "1h",
+      expiresIn: "7d",
     }
   );
 
@@ -19,6 +19,6 @@ export const generateTokenAndSetCookie = async (
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    expires: new Date(Date.now() + 60 * 60 * 1000),
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
   });
 };

@@ -100,7 +100,7 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
   fetchOrders: async () => {
     set({ ordersLoading: true });
     try {
-      const res = await axios.get("/api/order");
+      const res = await axios.get("/api/orders");
       console.log("Fetched Orders:", res.data);
       set({ orders: res.data.orders || [] });
     } catch (err: unknown) {
