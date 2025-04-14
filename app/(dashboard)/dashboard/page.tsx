@@ -41,6 +41,9 @@ export default function DashboardHome() {
 
   // Modify your useEffect to stagger requests
   useEffect(() => {
+    fetchUsers();
+    fetchOrders();
+    fetchNewsletters();
     const fetchData = async () => {
       await fetchUsers();
       await fetchOrders();
