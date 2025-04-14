@@ -206,7 +206,7 @@ const Page = () => {
                         alt={product.title}
                         width={100}
                         height={100}
-                        className="w-14 h-14 object-contain rounded"
+                        className="w-14 h-14 object-contain z-0 rounded"
                       />
                     </TableCell>
                     <TableCell className="font-medium">

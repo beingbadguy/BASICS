@@ -108,7 +108,7 @@ const Page = () => {
                 alt={category.name}
                 width={100}
                 height={100}
-                className="rounded size-32 object-contain"
+                className="rounded size-32 object-contain z-0"
               />
               <div className="flex items-center gap-2">
                 <Trash2 className="text-red-500" />
@@ -133,7 +133,7 @@ const Page = () => {
                 alt={category.name}
                 width={100}
                 height={100}
-                className="rounded size-32 object-contain"
+                className="rounded size-32 object-contain z-0"
               />
               <div className="flex items-center gap-4 mr-4">
                 <Trash2

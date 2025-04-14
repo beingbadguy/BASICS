@@ -45,10 +45,10 @@ export default function DashboardCharts() {
   //   const newsletterData = useMemo(() => groupByDate(newsletters), [newsletters]);
 
   return (
-    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 z-0">
       {/* Orders Chart - Bar */}
       <ChartCard title="Orders Booked per Day">
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={250} className="z-0">
           <BarChart data={orderData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
@@ -61,7 +61,7 @@ export default function DashboardCharts() {
 
       {/* Users Chart - Line */}
       <ChartCard title="New Users per Day">
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={250} className="z-0">
           <LineChart data={userData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
@@ -79,7 +79,7 @@ export default function DashboardCharts() {
 
       {/* Products Chart - Area */}
       <ChartCard title="Products Added per Day">
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={250} className="z-0">
           <AreaChart data={productData}>
             <defs>
               <linearGradient id="colorProd" x1="0" y1="0" x2="0" y2="1">
@@ -104,7 +104,7 @@ export default function DashboardCharts() {
 
       {/* Queries Chart - Area */}
       <ChartCard title="Customer Queries per Day">
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={250} className="z-0">
           <AreaChart data={queryData}>
             <XAxis dataKey="date" />
             <YAxis allowDecimals={false} />
@@ -122,7 +122,7 @@ export default function DashboardCharts() {
 
       {/* Newsletter Subscriptions - Pie */}
       <ChartCard title="Newsletter Subscriptions">
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={250} className="z-0">
           <PieChart>
             <Pie
               data={[
@@ -161,7 +161,7 @@ function ChartCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 z-0">
       <h3 className="text-md font-semibold text-gray-700 mb-3">{title}</h3>
       {children}
     </div>
