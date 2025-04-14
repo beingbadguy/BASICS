@@ -1,5 +1,5 @@
 import { databaseConnection } from "@/config/databseConnection";
-import Newsletter from "@/models/newsletter.mode";
+import Newsletter from "@/models/newsletter.model";
 import { newsletterSubscriptionMail } from "@/services/sendMail";
 import { NextRequest, NextResponse } from "next/server";
 
