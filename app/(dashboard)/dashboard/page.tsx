@@ -39,14 +39,17 @@ export default function DashboardHome() {
     fetchNewsletters,
   } = useDashboardStore();
 
-  // Fetch all on mount
+  // Modify your useEffect to stagger requests
   useEffect(() => {
-    fetchUsers();
-    fetchOrders();
-    fetchProducts();
-    fetchCategories();
-    fetchQueries();
-    fetchNewsletters();
+    const fetchData = async () => {
+      await fetchUsers();
+      await fetchOrders();
+      await fetchProducts();
+      await fetchCategories();
+      await fetchQueries();
+      await fetchNewsletters();
+    };
+    fetchData();
   }, []);
 
   // Determine if any data is still loading
