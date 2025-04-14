@@ -13,6 +13,7 @@ import { BsCartCheckFill } from "react-icons/bs";
 import CountCard from "@/components/CountCard";
 import Link from "next/link";
 import { useDashboardStore } from "@/store/dashboard";
+import DashboardCharts from "@/components/OrdersChart";
 
 export default function DashboardHome() {
   const {
@@ -22,7 +23,14 @@ export default function DashboardHome() {
     categories,
     queries,
     newsletters,
-    loading,
+
+    usersLoading,
+    ordersLoading,
+    productsLoading,
+    categoriesLoading,
+    queriesLoading,
+    newslettersLoading,
+
     fetchUsers,
     fetchOrders,
     fetchProducts,
@@ -31,6 +39,7 @@ export default function DashboardHome() {
     fetchNewsletters,
   } = useDashboardStore();
 
+  // Fetch all on mount
   useEffect(() => {
     fetchUsers();
     fetchOrders();
@@ -40,20 +49,21 @@ export default function DashboardHome() {
     fetchNewsletters();
   }, []);
 
+  // Determine if any data is still loading
+  const isAnyLoading =
+    usersLoading ||
+    ordersLoading ||
+    productsLoading ||
+    categoriesLoading ||
+    queriesLoading ||
+    newslettersLoading;
+
   const totalRevenue = orders.reduce(
     (acc, order) => acc + (order.totalAmount || 0),
     0
   );
 
-  if (loading) {
-    return (
-      <div className="min-h-[40vh] flex items-center justify-center">
-        <VscLoading className="animate-spin text-purple-600 text-3xl" />
-      </div>
-    );
-  }
-
-  if (loading) {
+  if (isAnyLoading) {
     return (
       <div className="min-h-[40vh] flex items-center justify-center">
         <VscLoading className="animate-spin text-purple-600 text-3xl" />
@@ -66,8 +76,9 @@ export default function DashboardHome() {
       <h2 className="text-xl md:text-2xl font-semibold mb-4 text-purple-800">
         Dashboard Overview
       </h2>
+      <DashboardCharts />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid mt-6 grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">
         <CountCard
           icon={<FaUsers />}
           label="Users"
@@ -119,9 +130,11 @@ export default function DashboardHome() {
           </div>
         </div>
       </div>
+
       <div className="flex items-center justify-center gap-2 bg-purple-100 text-purple-700 shadow-md px-4 py-2 rounded-md cursor-pointer w-[200px] ">
         <Link href={"/"}>Go to website</Link>
       </div>
+      {/* <OrdersChart /> */}
     </main>
   );
 }

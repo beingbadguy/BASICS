@@ -39,7 +39,7 @@ const DashboardNavbar = () => {
   }
 
   return (
-    <div className="fixed top-0 left-0 md:static w-full  py-2 px-4 border-b-1 border-gray-300 bg-white">
+    <div className="fixed top-0 left-0 md:static w-full  py-2 px-4 border-b-1 border-gray-300 bg-white z-[999]">
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-center gap-2">
           <div className="size-14 rounded-full border border-gray-500 flex items-center justify-center text-purple-700 overflow-hidden">

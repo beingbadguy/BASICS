@@ -22,6 +22,7 @@ interface Product {
   _id: string;
   title: string;
   price: number;
+  createdAt: string;
 }
 
 interface Category {
@@ -33,6 +34,7 @@ interface Contact {
   _id: string;
   name: string;
   message: string;
+  createdAt: string;
 }
 
 interface Newsletter {
@@ -47,8 +49,14 @@ interface DashboardStore {
   categories: Category[];
   queries: Contact[];
   newsletters: Newsletter[];
-  loading: boolean;
-  // fetchDashboardData: () => Promise<void>;
+
+  usersLoading: boolean;
+  ordersLoading: boolean;
+  productsLoading: boolean;
+  categoriesLoading: boolean;
+  queriesLoading: boolean;
+  newslettersLoading: boolean;
+
   fetchUsers: () => Promise<void>;
   fetchOrders: () => Promise<void>;
   fetchProducts: () => Promise<void>;
@@ -64,152 +72,113 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
   categories: [],
   queries: [],
   newsletters: [],
-  loading: true,
-  // fetchDashboardData: async () => {
-  //   set({ loading: true });
-  //   try {
-  //     const [
-  //       userRes,
-  //       orderRes,
-  //       productRes,
-  //       categoryRes,
-  //       contactRes,
-  //       newsletterRes,
-  //     ] = await Promise.all([
-  //       axios.get("/api/users"),
-  //       axios.get("/api/order"),
-  //       axios.get("/api/product"),
-  //       axios.get("/api/category"),
-  //       axios.get("/api/contact"),
-  //       axios.get("/api/newsletter"),
-  //     ]);
 
-  //     set({
-  //       users: userRes.data.users || [],
-  //       orders: orderRes.data.orders || [],
-  //       products: productRes.data.products || [],
-  //       categories: categoryRes.data.categories || [],
-  //       queries: contactRes.data.contacts || [],
-  //       newsletters: newsletterRes.data.newsletters || [],
-  //     });
-  //   } catch (err) {
-  //     console.error("Error fetching dashboard data", err);
-  //   } finally {
-  //     set({ loading: false });
-  //   }
-  // },
+  usersLoading: false,
+  ordersLoading: false,
+  productsLoading: false,
+  categoriesLoading: false,
+  queriesLoading: false,
+  newslettersLoading: false,
+
   fetchUsers: async () => {
-    set({ loading: true });
+    set({ usersLoading: true });
     try {
-      const response = await axios.get("/api/users");
-      console.log(response);
-
-      set({
-        users: response.data.users || [],
-      });
+      const res = await axios.get("/api/users");
+      console.log("Fetched Users:", res.data);
+      set({ users: res.data.users || [] });
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
-        console.error(err.response?.data);
+        console.error("Error fetching users:", err.response?.data);
       } else {
-        console.error("Error fetching users data", err);
+        console.error("Error fetching users:", err);
       }
     } finally {
-      set({ loading: false });
+      set({ usersLoading: false });
     }
   },
+
   fetchOrders: async () => {
-    set({ loading: true });
+    set({ ordersLoading: true });
     try {
-      const response = await axios.get("/api/order");
-      console.log(response);
-
-      set({
-        orders: response.data.orders || [],
-      });
+      const res = await axios.get("/api/order");
+      console.log("Fetched Orders:", res.data);
+      set({ orders: res.data.orders || [] });
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
-        console.error(err.response?.data);
+        console.error("Error fetching orders:", err.response?.data);
       } else {
-        console.error("Error fetching orders data", err);
+        console.error("Error fetching orders:", err);
       }
     } finally {
-      set({ loading: false });
+      set({ ordersLoading: false });
     }
   },
+
   fetchProducts: async () => {
-    set({ loading: true });
+    set({ productsLoading: true });
     try {
-      const response = await axios.get("/api/product");
-      console.log(response);
-
-      set({
-        products: response.data.products || [],
-      });
+      const res = await axios.get("/api/product");
+      console.log("Fetched Products:", res.data);
+      set({ products: res.data.products || [] });
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
-        console.error(err.response?.data);
+        console.error("Error fetching products:", err.response?.data);
       } else {
-        console.error("Error fetching products data", err);
+        console.error("Error fetching products:", err);
       }
     } finally {
-      set({ loading: false });
+      set({ productsLoading: false });
     }
   },
+
   fetchCategories: async () => {
-    set({ loading: true });
+    set({ categoriesLoading: true });
     try {
-      const response = await axios.get("/api/category");
-      console.log(response);
-
-      set({
-        categories: response.data.categories || [],
-      });
+      const res = await axios.get("/api/category");
+      console.log("Fetched Categories:", res.data);
+      set({ categories: res.data.categories || [] });
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
-        console.error(err.response?.data);
+        console.error("Error fetching categories:", err.response?.data);
       } else {
-        console.error("Error fetching categories data", err);
+        console.error("Error fetching categories:", err);
       }
     } finally {
-      set({ loading: false });
+      set({ categoriesLoading: false });
     }
   },
+
   fetchQueries: async () => {
-    set({ loading: true });
+    set({ queriesLoading: true });
     try {
-      const response = await axios.get("/api/contact");
-      console.log(response);
-
-      set({
-        queries: response.data.contacts || [],
-      });
+      const res = await axios.get("/api/contact");
+      console.log("Fetched Queries:", res.data);
+      set({ queries: res.data.contacts || [] });
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
-        console.error(err.response?.data);
+        console.error("Error fetching queries:", err.response?.data);
       } else {
-        console.error("Error fetching queries data", err);
+        console.error("Error fetching queries:", err);
       }
     } finally {
-      set({ loading: false });
+      set({ queriesLoading: false });
     }
   },
-  fetchNewsletters: async () => {
-    set({ loading: true });
-    try {
-      const response = await axios.get("/api/newsletter");
-      console.log(response);
 
-      set({
-        newsletters: response.data.newsletters || [],
-      });
+  fetchNewsletters: async () => {
+    set({ newslettersLoading: true });
+    try {
+      const res = await axios.get("/api/newsletter");
+      console.log("Fetched Newsletters:", res.data);
+      set({ newsletters: res.data.newsletters || [] });
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
-        console.error(err.response?.data);
+        console.error("Error fetching newsletters:", err.response?.data);
       } else {
-        console.error("Error fetching newsletters data", err);
+        console.error("Error fetching newsletters:", err);
       }
     } finally {
-      set({ loading: false });
+      set({ newslettersLoading: false });
     }
   },
 }));
