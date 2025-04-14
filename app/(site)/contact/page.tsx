@@ -61,7 +61,7 @@ const ContactUs = () => {
 
   return (
     <div className="bg-white p-4 min-h-[60vh]">
-      <div className="text-sm px-4 text-gray-500 mb-4">
+      <div className="text-sm  text-gray-500 mb-4">
         <span
           className="cursor-pointer hover:text-purple-600"
           onClick={() => router.push("/")}

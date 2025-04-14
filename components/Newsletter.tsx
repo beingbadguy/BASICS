@@ -27,7 +27,7 @@ const Newsletter = () => {
     setLoading(true);
     try {
       const response = await axios.post("/api/newsletter", { email });
-      console.log(response.data);
+      // console.log(response.data);
       setError(response.data.message);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

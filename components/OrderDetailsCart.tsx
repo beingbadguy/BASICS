@@ -57,8 +57,8 @@ export default function OrderDetailsCard({
   const updateStatus = async (id: string, status: string) => {
     setUpdatingId(true);
     try {
-      const response = await axios.put(`/api/orders/${id}`, { status });
-      console.log(response.data);
+      await axios.put(`/api/orders/${id}`, { status });
+      // console.log(response.data);
 
       fetchUserOrders();
     } catch (error) {

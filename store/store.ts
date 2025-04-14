@@ -77,7 +77,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   fetchUser: async () => {
     try {
       const response = await axios.get("/api/me");
-      console.log(response.data.user);
+      // console.log(response.data.user);
       set({ user: response.data.user });
 
       const { fetchUserCart, fetchUserWishlist } = useAuthStore.getState();
@@ -118,7 +118,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
     try {
       const response = await axios.post(`/api/wishlist/${id}`);
-      console.log(response.data);
+      // console.log(response.data);
       useAuthStore.getState().fetchUser();
     } catch (error) {
       console.error("Failed to add to wishlist:", error);
@@ -137,8 +137,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   fetchUserWishlist: async () => {
     try {
       const response = await axios.get(`/api/wishlist`);
-      console.log("user wishlist is called");
-      console.log(response.data.wishlist);
+      // console.log("user wishlist is called");
+      // console.log(response.data.wishlist);
       set({ userWishlist: response.data.wishlist });
     } catch (error) {
       console.error("Failed to add to cart", error);

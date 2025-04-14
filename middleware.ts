@@ -48,6 +48,7 @@ export async function middleware(request: NextRequest) {
     "/addcategory",
     "/editproduct",
     "/editcategory",
+    "/others",
   ];
 
   if (!token) {

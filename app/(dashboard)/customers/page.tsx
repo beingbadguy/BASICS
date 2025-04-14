@@ -24,6 +24,7 @@ interface User {
   createdAt: string;
   updatedAt: string;
   pass: string;
+  order: string[];
 }
 
 const Page = () => {
@@ -75,6 +76,7 @@ const Page = () => {
             <TableHead>Email</TableHead>
             <TableHead>Password</TableHead>
             <TableHead>First Purchase</TableHead>
+            <TableHead>Total Orders</TableHead>
             <TableHead>Created</TableHead>
           </TableRow>
         </TableHeader>
@@ -85,6 +87,7 @@ const Page = () => {
               <TableCell>{user.email}</TableCell>
               <TableCell className="capitalize">{user?.pass}</TableCell>
               <TableCell>{user.firstPurchase ? "Yes" : "No"}</TableCell>
+              <TableCell>{user.order.length}</TableCell>
               <TableCell>{new Date(user.createdAt).toLocaleString()}</TableCell>
             </TableRow>
           ))}

@@ -30,7 +30,7 @@ const HeaderSection = () => {
   const router = useRouter();
 
   if (userCart) {
-    console.log(userCart.products);
+    // console.log(userCart.products);
   }
 
   useEffect(() => {

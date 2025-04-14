@@ -14,6 +14,12 @@ const productSchema = new mongoose.Schema(
     rating: { type: Number, default: 0 },
     numReviews: { type: Number, default: 0 },
     isActive: { type: Boolean, default: true },
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
     info: {
       type: String,
       // required: true,

@@ -44,15 +44,9 @@ export default function DashboardHome() {
     fetchUsers();
     fetchOrders();
     fetchNewsletters();
-    const fetchData = async () => {
-      await fetchUsers();
-      await fetchOrders();
-      await fetchProducts();
-      await fetchCategories();
-      await fetchQueries();
-      await fetchNewsletters();
-    };
-    fetchData();
+    fetchProducts();
+    fetchCategories();
+    fetchQueries();
   }, []);
 
   // Determine if any data is still loading

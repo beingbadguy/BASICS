@@ -28,7 +28,6 @@ const DashboardSidebar = () => {
   } = useDashboardStore();
   const pathname = usePathname();
   const router = useRouter();
-  console.log(pathname);
   const MenuBar = [
     { label: "Dashboard", path: "/dashboard", icons: <LayoutDashboard /> },
     { label: "Products", path: "/products", icons: <ShoppingBag /> },
