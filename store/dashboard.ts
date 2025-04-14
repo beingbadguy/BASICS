@@ -40,6 +40,7 @@ interface Contact {
 interface Newsletter {
   _id: string;
   email: string;
+  createdAt: string;
 }
 
 interface DashboardStore {
@@ -84,14 +85,11 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     set({ usersLoading: true });
     try {
       const res = await axios.get("/api/users");
-      console.log("Fetched Users:", res.data);
-      set({ users: res.data.users || [] });
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        console.error("Error fetching users:", err.response?.data);
-      } else {
-        console.error("Error fetching users:", err);
+      if (res.data.success) {
+        set({ users: res.data.users });
       }
+    } catch (err) {
+      console.error("Fetch users error:", err);
     } finally {
       set({ usersLoading: false });
     }
@@ -101,14 +99,11 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     set({ ordersLoading: true });
     try {
       const res = await axios.get("/api/orders");
-      console.log("Fetched Orders:", res.data);
-      set({ orders: res.data.orders || [] });
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        console.error("Error fetching orders:", err.response?.data);
-      } else {
-        console.error("Error fetching orders:", err);
+      if (res.data.success) {
+        set({ orders: res.data.orders });
       }
+    } catch (err) {
+      console.error("Fetch orders error:", err);
     } finally {
       set({ ordersLoading: false });
     }
@@ -118,14 +113,11 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     set({ productsLoading: true });
     try {
       const res = await axios.get("/api/product");
-      console.log("Fetched Products:", res.data);
-      set({ products: res.data.products || [] });
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        console.error("Error fetching products:", err.response?.data);
-      } else {
-        console.error("Error fetching products:", err);
+      if (res.data.success) {
+        set({ products: res.data.products });
       }
+    } catch (err) {
+      console.error("Fetch products error:", err);
     } finally {
       set({ productsLoading: false });
     }
@@ -135,14 +127,11 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     set({ categoriesLoading: true });
     try {
       const res = await axios.get("/api/category");
-      console.log("Fetched Categories:", res.data);
-      set({ categories: res.data.categories || [] });
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        console.error("Error fetching categories:", err.response?.data);
-      } else {
-        console.error("Error fetching categories:", err);
+      if (res.data.success) {
+        set({ categories: res.data.categories });
       }
+    } catch (err) {
+      console.error("Fetch categories error:", err);
     } finally {
       set({ categoriesLoading: false });
     }
@@ -152,14 +141,11 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     set({ queriesLoading: true });
     try {
       const res = await axios.get("/api/contact");
-      console.log("Fetched Queries:", res.data);
-      set({ queries: res.data.contacts || [] });
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        console.error("Error fetching queries:", err.response?.data);
-      } else {
-        console.error("Error fetching queries:", err);
+      if (res.data.success) {
+        set({ queries: res.data.contacts });
       }
+    } catch (err) {
+      console.error("Fetch queries error:", err);
     } finally {
       set({ queriesLoading: false });
     }
@@ -169,14 +155,11 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     set({ newslettersLoading: true });
     try {
       const res = await axios.get("/api/newsletter");
-      console.log("Fetched Newsletters:", res.data);
-      set({ newsletters: res.data.newsletters || [] });
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        console.error("Error fetching newsletters:", err.response?.data);
-      } else {
-        console.error("Error fetching newsletters:", err);
+      if (res.data.success) {
+        set({ newsletters: res.data.newsletters });
       }
+    } catch (err) {
+      console.error("Fetch newsletters error:", err);
     } finally {
       set({ newslettersLoading: false });
     }

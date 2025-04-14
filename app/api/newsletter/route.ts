@@ -49,22 +49,18 @@ export async function GET() {
       {
         success: true,
         message: "Newsletters fetched successfully",
-        newsletters: newsletters,
+        newsletters,
       },
-      {
-        status: 200,
-      }
+      { status: 200 }
     );
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching newsletters:", error);
     return NextResponse.json(
       {
         success: false,
         message: "Failed to get newsletters",
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }
