@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   await databaseConnection();
   try {
-    const newsletters = await Newsletter.find();
+    const newsletters = await Newsletter.find().sort({ createdAt: -1 });
     return NextResponse.json(
       {
         success: true,

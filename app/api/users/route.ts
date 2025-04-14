@@ -4,8 +4,10 @@ import User from "@/models/user.model";
 
 export async function GET() {
   await databaseConnection();
+
   try {
     const users = await User.find({})
+      .sort({ createdAt: -1 }) // optional: most recent users first
       .populate({
         path: "wishlist",
         populate: {
@@ -27,8 +29,13 @@ export async function GET() {
     );
   } catch (error) {
     console.error("Error fetching users:", error);
+
     return NextResponse.json(
-      { success: false, message: "Something went wrong" },
+      {
+        success: false,
+        message: "Failed to fetch users",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }

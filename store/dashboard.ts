@@ -99,9 +99,8 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     set({ ordersLoading: true });
     try {
       const res = await axios.get("/api/orders");
-      if (res.data.success) {
-        set({ orders: res.data.orders });
-      }
+
+      set({ orders: res.data.orders });
     } catch (err) {
       console.error("Fetch orders error:", err);
     } finally {
@@ -155,9 +154,7 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     set({ newslettersLoading: true });
     try {
       const res = await axios.get("/api/newsletter");
-      if (res.data.success) {
-        set({ newsletters: res.data.newsletters });
-      }
+      set({ newsletters: res.data.newsletters });
     } catch (err) {
       console.error("Fetch newsletters error:", err);
     } finally {
