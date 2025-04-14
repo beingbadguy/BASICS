@@ -1,4 +1,3 @@
-// components/DashboardCharts.tsx
 "use client";
 import { useMemo } from "react";
 import {
@@ -26,7 +25,6 @@ const COLORS = ["#7e5bef", "#f472b6", "#facc15", "#34d399", "#60a5fa"];
 export default function DashboardCharts() {
   const { orders, users, products, newsletters, queries } = useDashboardStore();
 
-  // === Group by date helpers ===
   const groupByDate = (items: { createdAt: string }[]) => {
     const counts: Record<string, number> = {};
     items.forEach((item) => {
@@ -42,13 +40,11 @@ export default function DashboardCharts() {
   const userData = useMemo(() => groupByDate(users), [users]);
   const productData = useMemo(() => groupByDate(products), [products]);
   const queryData = useMemo(() => groupByDate(queries), [queries]);
-  //   const newsletterData = useMemo(() => groupByDate(newsletters), [newsletters]);
 
   return (
-    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 z-0">
-      {/* Orders Chart - Bar */}
+    <div className="relative z-0 mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
       <ChartCard title="Orders Booked per Day">
-        <ResponsiveContainer width="100%" height={250} className="z-0">
+        <ResponsiveContainer width="100%" height={250}>
           <BarChart data={orderData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
@@ -59,9 +55,8 @@ export default function DashboardCharts() {
         </ResponsiveContainer>
       </ChartCard>
 
-      {/* Users Chart - Line */}
       <ChartCard title="New Users per Day">
-        <ResponsiveContainer width="100%" height={250} className="z-0">
+        <ResponsiveContainer width="100%" height={250}>
           <LineChart data={userData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
@@ -77,9 +72,8 @@ export default function DashboardCharts() {
         </ResponsiveContainer>
       </ChartCard>
 
-      {/* Products Chart - Area */}
       <ChartCard title="Products Added per Day">
-        <ResponsiveContainer width="100%" height={250} className="z-0">
+        <ResponsiveContainer width="100%" height={250}>
           <AreaChart data={productData}>
             <defs>
               <linearGradient id="colorProd" x1="0" y1="0" x2="0" y2="1">
@@ -102,9 +96,8 @@ export default function DashboardCharts() {
         </ResponsiveContainer>
       </ChartCard>
 
-      {/* Queries Chart - Area */}
       <ChartCard title="Customer Queries per Day">
-        <ResponsiveContainer width="100%" height={250} className="z-0">
+        <ResponsiveContainer width="100%" height={250}>
           <AreaChart data={queryData}>
             <XAxis dataKey="date" />
             <YAxis allowDecimals={false} />
@@ -120,9 +113,8 @@ export default function DashboardCharts() {
         </ResponsiveContainer>
       </ChartCard>
 
-      {/* Newsletter Subscriptions - Pie */}
       <ChartCard title="Newsletter Subscriptions">
-        <ResponsiveContainer width="100%" height={250} className="z-0">
+        <ResponsiveContainer width="100%" height={250}>
           <PieChart>
             <Pie
               data={[
@@ -161,7 +153,7 @@ function ChartCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 z-0">
+    <div className="relative z-0 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
       <h3 className="text-md font-semibold text-gray-700 mb-3">{title}</h3>
       {children}
     </div>

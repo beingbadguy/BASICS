@@ -17,7 +17,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const DashboardSidebar = () => {
-  const { fetchUser, logout,  } = useAuthStore();
+  const { fetchUser, logout } = useAuthStore();
   const {
     fetchUsers,
     fetchOrders,
@@ -56,7 +56,7 @@ const DashboardSidebar = () => {
   }, []);
 
   return (
-    <div className="fixed bg-white left-0 top-[93%] w-full  md:static p-2 md:p-4 border shadow-md md:min-h-screen flex items-center justify-between flex-col  md:w-48 ">
+    <div className="fixed bg-white left-0 top-[93%] w-full  md:static p-2 md:p-4 border shadow-md md:min-h-screen flex items-center justify-between flex-col  md:w-48 z-[50]">
       <div>
         <div className="w-full hidden md:flex  items-center justify-center pt-1">
           <Image
