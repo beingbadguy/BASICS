@@ -1,6 +1,16 @@
 import { databaseConnection } from "@/config/databseConnection";
 import Order from "@/models/order.model";
 import { NextResponse } from "next/server";
+import "@/models/wishlist.model";
+import "@/models/product.model";
+import "@/models/category.model";
+import "@/models/cart.model";
+import "@/models/order.model";
+import "@/models/coupon.model";
+import "@/models/contact.model";
+import "@/models/newsletter.model";
+import "@/models/user.model";
+import "@/models/promo.model";
 
 export async function GET() {
   await databaseConnection();

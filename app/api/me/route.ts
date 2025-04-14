@@ -7,6 +7,11 @@ import "@/models/product.model";
 import "@/models/category.model";
 import "@/models/cart.model";
 import "@/models/order.model";
+import "@/models/coupon.model";
+import "@/models/contact.model";
+import "@/models/newsletter.model";
+import "@/models/user.model";
+import "@/models/promo.model";
 
 export async function GET(request: NextRequest) {
   await databaseConnection();
