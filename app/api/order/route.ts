@@ -25,6 +25,8 @@ export async function POST(request: NextRequest) {
       address,
       phone,
       products,
+
+      zip,
     } = await request.json();
     const user = await User.findOne({ _id: decoded?.userId });
     await Cart.findOneAndDelete({ userId: decoded?.userId.toString() });
@@ -38,6 +40,7 @@ export async function POST(request: NextRequest) {
       phone,
       status: "processing",
       products,
+      zip,
     });
 
     await newOrder.save();
@@ -85,8 +88,7 @@ export async function GET(request: NextRequest) {
       .sort({ createdAt: -1 })
       .populate({
         path: "userId",
-        select:"-password -pass"
-        
+        select: "-password -pass",
       })
       .populate({
         path: "products.productId",

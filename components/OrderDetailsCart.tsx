@@ -34,6 +34,7 @@ type Product = {
     image: string; // Assuming you're storing product image URL
   };
   quantity: number;
+  size?: string;
 };
 
 type User = {
@@ -148,6 +149,7 @@ export default function OrderDetailsCard({
                     <p className="font-medium">{item.productId.title}</p>
                     <p>₹{item.productId.price}</p>
                     <p>Qty: {item.quantity}</p>
+                    {item?.size && <p>Size: {item.size}</p>}
                   </div>
                 </li>
               ))}

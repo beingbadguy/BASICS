@@ -23,6 +23,8 @@ type Order = {
       image: string;
     };
     quantity: number;
+    _id: string;
+    size: string;
   }[];
 };
 
@@ -118,7 +120,7 @@ export default function AdminOrdersPage() {
                   Phone: {order.phone || "Pincode Unavailable"}
                 </p>
                 <p className="text-sm">Address: {order.address}</p>
-                <p className="text-sm">Pincode: {order?.zip}</p>
+                {order.zip && <p className="text-sm">Pincode: {order.zip}</p>}
                 <p className="text-sm">Delivery Type: {order.deliveryType}</p>
                 <p className="text-sm">Payment Method: {order.paymentMethod}</p>
               </div>
@@ -151,6 +153,11 @@ export default function AdminOrdersPage() {
                     <p className="text-sm text-gray-500">
                       ₹{item.productId.price} × {item.quantity}
                     </p>
+                    {item.size && (
+                      <p className="text-sm text-gray-500 italic">
+                        Size: {item.size}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}

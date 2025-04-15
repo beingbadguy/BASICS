@@ -9,7 +9,7 @@ import axios, { AxiosError } from "axios";
 import { VscLoading } from "react-icons/vsc";
 
 export default function CheckoutPage() {
-  const { user, fetchUserCart, userCart, fetchUser } = useAuthStore();
+  const { user, userCart, fetchUser } = useAuthStore();
   const router = useRouter();
 
   const [showModal, setShowModal] = useState(false);
@@ -28,15 +28,21 @@ export default function CheckoutPage() {
   const [couponApplied, setCouponApplied] = useState(false);
 
   useEffect(() => {
-    if (!user) router.push("/login");
-    else fetchUserCart();
+    const initialize = async () => {
+      await fetchUser(); // ensures user, cart, wishlist get fetched
+    };
+    initialize();
+  }, []);
+
+  useEffect(() => {
+    if (user === null) router.push("/login");
   }, [user]);
 
   useEffect(() => {
-    if (!userCart) {
-      router.push("/");
+    if (userCart && userCart.products.length === 0) {
+      router.push("/cart");
     }
-  }, []);
+  }, [userCart]);
 
   const handleUpdate = async () => {
     if (!/^\d{10}$/.test(phone.toString())) {
@@ -112,6 +118,7 @@ export default function CheckoutPage() {
         products: userCart?.products.map((item) => ({
           productId: item.productId._id,
           quantity: item.quantity,
+          size: item.size || "",
           title: item.productId.title,
           price: item.productId.discountedPrice,
           image: item.productId.image,

@@ -33,6 +33,7 @@ type PopulatedCartProduct = {
 type CartProduct = {
   productId: Products;
   quantity: number;
+  size: string;
 };
 
 type PopulatedWishlist = {

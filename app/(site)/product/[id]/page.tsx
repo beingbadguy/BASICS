@@ -11,6 +11,7 @@ import { CiDiscount1, CiHeart } from "react-icons/ci";
 import { IoMdHeart } from "react-icons/io";
 import { useAuthStore } from "@/store/store";
 import { VscSparkle } from "react-icons/vsc";
+import { X } from "lucide-react";
 
 type Product = {
   _id: string;
@@ -25,6 +26,7 @@ type Product = {
   isActive: boolean;
   discountPercentage: number;
   info: string;
+  category: string;
 };
 
 const ProductPage = () => {
@@ -34,7 +36,10 @@ const ProductPage = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [addingCart, setAddingCart] = useState<boolean>(false);
+  const [size, setSize] = useState("");
   const [expand, setExpand] = useState(false);
+  const [overlayVisible, setOverlayVisible] = useState(false);
+  const [overlayImage, setOverlayImage] = useState<string>("");
   const router = useRouter();
 
   const fetchAllProducts = async () => {
@@ -74,7 +79,9 @@ const ProductPage = () => {
     if (!id) return;
     setAddingCart(true);
     try {
-      await axios.post(`/api/cart/${id}`);
+      await axios.post(`/api/cart/${id}`, {
+        size,
+      });
       fetchUserCart();
       router.push("/cart");
     } catch (error: unknown) {
@@ -121,8 +128,31 @@ const ProductPage = () => {
   useEffect(() => {
     fetchProductById();
     fetchAllProducts();
+
     window.scrollTo(0, 0);
   }, [id]);
+
+  useEffect(() => {
+    if (
+      product?.category === "Lowers" ||
+      product?.category === "Jeans" ||
+      product?.category === "Shirts"
+    ) {
+      setSize("M");
+    }
+    if (product?.category === "Shoes" || product?.category === "Slippers") {
+      setSize("6");
+    }
+  }, [product]);
+
+  const openOverlay = (image: string) => {
+    setOverlayImage(image);
+    setOverlayVisible(true);
+  };
+
+  const closeOverlay = () => {
+    setOverlayVisible(false);
+  };
 
   if (loading || !product) {
     return (
@@ -151,11 +181,13 @@ const ProductPage = () => {
         </span>{" "}
         / <span className="text-black">{product.title}</span>
       </div>
-
       <div className="flex flex-col md:flex-row gap-10 mt-5">
         {/* Product Image */}
         <div className="flex-1 flex items-center justify-center relative">
-          <div className="relative w-64 h-64 md:w-72 md:h-72 bg-white p-4 rounded-xl shadow-sm">
+          <div
+            className="relative w-64 h-64 md:w-72 md:h-72 bg-white p-4 rounded-xl shadow-sm cursor-pointer"
+            onClick={() => openOverlay(product.image)}
+          >
             <Image
               src={product.image}
               alt={product.title}
@@ -167,9 +199,11 @@ const ProductPage = () => {
 
         {/* Product Info */}
         <div className="flex-1 space-y-4">
+          <p className="text-gray-400">{product?.category}</p>
           <div className="flex items-center justify-between w-full">
             <h1 className="text-2xl font-bold">{product.title}</h1>
           </div>
+
           <div className="flex items-center gap-2 text-yellow-500">
             {Array.from({ length: 5 }, (_, i) => (
               <FaStar
@@ -183,8 +217,37 @@ const ProductPage = () => {
               ({product.numReviews} reviews)
             </span>
           </div>
+          <div>
+            <p className="text-lg font-semibold text-green-600">
+              ₹{product.discountedPrice.toLocaleString()}
+              <span className="line-through text-sm text-red-500 ml-2">
+                ₹{product.price.toLocaleString()}
+              </span>
+            </p>
+          </div>
+          <div className="space-y-1">
+            <div className="text-purple-500 text-sm rounded z-[999] flex items-center gap-1">
+              <CiDiscount1 className="text-xl" />
+              {Math.floor(product.discountPercentage)}% Off
+            </div>
+            <p className="text-sm text-gray-600">
+              {product.countInStock > 0 ? "" : "Out of stock"}
+            </p>
+            <p className="text-sm">
+              <span
+                className={product.isActive ? "text-green-600" : "text-red-500"}
+              >
+                {product.isActive ? "" : "Out of stock"}
+              </span>
+            </p>
+          </div>
+          <div>
+            <p className="text-gray-700 hidden md:block">
+              {product.description}
+            </p>
+          </div>
 
-          <div className="text-gray-700">
+          <div className="text-gray-700 md:hidden">
             {expand ? (
               <div>
                 {product.description}{" "}
@@ -208,30 +271,70 @@ const ProductPage = () => {
               </p>
             )}
           </div>
+
           <Separator className="my-4 w-full bg-gray-400 border" />
 
-          <div className="space-y-2">
-            <p className="text-lg font-semibold text-green-600">
-              ₹{product.discountedPrice.toLocaleString()}
-              <span className="line-through text-sm text-gray-500 ml-2">
-                ₹{product.price.toLocaleString()}
-              </span>
-            </p>
-            <div className="  text-purple-500 text-sm rounded z-[999] flex items-center gap-1">
-              <CiDiscount1 className="text-xl" />
-              {Math.floor(product.discountPercentage)}% Off
+          {product.category === "Lowers" ||
+          product.category === "Shirts" ||
+          product.category === "Shirts" ? (
+            <div className="flex items-center gap-4 flex-wrap">
+              {["XS", "M", "LG", "XL", "XXL"].map((s) => (
+                <div
+                  key={s}
+                  className={`flex items-center gap-2  px-4 py-2 rounded cursor-pointer text-sm ${
+                    s === size ? "bg-purple-800 text-white" : "bg-gray-100"
+                  } `}
+                >
+                  <input
+                    type="radio"
+                    name="size"
+                    id={s}
+                    value={s}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor={s}
+                    className="cursor-pointer"
+                    onClick={() => setSize(s)}
+                  >
+                    {s}
+                  </label>
+                </div>
+              ))}
             </div>
-            <p className="text-sm text-gray-600">
-              {product.countInStock > 0 ? "In stock" : "Out of stock"}
-            </p>
-            <p className="text-sm">
-              <span
-                className={product.isActive ? "text-green-600" : "text-red-500"}
-              >
-                {product.isActive ? "" : "Out of stock"}
-              </span>
-            </p>
-          </div>
+          ) : (
+            ""
+          )}
+
+          {product.category === "Slippers" || product.category === "Shoes" ? (
+            <div className="flex items-center gap-4 flex-wrap">
+              {["6", "7", "8", "9", "10", "11", "12"].map((s) => (
+                <div
+                  key={s}
+                  className={`flex items-center gap-2  px-4 py-2 rounded cursor-pointer text-sm ${
+                    s === size ? "bg-purple-800 text-white" : "bg-gray-100"
+                  } `}
+                >
+                  <input
+                    type="radio"
+                    name="size"
+                    id={s}
+                    value={s}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor={s}
+                    className="cursor-pointer"
+                    onClick={() => setSize(s)}
+                  >
+                    {s}
+                  </label>
+                </div>
+              ))}
+            </div>
+          ) : (
+            ""
+          )}
 
           {/* Buttons */}
           <div className="flex items-center gap-4 mt-6">
@@ -250,7 +353,7 @@ const ProductPage = () => {
               )}
             </button>
             <button
-              className="bg-gray-100 hover:bg-gray-200 text-black border px-4 py-2 md:py-2 rounded flex items-center gap-2"
+              className="bg-gray-100 hover:bg-gray-300/50 text-black border px-4 py-2 md:py-2 rounded flex items-center gap-2 cursor-pointer"
               onClick={() =>
                 user ? addToWishlist(product._id) : router.push("/login")
               }
@@ -261,15 +364,14 @@ const ProductPage = () => {
                 <CiHeart className="text-black text-2xl hover:text-red-500" />
               )}
               <p className="hidden xl:block">
-                {user && alreadyInWishlist(product._id)
-                  ? "Added to wishlist"
-                  : "Add to Wishlist"}
+                {alreadyInWishlist(product._id)
+                  ? "Remove from wishlist"
+                  : "Add to wishlist"}
               </p>
             </button>
           </div>
         </div>
       </div>
-
       {/* Product Details */}
       <div className="mt-10">
         <h2 className="text-xl  md:text-2xl font-bold mb-4 flex items-center gap-2">
@@ -279,8 +381,7 @@ const ProductPage = () => {
           {product?.info || product.description}
         </pre>
       </div>
-
-      {/* Recommended Products */}
+      ;{/* Recommended Products */}
       <div>
         <h2 className=" text-xl  md:text-2xl font-bold mb-4 mt-10 ">
           Recommended Products
@@ -341,6 +442,30 @@ const ProductPage = () => {
           ))}
         </div>
       </div>
+      ;{/* Overlay */}
+      {overlayVisible && (
+        <div
+          className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-[99999] cursor-pointer "
+          onClick={closeOverlay}
+        >
+          <div
+            className="relative max-w-full max-h-full cursor-pointer rounded-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={overlayImage}
+              alt="Expanded View"
+              className="object-contain max-w-full max-h-full mx-auto px-2 rounded-xl"
+            />
+            <div
+              className="bg-gray-300 text-black rounded-full w-8 h-8 flex items-center justify-center absolute top-2 right-3 cursor-pointer"
+              onClick={closeOverlay}
+            >
+              <X />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

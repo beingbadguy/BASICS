@@ -50,6 +50,7 @@ const HeaderSection = () => {
   }, [userCart]);
 
   useEffect(() => {
+    fetchUser();
     if (!user) {
       fetchUser();
     }

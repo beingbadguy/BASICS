@@ -17,6 +17,8 @@ export async function POST(
   await databaseConnection();
   try {
     const { id } = await context.params;
+    const { size } = await request.json();
+    console.log(size);
     const decoded = await fetchTokenDetails(request);
     if (!decoded) {
       return NextResponse.json(
@@ -46,6 +48,7 @@ export async function POST(
           {
             productId: id,
             quantity: 1,
+            size: size || "",
           },
         ],
       });

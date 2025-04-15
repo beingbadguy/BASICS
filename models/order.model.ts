@@ -9,6 +9,7 @@ const orderSchema = new mongoose.Schema({
       title: String,
       price: Number,
       image: String,
+      size: String,
     },
   ],
   totalAmount: { type: Number, required: true },
@@ -45,6 +46,9 @@ const orderSchema = new mongoose.Schema({
     default: null,
   },
   phone: { type: Number, required: true },
+  size: {
+    type: String,
+  },
 
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
