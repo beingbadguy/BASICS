@@ -282,7 +282,7 @@ const ProductPage = () => {
                 <div
                   key={s}
                   className={`flex items-center gap-2  px-4 py-2 rounded cursor-pointer text-sm ${
-                    s === size ? "bg-purple-800 text-white" : "bg-gray-100"
+                    s === size ? "bg-purple-600 text-white" : "bg-gray-100"
                   } `}
                 >
                   <input
@@ -312,7 +312,7 @@ const ProductPage = () => {
                 <div
                   key={s}
                   className={`flex items-center gap-2  px-4 py-2 rounded cursor-pointer text-sm ${
-                    s === size ? "bg-purple-800 text-white" : "bg-gray-100"
+                    s === size ? "bg-purple-600 text-white" : "bg-gray-100"
                   } `}
                 >
                   <input
