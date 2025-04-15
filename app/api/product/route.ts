@@ -8,7 +8,7 @@ export async function GET() {
   await databaseConnection();
   cloudinaryConnection();
   try {
-    const products = await Product.find();
+    const products = await Product.find().sort({ createdAt: -1 });
     return NextResponse.json(
       {
         success: true,
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   await databaseConnection();
   try {
-    const { id,isActive } = await request.json();
+    const { id, isActive } = await request.json();
     if (!id) {
       return NextResponse.json(
         { message: "Product id is required", success: false },
@@ -121,7 +121,7 @@ export async function PUT(request: NextRequest) {
       );
     }
     product.isActive = isActive;
-    
+
     await product.save();
     return NextResponse.json(
       { product, success: true, message: "Product updated successfully" },

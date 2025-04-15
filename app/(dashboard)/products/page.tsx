@@ -156,7 +156,9 @@ const Page = () => {
   return (
     <div className="mt-2 pt-20 pb-20 md:pt-0 md:mb-0 px-2 md:px-6 overflow-y-scroll max-h-[90vh]">
       <div className="flex items-start justify-start flex-col md:items-center md:justify-between md:flex-row gap-2">
-        <h1 className="font-bold text-2xl text-purple-700">Products</h1>
+        <h1 className="font-bold text-2xl text-purple-700">
+          Products ({products?.length})
+        </h1>
         <div className="flex items-center justify-between md:justify-center w-full md:w-auto gap-2 my-2 md:my-0">
           <div className="flex items-center gap-2 px-3 py-[6px] rounded border border-purple-700">
             <Search className="text-purple-700" />
