@@ -12,7 +12,7 @@ const TextEffect = () => {
   const fullText = "A Place where you can buy anything.";
 
   return (
-    <div className="w-full flex flex-col items-center justify-center text-center">
+    <div className="w-full flex flex-col items-center justify-center text-center my-10">
       {/* For screens md and up: show full line */}
       <div className="hidden md:flex flex-wrap justify-center">
         {fullText.split("").map((char, index) => (
