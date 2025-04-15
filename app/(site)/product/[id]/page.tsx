@@ -276,7 +276,7 @@ const ProductPage = () => {
 
           {product.category === "Lowers" ||
           product.category === "Shirts" ||
-          product.category === "Shirts" ? (
+          product.category === "Jeans" ? (
             <div className="flex items-center gap-4 flex-wrap">
               {["XS", "M", "LG", "XL", "XXL"].map((s) => (
                 <div
