@@ -4,6 +4,7 @@ import NewArrivals from "@/components/NewArrivals";
 import Newsletter from "@/components/Newsletter";
 import OverlapCards from "@/components/OverlapCards";
 import ShopByCategory from "@/components/ShopByCategory";
+import TextEffect from "@/components/TextEffect";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { MdArrowRightAlt } from "react-icons/md";
@@ -13,7 +14,8 @@ export default function Home() {
   return (
     <div className="px-4">
       <div className="min-h-[80vh] flex items-center justify-center  text-center px-4 flex-col gap-4 ">
-        <h1 className="text-3xl">A Place where you can buy anything.</h1>
+        {/* <h1 className="text-3xl">A Place where you can buy anything.</h1> */}
+        <TextEffect />
         <OverlapCards />
         <p>Welcome to the world of e-commerce!</p>
         <div className="flex items-center justify-center gap-4 ">
