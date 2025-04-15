@@ -41,7 +41,12 @@ export default function Home() {
         <ShopByCategory />
         <div className="cursor-pointer my-10 ">
           <Link href="/product">
-            <img src="/day2.png" alt="" className="rounded-xl" />
+            <img src="/day.png" alt="" className="rounded-xl md:hidden" />
+            <img
+              src="/day2.png"
+              alt=""
+              className="rounded-xl hidden md:block"
+            />
           </Link>
         </div>
         <NewArrivals />
