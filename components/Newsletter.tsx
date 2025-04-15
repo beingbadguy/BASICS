@@ -43,7 +43,7 @@ const Newsletter = () => {
 
   return (
     <div className="my-4 w-full flex items-center justify-center flex-col gap-1">
-      <h2 className=" text-xl text-center md:text-3xl font-bold">
+      <h2 className=" text-xl text-center md:text-4xl ">
         Subscribe to our newsletter
       </h2>
       <p className="text-center">

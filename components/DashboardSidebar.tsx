@@ -38,7 +38,7 @@ const DashboardSidebar = () => {
     },
     { label: "Orders", path: "/orders", icons: <ShoppingCart /> },
     { label: "Customers", path: "/customers", icons: <User /> },
-    { label: "Analysis", path: "/analysis", icons: <ScanBarcode /> },
+    { label: "Support", path: "/support", icons: <ScanBarcode /> },
     { label: "Others", path: "/others", icons: <Database /> },
   ];
 

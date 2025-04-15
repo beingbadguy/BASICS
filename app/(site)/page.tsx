@@ -39,14 +39,25 @@ export default function Home() {
       </div>
       <div className="">
         <ShopByCategory />
-        <NewArrivals />
-
-        <div className="cursor-pointer my-10">
+        <div className="cursor-pointer my-10 ">
           <Link href="/product">
-            <img src="/sale.png" alt="" className="rounded-xl" />
+            <img src="/day2.png" alt="" className="rounded-xl" />
           </Link>
         </div>
+        <NewArrivals />
+
         {/* <BannerWall /> */}
+
+        <div className="aspect-video w-full mx-auto my-12 ">
+          <video
+            src="/ad.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full rounded-lg"
+          />
+        </div>
         <Newsletter />
         <Faqs />
         <Banner />

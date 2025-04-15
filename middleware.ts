@@ -41,7 +41,7 @@ export async function middleware(request: NextRequest) {
     "/orders",
     "/customers",
     "/settings",
-    "/analysis",
+    "/support",
     "/products",
     "/categories",
     "/addproduct",
@@ -111,5 +111,6 @@ export const config = {
     "/editcategory/:id",
     "/product/:id",
     "/category/:id",
-  ],
+    "/support",
+    ],
 };
