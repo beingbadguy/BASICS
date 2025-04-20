@@ -46,7 +46,7 @@ export default function AdminOrdersPage() {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get("/api/order");
+      const res = await axios.get("/api/orders");
       setOrders(res.data.orders);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

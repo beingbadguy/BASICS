@@ -16,6 +16,7 @@ export async function GET() {
   await databaseConnection();
   try {
     const orders = await Order.find()
+      .sort({ createdAt: -1 })
       .populate("userId", "-password")
       .populate("products.productId");
 
