@@ -112,5 +112,5 @@ export const config = {
     "/product/:id",
     "/category/:id",
     "/support",
-    ],
+  ],
 };

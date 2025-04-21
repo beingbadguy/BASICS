@@ -2,6 +2,7 @@ import Contact from "@/models/contact.model";
 import { NextRequest, NextResponse } from "next/server";
 import { databaseConnection } from "@/config/databseConnection";
 import { contactConfirmationMail } from "@/services/sendMail";
+import { fetchTokenDetails } from "@/lib/fetchTokenDetails";
 
 export async function POST(request: NextRequest) {
   await databaseConnection();
@@ -29,9 +30,20 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   await databaseConnection();
   try {
+    const decoded = await fetchTokenDetails(request);
+    if (!decoded || decoded.role != "admin") {
+      return NextResponse.json(
+        {
+          message: "You must log in to view your contacts and must be admin.",
+          success: false,
+        },
+        { status: 401 }
+      );
+    }
+
     const contacts = await Contact.find().sort({ createdAt: -1 });
     return NextResponse.json(
       { contacts, success: true, message: "Contacts fetched successfully" },

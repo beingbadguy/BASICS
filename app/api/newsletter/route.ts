@@ -1,4 +1,5 @@
 import { databaseConnection } from "@/config/databseConnection";
+import { fetchTokenDetails } from "@/lib/fetchTokenDetails";
 import Newsletter from "@/models/newsletter.model";
 import { newsletterSubscriptionMail } from "@/services/sendMail";
 import { NextRequest, NextResponse } from "next/server";
@@ -41,9 +42,19 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(  request: NextRequest) {
   await databaseConnection();
   try {
+    const decoded = await fetchTokenDetails(request);
+    if (!decoded || decoded.role != "admin") {
+      return NextResponse.json(
+        {
+          message: "You must log in to view your contacts and must be admin.",
+          success: false,
+        },
+        { status: 401 }
+      );
+    }
     const newsletters = await Newsletter.find().sort({ createdAt: -1 });
     return NextResponse.json(
       {

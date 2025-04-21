@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { databaseConnection } from "@/config/databseConnection";
 import User from "@/models/user.model";
 import "@/models/wishlist.model";
@@ -11,11 +11,22 @@ import "@/models/contact.model";
 import "@/models/newsletter.model";
 import "@/models/user.model";
 import "@/models/promo.model";
+import { fetchTokenDetails } from "@/lib/fetchTokenDetails";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   await databaseConnection();
 
   try {
+    const decoded = await fetchTokenDetails(request);
+    if (!decoded || decoded.role != "admin") {
+      return NextResponse.json(
+        {
+          message: "Unauthorised Access, you must be admin",
+          success: false,
+        },
+        { status: 401 }
+      );
+    }
     const users = await User.find({})
       .sort({ createdAt: -1 }) // optional: most recent users first
       .populate({

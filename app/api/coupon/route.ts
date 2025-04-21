@@ -1,10 +1,21 @@
 import { databaseConnection } from "@/config/databseConnection";
+import { fetchTokenDetails } from "@/lib/fetchTokenDetails";
 import Coupon from "@/models/coupon.model";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(  request: NextRequest) {
   await databaseConnection();
   try {
+    const decoded = await fetchTokenDetails(request);
+    if (!decoded || decoded.role != "admin") {
+      return NextResponse.json(
+        {
+          message: "You must log in to view your coupons and must be admin.",
+          success: false,
+        },
+        { status: 401 }
+      );
+    }
     const coupons = await Coupon.find().sort({ createdAt: -1 });
     return NextResponse.json(
       { coupons, success: true, message: "Coupons fetched successfully" },
@@ -38,7 +49,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const newCoupon = new Coupon({ name:name.toUpperCase(), code, discount });
+    const newCoupon = new Coupon({ name: name.toUpperCase(), code, discount });
     await newCoupon.save();
     return NextResponse.json(
       { newCoupon, success: true, message: "Coupon created successfully" },

@@ -1,6 +1,6 @@
 import { databaseConnection } from "@/config/databseConnection";
 import Order from "@/models/order.model";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import "@/models/wishlist.model";
 import "@/models/product.model";
 import "@/models/category.model";
@@ -11,10 +11,21 @@ import "@/models/contact.model";
 import "@/models/newsletter.model";
 import "@/models/user.model";
 import "@/models/promo.model";
+import { fetchTokenDetails } from "@/lib/fetchTokenDetails";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   await databaseConnection();
   try {
+    const decoded = await fetchTokenDetails(request);
+    if (!decoded || decoded.role != "admin") {
+      return NextResponse.json(
+        {
+          message: "You must log in to view your contacts and must be admin.",
+          success: false,
+        },
+        { status: 401 }
+      );
+    }
     const orders = await Order.find()
       .sort({ createdAt: -1 })
       .populate("userId", "-password")

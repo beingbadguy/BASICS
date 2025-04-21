@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 
 interface DecodeType {
   userId: string;
+  role: string;
 }
 
 export async function fetchTokenDetails(request: NextRequest) {
