@@ -358,6 +358,11 @@ export default function ProfilePage() {
           <h1 className="text-xl md:text-2xl font-semibold">
             My Orders ({orders?.length || 0})
           </h1>
+          {orders?.length === 0 && (
+            <p className="text-sm text-purple-700">
+              You have not placed any orders yet.
+            </p>
+          )}
           <div className="w-full select-text">
             {orders?.map((order: Order) => (
               <OrderDetailsCard

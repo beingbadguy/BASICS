@@ -67,7 +67,7 @@ const Page = () => {
   return (
     <div className="mt-2 overflow-y-scroll max-h-[90vh] pt-20 pb-20 md:pt-0 md:mb-0 px-4">
       <h2 className="text-xl font-semibold mb-4 my-2 text-purple-700">
-        All User Details
+        All User Details ({customers?.length})
       </h2>
       <Table>
         <TableHeader>

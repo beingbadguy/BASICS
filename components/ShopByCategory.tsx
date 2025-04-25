@@ -4,7 +4,7 @@ import axios, { AxiosError } from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { Skeleton } from "./ui/skeleton";
 
 interface Category {
   _id: string;
@@ -16,7 +16,7 @@ interface Category {
 }
 
 const ShopByCategory = () => {
-  const [catLoading, setCatLoading] = React.useState(false);
+  const [catLoading, setCatLoading] = React.useState(true);
   const [categories, setCategories] = React.useState<Category[]>([]);
 
   const router = useRouter();
@@ -39,15 +39,31 @@ const ShopByCategory = () => {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  if (catLoading) {
+    return (
+      <div>
+        <h2 className="text-2xl">Shop By Category</h2>
+        <ul className="my-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {[...Array(10)].fill(1, 10).map((_, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-center gap-4 flex-col mt-2"
+            >
+              <Skeleton className="size-32 md:size-42 rounded-full " />
+              <Skeleton className="md:w-32 h-4" />
+            </div>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
   return (
     <div>
       <h2 className="text-2xl">Shop By Category</h2>
-      {catLoading && (
-        <p className="flex w-full items-center justify-center h-20">
-          <AiOutlineLoading3Quarters className="animate-spin text-purple-700" />
-        </p>
-      )}
-      <ul className="my-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+
+      <ul className="my-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {categories.map((category, index) => (
           <div
             key={index}
