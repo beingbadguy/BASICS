@@ -66,29 +66,32 @@ const NewArrivals = () => {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {[...Array(10)].fill(1, 10).map((_, index) => (
-          <div
-            key={index}
-            className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-3 flex flex-col justify-between"
-          >
-            <div className="flex justify-between items-start mb-2">
-              <div className="flex w-10 h-4 items-center gap-1 bg-purple-600 text-white text-xs px-2 py-1 rounded"></div>
+      <div>
+        <h2 className="text-2xl  mb-4">New Arrivals</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {[...Array(10)].fill(1, 10).map((_, index) => (
+            <div
+              key={index}
+              className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-3 flex flex-col justify-between"
+            >
+              <div className="flex justify-between items-start mb-2">
+                <div className="flex w-10 h-4 items-center gap-1 bg-purple-600 text-white text-xs px-2 py-1 rounded"></div>
+              </div>
+
+              {/* Product Image */}
+              <Skeleton className="relative w-full h-40 bg-gray-100 rounded-lg overflow-hidden mb-3 cursor-pointer" />
+
+              {/* Product Title */}
+              <Skeleton className="font-semibold text-sm md:text-base line-clamp-2 cursor-pointer mb-1" />
+
+              {/* Pricing */}
+              <div className=" text-sm w-full">
+                <Skeleton className="text-red-500 line-through w-[80%] h-4 rounded" />
+                <Skeleton className="text-red-500 line-through w-16 h-4 mt-4 rounded" />
+              </div>
             </div>
-
-            {/* Product Image */}
-            <Skeleton className="relative w-full h-40 bg-gray-100 rounded-lg overflow-hidden mb-3 cursor-pointer" />
-
-            {/* Product Title */}
-            <Skeleton className="font-semibold text-sm md:text-base line-clamp-2 cursor-pointer mb-1" />
-
-            {/* Pricing */}
-            <div className=" text-sm w-full">
-              <Skeleton className="text-red-500 line-through w-[80%] h-4 rounded" />
-              <Skeleton className="text-red-500 line-through w-16 h-4 mt-4 rounded" />
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     );
   }
