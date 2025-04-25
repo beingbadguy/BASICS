@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { TbWorldShare } from "react-icons/tb";
-import { VscLoading } from "react-icons/vsc";
+import { Skeleton } from "./ui/skeleton";
 
 const DashboardNavbar = () => {
   const { user } = useAuthStore();
@@ -32,8 +32,18 @@ const DashboardNavbar = () => {
 
   if (!user) {
     return (
-      <div className="min-h-10 w-full mt-6 flex ictems-center justify-center">
-        <VscLoading className="animate-spin text-purple-700 text-xl" />
+      <div className="min-h-8 w-full py-2 flex items-center justify-between gap-2 px-4 border-b">
+        <div className="flex items-center gap-2 ">
+          <Skeleton className="size-14 rounded-full" />
+          <div>
+            <Skeleton className="w-40 h-4 rounded" />
+            <Skeleton className="w-40 h-4 rounded mt-2" />
+          </div>
+        </div>
+        <div>
+          <Skeleton className="size-14 rounded-full" />
+        </div>
+        {/* <VscLoading className="animate-spin text-purple-700 text-xl" /> */}
       </div>
     );
   }
