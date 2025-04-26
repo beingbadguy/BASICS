@@ -65,6 +65,13 @@ const AnalysisPage = () => {
     }
   };
 
+  const closeSidebar = () => {
+    setSidebar(false);
+    setQuery(null);
+    setResponse("");
+    setQueryError(null);
+  };
+
   const fetchQueries = async () => {
     setQueriesLoading(true);
     try {
@@ -204,7 +211,7 @@ const AnalysisPage = () => {
         className={`fixed inset-0 z-50 bg-black/70 transition-opacity duration-300  ${
           sidebar ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
-        onClick={() => setSidebar(false)}
+        onClick={() => closeSidebar()}
       >
         <div
           className={`fixed right-0 top-18 md:top-0 h-full w-full sm:w-96 bg-white p-6 shadow-2xl transform transition-transform duration-300 ${
@@ -217,7 +224,7 @@ const AnalysisPage = () => {
             <h2 className="text-xl font-bold text-purple-700">Contact Query</h2>
             <button
               className="text-gray-600 p-1 hover:text-black bg-gray-200 cursor-pointer rounded-full hover:scale-90 hover:rotate-90 transition-transform duration-300"
-              onClick={() => setSidebar(false)}
+              onClick={() => closeSidebar()}
             >
               <IoMdClose size={24} />
             </button>
@@ -264,7 +271,11 @@ const AnalysisPage = () => {
                 value={response}
                 onChange={(e) => setResponse(e.target.value)}
               />
-              <Button className="mt-2 cursor-pointer" onClick={handleReply} disabled={loading}>
+              <Button
+                className="mt-2 cursor-pointer bg-purple-600 text-white hover:bg-purple-700/60"
+                onClick={handleReply}
+                disabled={loading}
+              >
                 {loading ? "Sending..." : "Send Reply"}
               </Button>
               {queryError && <p className="text-red-500 mt-2">{queryError}</p>}
