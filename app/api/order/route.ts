@@ -3,7 +3,10 @@ import { fetchTokenDetails } from "@/lib/fetchTokenDetails";
 import Cart from "@/models/cart.model";
 import Order from "@/models/order.model";
 import User from "@/models/user.model";
-import { OrderConfirmationMail } from "@/services/sendMail";
+import {
+  OrderConfirmationMail,
+  orderPlacedMessageToAdmin,
+} from "@/services/sendMail";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -59,6 +62,8 @@ export async function POST(request: NextRequest) {
       deliveryType: newOrder.deliveryType,
       products: newOrder.products,
     });
+
+    await orderPlacedMessageToAdmin(user.email, user.name);
 
     return NextResponse.json(
       { message: "Order placed successfully", success: true, order: newOrder },

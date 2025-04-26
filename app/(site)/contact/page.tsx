@@ -71,7 +71,7 @@ const ContactUs = () => {
         / <span className="cursor-pointer text-black">Contact Us</span>{" "}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 px-4 md:px-12 lg:px-24 ">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10  md:px-12 lg:px-24 ">
         {/* Left: Contact Info */}
         <div className="flex flex-col justify-center space-y-6">
           <div>
@@ -91,7 +91,7 @@ const ContactUs = () => {
             </div>
             <div className="flex items-center gap-3">
               <FaPhoneAlt className="text-black" />
-              <span>+91 98765 43210</span>
+              <span>+91 96675 XXXX</span>
             </div>
             <div className="flex items-center gap-3">
               <FaMapMarkerAlt className="text-black" />
@@ -108,7 +108,7 @@ const ContactUs = () => {
             value={data.name}
             onChange={handleChange}
             placeholder="Your Name"
-            className="w-full px-2 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+            className="w-full px-2 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
           />
 
           <input
@@ -117,7 +117,7 @@ const ContactUs = () => {
             value={data.email}
             onChange={handleChange}
             placeholder="Your Email"
-            className="w-full px-2 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+            className="w-full px-2 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
           />
 
           <textarea
@@ -126,13 +126,13 @@ const ContactUs = () => {
             value={data.message}
             onChange={handleChange}
             placeholder="Your Message"
-            className="w-full px-2 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+            className="w-full px-2 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"
+            className="flex items-center justify-center gap-2 bg-black hover:bg-black/80 text-white text-sm font-medium px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black cursor-pointer"
           >
             {loading ? (
               <VscLoading className="animate-spin " />

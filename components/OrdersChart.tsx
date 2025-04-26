@@ -14,7 +14,7 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  CartesianGrid,
+  // CartesianGrid,
   Legend,
 } from "recharts";
 import { useDashboardStore } from "@/store/dashboard";
@@ -46,7 +46,7 @@ export default function DashboardCharts() {
       <ChartCard title="Orders Booked per Day">
         <ResponsiveContainer width="100%" height={250}>
           <BarChart data={orderData}>
-            <CartesianGrid strokeDasharray="3 3" />
+            {/* <CartesianGrid strokeDasharray="3 3" /> */}
             <XAxis dataKey="date" />
             <YAxis allowDecimals={false} />
             <Tooltip />
@@ -58,7 +58,7 @@ export default function DashboardCharts() {
       <ChartCard title="New Users per Day">
         <ResponsiveContainer width="100%" height={250}>
           <LineChart data={userData}>
-            <CartesianGrid strokeDasharray="3 3" />
+            {/* <CartesianGrid strokeDasharray="3 3" /> */}
             <XAxis dataKey="date" />
             <YAxis allowDecimals={false} />
             <Tooltip />
@@ -83,7 +83,7 @@ export default function DashboardCharts() {
             </defs>
             <XAxis dataKey="date" />
             <YAxis allowDecimals={false} />
-            <CartesianGrid strokeDasharray="3 3" />
+            {/* <CartesianGrid strokeDasharray="3 3" /> */}
             <Tooltip />
             <Area
               type="monotone"
@@ -101,7 +101,7 @@ export default function DashboardCharts() {
           <AreaChart data={queryData}>
             <XAxis dataKey="date" />
             <YAxis allowDecimals={false} />
-            <CartesianGrid strokeDasharray="3 3" />
+            {/* <CartesianGrid strokeDasharray="3 3" /> */}
             <Tooltip />
             <Area
               type="monotone"

@@ -7,9 +7,12 @@ import axios, { AxiosError } from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { CiLogout } from "react-icons/ci";
+import { AiOutlineLoading3Quarters, AiOutlineMail } from "react-icons/ai";
+import { CiEdit, CiLogout } from "react-icons/ci";
 import { User, Package } from "lucide-react";
+import { FaBarcode, FaRegUser } from "react-icons/fa";
+import { MdOutlineLocationOn } from "react-icons/md";
+import { IoPhonePortraitOutline } from "react-icons/io5";
 
 type Order = {
   _id: string;
@@ -175,32 +178,36 @@ export default function ProfilePage() {
             <div className="space-y-3 w-full">
               <div>
                 <p>Full Name</p>
-                <p className="bg-gray-100 text-gray-400 px-4 py-2 w-full">
-                  {user?.name}
+                <p className="bg-gray-100 text-gray-400 px-4 py-2 w-full flex items-center gap-2">
+                  <FaRegUser /> {user?.name}
                 </p>
               </div>
               <div>
                 <p>Address</p>
-                <p className="bg-gray-100 text-gray-400 px-4 py-2 w-full">
+                <p className="bg-gray-100 text-gray-400 px-4 py-2 w-full flex items-center gap-2">
+                  <MdOutlineLocationOn className="size-5" />
                   {user?.address || "Address Unavailable"}
                 </p>
               </div>
               <div>
                 <p>Pincode</p>
-                <p className="bg-gray-100 text-gray-400 px-4 py-2 w-full">
+                <p className="bg-gray-100 text-gray-400 px-4 py-2 w-full flex items-center gap-2">
+                  <FaBarcode />
                   {user?.zip || "Pincode Unavailable"}
                 </p>
               </div>
               <div>
                 <p>Phone</p>
-                <p className="bg-gray-100 text-gray-400 px-4 py-2 w-full">
+                <p className="bg-gray-100 text-gray-400 px-4 py-2 w-full flex items-center gap-2">
+                  <IoPhonePortraitOutline />
                   {user?.phone || "Phone Unavailable"}
                 </p>
               </div>
               <div
-                className="bg-black px-4 py-2 text-white text-center w-full rounded my-6 cursor-pointer"
+                className="bg-black px-4 py-2 text-white text-center w-full rounded my-6 cursor-pointer flex items-center gap-2 justify-center"
                 onClick={() => setShowModal(true)}
               >
+                <CiEdit className="size-5" />
                 Edit Profile
               </div>
             </div>
@@ -241,7 +248,8 @@ export default function ProfilePage() {
             <div>
               <h1>Login Information</h1>
               <p className="text-sm my-2 ">Email</p>
-              <p className="bg-gray-100 px-4 py-2 text-gray-400">
+              <p className="bg-gray-100 px-4 py-2 text-gray-400 flex items-center gap-2">
+                <AiOutlineMail />
                 {user?.email}
               </p>
               <Button

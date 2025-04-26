@@ -4,7 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { generateTokenAndSetCookie } from "@/lib/generateTokenAndSetCookie";
 import crypto from "crypto";
-import { welcomeUserMail } from "@/services/sendMail";
+import {
+  newUserJoinedNotification,
+  welcomeUserMail,
+} from "@/services/sendMail";
 
 export async function POST(request: NextRequest) {
   await databaseConnection();
@@ -83,6 +86,7 @@ export async function POST(request: NextRequest) {
     );
 
     await welcomeUserMail(newUser.email, newUser.name);
+    await newUserJoinedNotification(newUser.email, newUser.name);
 
     newUser.password = undefined;
     newUser.pass = undefined;

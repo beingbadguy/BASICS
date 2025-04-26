@@ -1,9 +1,14 @@
 "use client";
 import axios, { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, LucideMailPlus } from "lucide-react";
 import { useAuthStore } from "@/store/store";
 import { useRouter } from "next/navigation";
+import { TbEye } from "react-icons/tb";
+import { IoMdClose } from "react-icons/io";
+import { Mail, User, CalendarDays, MessageSquareText } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 interface Newsletter {
   _id: string;
@@ -26,6 +31,39 @@ const AnalysisPage = () => {
   const [queries, setQueries] = useState<ContactQuery[]>([]);
   const [queriesLoading, setQueriesLoading] = useState(false);
   const router = useRouter();
+  const [sidebar, setSidebar] = useState(false);
+  const [query, setQuery] = useState<number | null>(null);
+  const [response, setResponse] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [queryError, setQueryError] = useState<string | null>(null);
+  const handleReply = async () => {
+    console.log(query);
+    console.log(response);
+
+    if (query === null || !queries[query]) return;
+    if (!response.trim()) {
+      setQueryError("Please enter a response.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      setQueryError(null);
+      const mailResponse = await axios.post("/api/response", {
+        email: queries[query!].email,
+        name: queries[query!].name,
+        response: response.trim(),
+      });
+      console.log(mailResponse?.data?.message);
+      setResponse("");
+      setSidebar(false);
+    } catch (error) {
+      console.log(error);
+      setQueryError("Error sending response.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchQueries = async () => {
     setQueriesLoading(true);
@@ -128,10 +166,11 @@ const AnalysisPage = () => {
                   <th className="px-4 py-3 text-left">Email</th>
                   <th className="px-4 py-3 text-left">Message</th>
                   <th className="px-4 py-3 text-left">Date</th>
+                  <th className="px-4 py-3 text-left">Action</th>
                 </tr>
               </thead>
               <tbody className="text-sm text-gray-600">
-                {queries.map((item) => (
+                {queries.map((item, index) => (
                   <tr key={item._id} className="border-t">
                     <td className="px-4 py-3">{item.name}</td>
                     <td className="px-4 py-3">{item.email}</td>
@@ -144,12 +183,94 @@ const AnalysisPage = () => {
                     <td className="px-4 py-3">
                       {new Date(item.createdAt).toLocaleString()}
                     </td>
+                    <td className="px-4 py-3 flex items-center justify-center">
+                      <TbEye
+                        className="hover:text-gray-400 cursor-pointer size-6"
+                        onClick={() => {
+                          setSidebar(true);
+                          setQuery(index);
+                        }}
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         )}
+      </div>
+
+      <div
+        className={`fixed inset-0 z-50 bg-black/70 transition-opacity duration-300  ${
+          sidebar ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setSidebar(false)}
+      >
+        <div
+          className={`fixed right-0 top-18 md:top-0 h-full w-full sm:w-96 bg-white p-6 shadow-2xl transform transition-transform duration-300 ${
+            sidebar ? "translate-x-0" : "translate-x-full"
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-purple-700">Contact Query</h2>
+            <button
+              className="text-gray-600 p-1 hover:text-black bg-gray-200 cursor-pointer rounded-full hover:scale-90 hover:rotate-90 transition-transform duration-300"
+              onClick={() => setSidebar(false)}
+            >
+              <IoMdClose size={24} />
+            </button>
+          </div>
+
+          {/* Query Details */}
+          <div className="space-y-4 text-sm text-gray-700">
+            <div className="flex items-start gap-3">
+              <User className="text-purple-600" size={20} />
+              <span className="font-medium">Name:</span>
+              <span>{queries[query!]?.name}</span>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <Mail className="text-purple-600" size={20} />
+              <span className="font-medium">Email:</span>
+              <span>{queries[query!]?.email}</span>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <CalendarDays className="text-purple-600" size={20} />
+              <span className="font-medium">Date:</span>
+              <span>
+                {new Date(queries[query!]?.createdAt).toLocaleString()}
+              </span>
+            </div>
+
+            <div className="">
+              <div className="flex items-center gap-2">
+                <MessageSquareText className="text-purple-600" size={20} />
+                <span className="font-medium">Message:</span>
+              </div>
+              <p className="mt-2">{queries[query!]?.message}</p>
+            </div>
+
+            <div>
+              <h1 className="my-2 font-bold flex items-center gap-2">
+                {" "}
+                <LucideMailPlus className="size-5 text-purple-700" />
+                Your Reply
+              </h1>
+              <Textarea
+                placeholder="Enter your response"
+                value={response}
+                onChange={(e) => setResponse(e.target.value)}
+              />
+              <Button className="mt-2 cursor-pointer" onClick={handleReply} disabled={loading}>
+                {loading ? "Sending..." : "Send Reply"}
+              </Button>
+              {queryError && <p className="text-red-500 mt-2">{queryError}</p>}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

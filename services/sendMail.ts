@@ -144,7 +144,40 @@ export const newsletterSubscriptionMail = async (email: string) => {
 
 // utils/mails/contactConfirmation.ts
 
-export const contactConfirmationMail = async (email: string, name: string) => {
+// export const contactConfirmationMail = async (
+//   email: string,
+//   name: string,
+//   message: string
+// ) => {
+//   const html = `
+//     <div style="background-color: #ffffff; padding: 24px; font-family: Arial, sans-serif; color: #000;">
+//       <div style="max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 12px;">
+//         <div style="background-color: #6b21a8; padding: 16px 24px;">
+//           <h1 style="color: #ffffff; margin: 0;">Thank You for Reaching Out, ${name}!</h1>
+//         </div>
+//         <div style="padding: 24px;">
+//           <p>We've received your message and our team will get back to you as soon as possible.</p>
+//           <p>We appreciate your interest in <strong>Basics</strong>.</p>
+//           <a href="https://shopbasics.vercel.app" style="display: inline-block; padding: 12px 20px; background-color: #6b21a8; color: #ffffff; text-decoration: none; border-radius: 6px; margin: 16px 0;">
+//             Visit Our Website
+//           </a>
+//         </div>
+
+//         <div style="background-color: #f9f9f9; padding: 16px; text-align: center; font-size: 12px; color: #999;">
+//           &copy; ${new Date().getFullYear()} Basics. All rights reserved.
+//         </div>
+//       </div>
+//     </div>
+//   `;
+
+//   sendMail(email, "We've received your message 📨", "", html);
+// };
+
+export const contactConfirmationMail = async (
+  email: string,
+  name: string,
+  message: string
+) => {
   const html = `
     <div style="background-color: #ffffff; padding: 24px; font-family: Arial, sans-serif; color: #000;">
       <div style="max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 12px;">
@@ -154,10 +187,17 @@ export const contactConfirmationMail = async (email: string, name: string) => {
         <div style="padding: 24px;">
           <p>We've received your message and our team will get back to you as soon as possible.</p>
           <p>We appreciate your interest in <strong>Basics</strong>.</p>
+
+          <div style="margin: 20px 0; padding: 16px; background-color: #f3f3f3; border-left: 4px solid #6b21a8;">
+            <h3 style="margin: 0 0 8px 0;">Your Message:</h3>
+            <p style="margin: 0;">${message}</p>
+          </div>
+
           <a href="https://shopbasics.vercel.app" style="display: inline-block; padding: 12px 20px; background-color: #6b21a8; color: #ffffff; text-decoration: none; border-radius: 6px; margin: 16px 0;">
             Visit Our Website
           </a>
         </div>
+
         <div style="background-color: #f9f9f9; padding: 16px; text-align: center; font-size: 12px; color: #999;">
           &copy; ${new Date().getFullYear()} Basics. All rights reserved.
         </div>
@@ -166,6 +206,42 @@ export const contactConfirmationMail = async (email: string, name: string) => {
   `;
 
   sendMail(email, "We've received your message 📨", "", html);
+};
+
+export const contactMailToAdmin = async (
+  email: string,
+  name: string,
+  message: string
+) => {
+  const html = `
+    <div style="background-color: #ffffff; padding: 24px; font-family: Arial, sans-serif; color: #000;">
+      <div style="max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 12px;">
+        <div style="background-color: #6b21a8; padding: 16px 24px;">
+          <h2 style="color: #ffffff; margin: 0;">New Contact Form Submission</h2>
+        </div>
+        <div style="padding: 24px;">
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+
+          <div style="margin: 20px 0; padding: 16px; background-color: #f3f3f3; border-left: 4px solid #6b21a8;">
+            <h3 style="margin: 0 0 8px 0;">Message:</h3>
+            <p style="margin: 0; white-space: pre-line;">${message}</p>
+          </div>
+        </div>
+
+        <div style="background-color: #f9f9f9; padding: 16px; text-align: center; font-size: 12px; color: #999;">
+          &copy; ${new Date().getFullYear()} Basics. All rights reserved.
+        </div>
+      </div>
+    </div>
+  `;
+
+  sendMail(
+    "authorisedaman@gmail.com",
+    "📬 New Contact Form Message from " + name,
+    "",
+    html
+  );
 };
 
 export const OrderStatusMail = async (
@@ -293,4 +369,111 @@ export const OrderConfirmationMail = async (
   `;
 
   await sendMail(email, "Order Confirmed 🛍️ | Basics", "", html);
+};
+
+export const orderPlacedMessageToAdmin = async (
+  email: string,
+  name: string
+) => {
+  const html = `
+    <div style="background-color: #ffffff; padding: 24px; font-family: Arial, sans-serif; color: #000;">
+      <div style="max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 12px;">
+        <div style="background-color: #6b21a8; padding: 16px 24px;">
+          <h2 style="color: #ffffff; margin: 0;">🛒 New Order Placed</h2>
+        </div>
+        <div style="padding: 24px;">
+          <p>A new order has just been placed on <strong>Basics</strong>.</p>
+          <p><strong>Customer Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+
+          <div style="margin-top: 24px;">
+            <a href="https://shopbasics.vercel.app/admin/orders" 
+              style="display: inline-block; padding: 12px 20px; background-color: #6b21a8; color: #ffffff; text-decoration: none; border-radius: 6px;">
+              View Order Details
+            </a>
+          </div>
+        </div>
+        <div style="background-color: #f9f9f9; padding: 16px; text-align: center; font-size: 12px; color: #999;">
+          &copy; ${new Date().getFullYear()} Basics. All rights reserved.
+        </div>
+      </div>
+    </div>
+  `;
+
+  sendMail(
+    "authorisedaman@gmail.com",
+    "🛒 New Order Placed by " + name,
+    "",
+    html
+  );
+};
+
+export const newUserJoinedNotification = async (
+  email: string,
+  name: string
+) => {
+  const html = `
+    <div style="background-color: #ffffff; padding: 24px; font-family: Arial, sans-serif; color: #000;">
+      <div style="max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 12px;">
+        <div style="background-color: #6b21a8; padding: 16px 24px;">
+          <h2 style="color: #ffffff; margin: 0;">👤 New User Joined</h2>
+        </div>
+        <div style="padding: 24px;">
+          <p>A new user has just registered or arrived at <strong>Basics</strong>.</p>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+
+          <div style="margin-top: 24px;">
+            <a href="https://shopbasics.vercel.app/admin/users" 
+              style="display: inline-block; padding: 12px 20px; background-color: #6b21a8; color: #ffffff; text-decoration: none; border-radius: 6px;">
+              View User Profile
+            </a>
+          </div>
+        </div>
+        <div style="background-color: #f9f9f9; padding: 16px; text-align: center; font-size: 12px; color: #999;">
+          &copy; ${new Date().getFullYear()} Basics. All rights reserved.
+        </div>
+      </div>
+    </div>
+  `;
+
+  sendMail("authorisedaman@gmail.com", "👤 New User Joined: " + name, "", html);
+};
+
+export const replyToUser = async (
+  email: string,
+  name: string,
+  message: string
+) => {
+  const html = `
+    <div style="background-color: #ffffff; padding: 24px; font-family: Arial, sans-serif; color: #000;">
+      <div style="max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 12px;">
+        <div style="background-color: #6b21a8; padding: 16px 24px;">
+          <h1 style="color: #ffffff; margin: 0;">Hi ${name},</h1>
+        </div>
+
+        <div style="padding: 24px;">
+          <p>Thank you for contacting <strong>Basics</strong>.</p>
+          <p>We appreciate you reaching out and want to assure you that we’ve gone through your message. Here’s our response:</p>
+
+          <div style="margin: 20px 0; padding: 16px; background-color: #f9f9f9; border-left: 4px solid #6b21a8;">
+            <h3 style="margin: 0 0 8px 0;">Our Response:</h3>
+            <p style="margin: 0;">${message}</p>
+          </div>
+
+          <p>If you have any further questions or concerns, feel free to reply to this email. We're always happy to help!</p>
+
+          <a href="https://shopbasics.vercel.app" style="display: inline-block; padding: 12px 20px; background-color: #6b21a8; color: #ffffff; text-decoration: none; border-radius: 6px; margin-top: 20px;">
+            Visit Basics
+          </a>
+        </div>
+
+        <div style="background-color: #f9f9f9; padding: 16px; text-align: center; font-size: 12px; color: #999;">
+          &copy; ${new Date().getFullYear()} Basics. All rights reserved.
+        </div>
+      </div>
+    </div>
+  `;
+
+  sendMail(email, "Re: Your Contact Query ✉️", "", html);
 };
