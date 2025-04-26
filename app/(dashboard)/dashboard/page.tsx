@@ -14,6 +14,7 @@ import CountCard from "@/components/CountCard";
 import Link from "next/link";
 import { useDashboardStore } from "@/store/dashboard";
 import DashboardCharts from "@/components/OrdersChart";
+import VisitorsChart from "@/components/VisitorsChart";
 
 export default function DashboardHome() {
   const {
@@ -76,6 +77,7 @@ export default function DashboardHome() {
       <h2 className="text-xl md:text-2xl font-semibold mb-4 text-purple-800">
         Dashboard Overview
       </h2>
+      <VisitorsChart />
       <DashboardCharts />
 
       <div className="grid mt-6 grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">

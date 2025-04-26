@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { MdArrowRightAlt } from "react-icons/md";
 import { VscWand } from "react-icons/vsc";
+import CountVisitor from "@/components/CountVisitor";
 
 export default function Home() {
   return (
@@ -68,6 +69,7 @@ export default function Home() {
         <Newsletter />
         <Faqs />
         <Banner />
+        <CountVisitor />
       </div>
     </div>
   );
