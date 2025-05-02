@@ -51,7 +51,7 @@ const ShopByCategory = () => {
               className="flex items-center justify-center gap-4 flex-col mt-2"
             >
               <Skeleton className="size-32 md:size-42 rounded-full " />
-              <Skeleton className="md:w-32 h-4" />
+              <Skeleton className="w-32 h-4" />
             </div>
           ))}
         </ul>
