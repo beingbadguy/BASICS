@@ -20,6 +20,8 @@
     "axios": "^1.8.4",
     "bcrypt": "^5.1.1",
     "canvas-confetti": "^1.9.3",
+    "cashfree-pg": "^5.0.8",
+    "cashfree-pg-sdk-javascript": "^2.0.8",
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.6.0",
     "clsx": "^2.1.1",

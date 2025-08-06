@@ -8,6 +8,12 @@ import { TbTruckDelivery } from "react-icons/tb";
 import axios, { AxiosError } from "axios";
 import { VscLoading } from "react-icons/vsc";
 
+declare global {
+  interface Window {
+    Cashfree: any;
+  }
+}
+
 export default function CheckoutPage() {
   const { user, userCart, fetchUser } = useAuthStore();
   const router = useRouter();
@@ -26,6 +32,7 @@ export default function CheckoutPage() {
   const [promoCodeLoading, setPromoCodeLoading] = useState(false);
   const [finalAmount, setFinalAmount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
+  const [cashfreeReady, setCashfreeReady] = useState(false);
 
   useEffect(() => {
     const initialize = async () => {
@@ -88,6 +95,17 @@ export default function CheckoutPage() {
     setFinalAmount(baseTotal);
   }, [subtotal, user?.firstPurchase]);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const interval = setInterval(() => {
+        if (window.Cashfree) {
+          setCashfreeReady(true);
+          clearInterval(interval);
+        }
+      }, 100);
+    }
+  }, []);
+
   const placeOrder = async () => {
     if (!userCart?.products.length) {
       setOrderError("Your cart is empty");
@@ -107,6 +125,7 @@ export default function CheckoutPage() {
     }
 
     setPlacingOrder(true);
+
     try {
       const response = await axios.post("/api/order", {
         totalAmount: finalAmount,
@@ -290,6 +309,8 @@ export default function CheckoutPage() {
               )}
             </Button>
           </div>
+
+          <div id="paymentDiv" style={{ minHeight: "400px" }}></div>
 
           <div className=" border p-4 rounded shadow-sm bg-white">
             <label htmlFor="promo" className="text-sm font-medium">
