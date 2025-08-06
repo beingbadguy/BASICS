@@ -12,6 +12,11 @@ type Order = {
   totalAmount: number;
   createdAt: string;
   address: string;
+  products: {
+    image: string;
+    title: string;
+    quantity: number;
+  }[];
 };
 
 export default function TrackOrderPage() {
@@ -38,7 +43,7 @@ export default function TrackOrderPage() {
 
     try {
       const response = await axios.get(`/api/order/${orderId}`);
-      // console.log(response.data);
+      console.log(response.data);
       setOrder(response.data.order);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -92,26 +97,56 @@ export default function TrackOrderPage() {
           </div>
         )}
 
+        {order && <div className="mt-4 space-y-2 border-t " />}
+
         {order && (
-          <div className="mt-4 space-y-3 border-t pt-4">
-            <p>
-              <span className="font-semibold">Order ID:</span> {order._id}
-            </p>
-            <p>
-              <span className="font-semibold">Status:</span>{" "}
-              <span className="capitalize text-purple-600">{order.status}</span>
-            </p>
-            <p>
-              <span className="font-semibold">Amount:</span> ₹
-              {order.totalAmount}
-            </p>
-            <p>
-              <span className="font-semibold">Address:</span> {order.address}
-            </p>
-            <p>
-              <span className="font-semibold">Placed on:</span>{" "}
-              {new Date(order.createdAt).toLocaleDateString()}
-            </p>
+          <div className="flex items-start md:items-center flex-col md:flex-row gap-4">
+            <div className="flex items-center justify-center gap-2 flex-wrap">
+              {order.products?.map((product, index) => (
+                <img
+                  key={index}
+                  src={product.image}
+                  alt=""
+                  className={` h-36 w-36 md:w-42 md:h-42  object-contain rounded-md  `}
+                />
+              ))}
+            </div>
+            <div className="">
+              <p>
+                <span className="font-semibold">Order ID:</span> {order._id}
+              </p>
+              <p>
+                <span className="font-semibold">Status:</span>{" "}
+                <span className="capitalize text-purple-600">
+                  {order.status}
+                </span>
+              </p>
+              <p>
+                <span className="font-semibold">Products:</span>{" "}
+                {order.products?.map((product, index) => (
+                  <span key={index} className="capitalize">
+                    {product.title}
+                    {index < order.products.length - 1 ? ", " : ""}
+                  </span>
+                ))}
+              </p>
+              <p>
+                <span className="font-semibold">Amount:</span> ₹
+                {order.totalAmount}
+              </p>
+              <p>
+                <span className="font-semibold">Items:</span>{" "}
+                {order.products?.length}{" "}
+                {order.products?.length > 1 ? "items" : "item"}
+              </p>
+              <p>
+                <span className="font-semibold">Address:</span> {order.address}
+              </p>
+              <p>
+                <span className="font-semibold">Placed on:</span>{" "}
+                {new Date(order.createdAt).toLocaleDateString()}
+              </p>
+            </div>
           </div>
         )}
       </div>

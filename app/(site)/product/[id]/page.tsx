@@ -284,6 +284,7 @@ const ProductPage = () => {
                   className={`flex items-center gap-2  px-4 py-2 rounded cursor-pointer text-sm ${
                     s === size ? "bg-purple-600 text-white" : "bg-gray-100"
                   } `}
+                  onClick={() => setSize(s)}
                 >
                   <input
                     type="radio"

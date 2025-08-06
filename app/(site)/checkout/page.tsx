@@ -8,11 +8,11 @@ import { TbTruckDelivery } from "react-icons/tb";
 import axios, { AxiosError } from "axios";
 import { VscLoading } from "react-icons/vsc";
 
-declare global {
-  interface Window {
-    Cashfree: any;
-  }
-}
+// declare global {
+//   interface Window {
+//     Cashfree: any;
+//   }
+// }
 
 export default function CheckoutPage() {
   const { user, userCart, fetchUser } = useAuthStore();
@@ -32,7 +32,7 @@ export default function CheckoutPage() {
   const [promoCodeLoading, setPromoCodeLoading] = useState(false);
   const [finalAmount, setFinalAmount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
-  const [cashfreeReady, setCashfreeReady] = useState(false);
+  // const [cashfreeReady, setCashfreeReady] = useState(false);
 
   useEffect(() => {
     const initialize = async () => {
@@ -95,16 +95,16 @@ export default function CheckoutPage() {
     setFinalAmount(baseTotal);
   }, [subtotal, user?.firstPurchase]);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const interval = setInterval(() => {
-        if (window.Cashfree) {
-          setCashfreeReady(true);
-          clearInterval(interval);
-        }
-      }, 100);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const interval = setInterval(() => {
+  //       if (window.Cashfree) {
+  //         setCashfreeReady(true);
+  //         clearInterval(interval);
+  //       }
+  //     }, 100);
+  //   }
+  // }, []);
 
   const placeOrder = async () => {
     if (!userCart?.products.length) {

@@ -20,24 +20,24 @@ export default function Home() {
         <OverlapCards />
         <p>Welcome to the world of e-commerce!</p>
         <div className="flex items-center justify-center gap-4 ">
-          <Button className="px-3 sm:px-4 py-2 text-white bg-purple-700 rounded-md hover:bg-purple-600 cursor-pointer">
-            <Link
-              href={"/product"}
-              className="flex items-center justify-center gap-2"
-            >
+          <Link
+            href={"/product"}
+            className="flex items-center justify-center gap-2"
+          >
+            <Button className="px-3 sm:px-4 py-2 text-white bg-purple-700 rounded-md hover:bg-purple-600 cursor-pointer">
               Start Shopping
               <VscWand />
-            </Link>
-          </Button>
-          <Button className="px-4 py-2 text-white bg-black rounded-md hover:bg-gray-700 cursor-pointer">
-            <Link
-              href={"/about"}
-              className="flex items-center justify-center gap-2"
-            >
+            </Button>
+          </Link>
+          <Link
+            href={"/about"}
+            className="flex items-center justify-center gap-2"
+          >
+            <Button className="px-4 py-2 text-white bg-black rounded-md hover:bg-gray-700 cursor-pointer">
               Learn More
               <MdArrowRightAlt />
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
       </div>
       <div className="">
