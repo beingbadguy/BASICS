@@ -30,10 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased custom-scrollbar`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased custom-scrollbar `}
       >
         {/* <Header /> */}
         <HeaderSection />
+
         {children}
         <Footer />
         <Analytics />

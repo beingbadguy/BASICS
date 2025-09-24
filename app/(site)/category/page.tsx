@@ -15,8 +15,7 @@ const Page = () => {
         >
           Home
         </span>{" "}
-        /{" "}
-        <span className="cursor-pointer text-black">Categories</span>{" "}
+        / <span className="cursor-pointer text-black">Categories</span>{" "}
       </div>
       <div>
         <ShopByCategory />

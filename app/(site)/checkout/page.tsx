@@ -7,6 +7,10 @@ import { AiOutlineEdit, AiOutlineLoading3Quarters } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import axios, { AxiosError } from "axios";
 import { VscLoading } from "react-icons/vsc";
+import { loadStripe } from "@stripe/stripe-js";
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 
 // declare global {
 //   interface Window {
@@ -23,6 +27,7 @@ export default function CheckoutPage() {
   const [zip, setZip] = useState(user?.zip || "");
   const [phone, setPhone] = useState(user?.phone || "");
   const [deliveryType, setDeliveryType] = useState<"normal" | "fast">("normal");
+  const [paymentMode, setPaymentMode] = useState<"cod" | "online">("cod");
   const [promoCode, setPromoCode] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState("");
@@ -32,7 +37,7 @@ export default function CheckoutPage() {
   const [promoCodeLoading, setPromoCodeLoading] = useState(false);
   const [finalAmount, setFinalAmount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
-  // const [cashfreeReady, setCashfreeReady] = useState(false);
+ 
 
   useEffect(() => {
     const initialize = async () => {
@@ -95,16 +100,6 @@ export default function CheckoutPage() {
     setFinalAmount(baseTotal);
   }, [subtotal, user?.firstPurchase]);
 
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     const interval = setInterval(() => {
-  //       if (window.Cashfree) {
-  //         setCashfreeReady(true);
-  //         clearInterval(interval);
-  //       }
-  //     }, 100);
-  //   }
-  // }, []);
 
   const placeOrder = async () => {
     if (!userCart?.products.length) {
@@ -156,6 +151,47 @@ export default function CheckoutPage() {
       }
     } finally {
       setPlacingOrder(false);
+    }
+  };
+
+  const handleOrder = () => {
+    if (paymentMode === "cod") {
+      placeOrder();
+    } else {
+      placeOnlineOrder();
+    }
+  };
+
+  const placeOnlineOrder = async () => {
+    try {
+      const stripe = await stripePromise;
+      const response = await axios.post("/api/create-payment-intent", {
+        amount: finalAmount * 100,
+        phone,
+        productName: "ShopBasics - Thankyou for shopping with us!",
+        totalAmount: finalAmount,
+        paymentMethod: "online",
+        deliveryType,
+        address,
+        zip,
+        products: userCart?.products.map((item) => ({
+          productId: item.productId._id,
+          quantity: item.quantity,
+          size: item.size || "",
+          title: item.productId.title,
+          price: item.productId.discountedPrice,
+          image: item.productId.image,
+        })),
+      });
+      const { id, data } = response.data;
+      console.log(data);
+      await stripe?.redirectToCheckout({ sessionId: id });
+
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error.response?.data.message);
+      }
+      console.log(error);
     }
   };
 
@@ -258,10 +294,31 @@ export default function CheckoutPage() {
           {/* Payment Option */}
           <div className="border p-4 rounded shadow-sm bg-white">
             <h2 className="text-lg font-semibold mb-2">Payment Mode</h2>
-            <p className="text-sm text-gray-700">Cash on Delivery only.</p>
-            <p className="text-sm text-green-500 hidden">
+            <div className="flex items-center gap-4">
+              <p
+                className={`${
+                  paymentMode === "cod"
+                    ? "bg-black text-white hover:bg-black/80"
+                    : "bg-gray-100"
+                } text-sm text-gray-700 cursor-pointer border px-3 py-2 rounded-md`}
+                onClick={() => setPaymentMode("cod")}
+              >
+                Cash on Delivery
+              </p>
+              <p
+                className={`${
+                  paymentMode === "online"
+                    ? "bg-black text-white hover:bg-black/80"
+                    : "bg-gray-100"
+                } text-sm text-gray-700 cursor-pointer border px-3 py-2 rounded-md `}
+                onClick={() => setPaymentMode("online")}
+              >
+                Online
+              </p>
+            </div>
+            {/* <p className="text-sm text-green-500 hidden">
               Working on online payments.
-            </p>
+            </p> */}
           </div>
         </div>
 
@@ -300,7 +357,9 @@ export default function CheckoutPage() {
             <Button
               disabled={placingOrder}
               className="px-4 w-full py-2 bg-black hover:bg-black/80 active:scale-90 transition-transform duration-200 text-white text-center rounded cursor-pointer my-2"
-              onClick={placeOrder}
+              // onClick={placeOrder}
+              onClick={() => handleOrder()}
+              // onClick={() => setShowStripe(true)}
             >
               {placingOrder ? (
                 <VscLoading className="animate-spin text-xl" />
@@ -309,8 +368,6 @@ export default function CheckoutPage() {
               )}
             </Button>
           </div>
-
-          <div id="paymentDiv" style={{ minHeight: "400px" }}></div>
 
           <div className=" border p-4 rounded shadow-sm bg-white">
             <label htmlFor="promo" className="text-sm font-medium">
