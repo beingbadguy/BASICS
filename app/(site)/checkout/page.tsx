@@ -165,6 +165,7 @@ export default function CheckoutPage() {
       const stripe = await stripePromise;
       const response = await axios.post("/api/create-payment-intent", {
         amount: finalAmount * 100,
+        _id: user?._id,
         phone,
         productName: "ShopBasics - Thankyou for shopping with us!",
         totalAmount: finalAmount,

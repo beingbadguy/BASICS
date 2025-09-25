@@ -28,14 +28,14 @@ export async function POST(request: NextRequest) {
       address,
       phone,
       products,
-
+      _id,
       zip,
     } = await request.json();
-    const user = await User.findOne({ _id: decoded?.userId });
-    await Cart.findOneAndDelete({ userId: decoded?.userId.toString() });
+    const user = await User.findOne({ _id: _id });
+    await Cart.findOneAndDelete({ userId: _id.toString() });
 
     const newOrder = new Order({
-      userId: decoded?.userId,
+      userId: _id,
       totalAmount,
       paymentMethod,
       deliveryType,

@@ -4,6 +4,7 @@ import axios, { AxiosError } from "axios";
 // Define the shape of your authentication state
 interface AuthState {
   user: {
+    _id: string;
     name: string;
     email: string;
     isVerified: boolean;
