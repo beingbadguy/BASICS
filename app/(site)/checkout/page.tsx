@@ -297,7 +297,7 @@ export default function CheckoutPage() {
                 className={`${
                   paymentMode === "cod"
                     ? "bg-black text-white hover:bg-black/80"
-                    : "bg-gray-100"
+                    : "hover:bg-gray-100"
                 } text-sm text-gray-700 cursor-pointer border px-3 py-2 rounded-md`}
                 onClick={() => setPaymentMode("cod")}
               >
@@ -307,7 +307,7 @@ export default function CheckoutPage() {
                 className={`${
                   paymentMode === "online"
                     ? "bg-black text-white hover:bg-black/80"
-                    : "bg-gray-100"
+                    : "hover:bg-gray-100"
                 } text-sm text-gray-700 cursor-pointer border px-3 py-2 rounded-md flex items-center gap-1 flex-wrap`}
                 onClick={() => setPaymentMode("online")}
               >

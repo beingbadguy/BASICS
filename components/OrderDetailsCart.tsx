@@ -184,9 +184,10 @@ export default function OrderDetailsCard({
             </div>
           </div>
 
-          {order.status === "processing" ||
-          order.status === "preparing" ||
-          order.status === "reviewing" ? (
+          {(order.status === "processing" ||
+            order.status === "preparing" ||
+            order.status === "reviewing") &&
+          order.paymentMethod === "cod" ? (
             <p
               className="bg-red-500 hover:bg-red-400 text-white py-1 px-2 rounded cursor-pointer active:scale-90 transition-all duration-300 w-[150px] text-center flex items-center justify-center"
               onClick={() => {

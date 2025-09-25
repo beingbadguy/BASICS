@@ -17,12 +17,8 @@ export default function OrderConfirmationPage() {
           <div className="flex items-center gap-3">
             <CheckCircle className="size-6 sm:size-10 text-green-600" />
             <div>
-              <h1 className="text-[11px] sm:text-xl font-bold tracking-tight">
-                Order Placed
-              </h1>
-              <p className=" text-[10px] sm:text-sm text-gray-500">
-                Thank you for your purchase! 🎉
-              </p>
+              <h1 className="text-xl font-bold tracking-tight">Order Placed</h1>
+              <p className=" text-gray-500">Thank you for your purchase! 🎉</p>
             </div>
           </div>
           <div className="text-right  text-[10px] sm:text-sm">
@@ -36,9 +32,7 @@ export default function OrderConfirmationPage() {
           </div>
         </header>
 
-        <p className="font-medium text-[8px] sm:text-sm md:text-md break-words">
-          Payment ID: {params?.id}
-        </p>
+        <p className="font-medium  break-words">Payment ID: {params?.id}</p>
 
         <div className="mt-4 flex flex-col gap-3">
           <button
@@ -57,11 +51,13 @@ export default function OrderConfirmationPage() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-8 text-[8px] sm:text-xs text-gray-500 border-t pt-4">
+        <footer className="mt-8 text-xs text-gray-500 border-t pt-4">
           <p>
             If you have any questions about your order, reply to this email or
             contact our support. Keep your payment ID handy:{" "}
-            <span className="font-medium break-words">{params?.id}</span>
+            <span className="font-medium break-words text-pink-300">
+              {params?.id}
+            </span>
           </p>
           <p className="mt-2">
             This is an automated receipt — no signature required.
