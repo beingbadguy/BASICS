@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
       deliveryType,
       address,
       zip,
+      _id,
       products,
     } = await req.json();
 
@@ -43,6 +44,7 @@ export async function POST(req: NextRequest) {
       success_url: `${origin}/online-success/{CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/payment-error`,
       metadata: {
+        _id,
         phone,
         totalAmount: totalAmount.toString(),
         paymentMethod,

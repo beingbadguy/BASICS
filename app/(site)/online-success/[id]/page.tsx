@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { CheckCircle } from "lucide-react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -7,7 +7,9 @@ import Link from "next/link";
 // Static order confirmation page with good UI and icons
 
 export default function OrderConfirmationPage() {
+  
   const params = useParams();
+  
 
   return (
     <div className="min-h-[60vh] md:min-h-[80vh] bg-gray-50 text-gray-800 flex items-center justify-center p-6">
