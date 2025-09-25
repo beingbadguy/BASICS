@@ -1,5 +1,4 @@
 // app/api/webhook/route.ts
-import { fetchTokenDetails } from "@/lib/fetchTokenDetails";
 import Cart from "@/models/cart.model";
 import Order from "@/models/order.model";
 import User from "@/models/user.model";
