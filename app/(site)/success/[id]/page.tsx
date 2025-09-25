@@ -15,9 +15,20 @@ export default function Page() {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    if (!id || !user || id.length < 23) router.push("/");
-  }, [id, user]);
+  // useEffect(() => {
+  //   // if (!id || !user || id.length < 23) router.push("/");
+
+  //   setTimeout(() => {
+  //     if (!user) {
+  //       console.log("User not logged in, redirecting to home.");
+  //       router.push("/");
+  //     }
+  //   }, 5000);
+  //   // if (!user) {
+  //   //   console.log("User not logged in, redirecting to home.");
+  //   //   router.push("/");
+  //   // }
+  // }, [id, user]);
 
   useEffect(() => {
     // Play success sound
@@ -64,10 +75,12 @@ export default function Page() {
         <div className="flex justify-center mb-6">
           <VscPass className="text-purple-600 text-6xl" />
         </div>
-        <div className="flex items-center justify-center gap-2 w-full">
-          <p className="text-sm md:text-base my-2">Order ID: {id}</p>
+        <div className="flex items-center justify-center gap-2 w-full mx-2 flex-col md:flex-row">
+          <p className="text-sm md:text-base my-2 mx-2 break-all">
+            Order ID: {id}
+          </p>
           <Copy
-            className={`size-4 cursor-pointer transform transition-all duration-300 ${
+            className={`size-4 cursor-pointer transform transition-all duration-300 my-2 ${
               copied ? "scale-125" : "scale-100"
             }`}
             onClick={() => {
@@ -79,6 +92,7 @@ export default function Page() {
             }}
           />
         </div>
+
         <h1 className="text-xl md:text-2xl font-semibold text-black mb-2">
           Thanks {user?.name}, Your Order was Placed Successfully.
         </h1>

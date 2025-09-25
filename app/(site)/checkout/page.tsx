@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AiOutlineEdit, AiOutlineLoading3Quarters } from "react-icons/ai";
-import { TbTruckDelivery } from "react-icons/tb";
+import { TbAlertTriangle, TbTruckDelivery } from "react-icons/tb";
 import axios, { AxiosError } from "axios";
 import { VscLoading } from "react-icons/vsc";
 import { loadStripe } from "@stripe/stripe-js";
@@ -37,7 +37,6 @@ export default function CheckoutPage() {
   const [promoCodeLoading, setPromoCodeLoading] = useState(false);
   const [finalAmount, setFinalAmount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
- 
 
   useEffect(() => {
     const initialize = async () => {
@@ -99,7 +98,6 @@ export default function CheckoutPage() {
   useEffect(() => {
     setFinalAmount(baseTotal);
   }, [subtotal, user?.firstPurchase]);
-
 
   const placeOrder = async () => {
     if (!userCart?.products.length) {
@@ -186,7 +184,6 @@ export default function CheckoutPage() {
       const { id, data } = response.data;
       console.log(data);
       await stripe?.redirectToCheckout({ sessionId: id });
-
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response?.data.message);
@@ -294,7 +291,7 @@ export default function CheckoutPage() {
           {/* Payment Option */}
           <div className="border p-4 rounded shadow-sm bg-white">
             <h2 className="text-lg font-semibold mb-2">Payment Mode</h2>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-wrap mt-2">
               <p
                 className={`${
                   paymentMode === "cod"
@@ -310,11 +307,13 @@ export default function CheckoutPage() {
                   paymentMode === "online"
                     ? "bg-black text-white hover:bg-black/80"
                     : "bg-gray-100"
-                } text-sm text-gray-700 cursor-pointer border px-3 py-2 rounded-md `}
+                } text-sm text-gray-700 cursor-pointer border px-3 py-2 rounded-md flex items-center gap-1 flex-wrap`}
                 onClick={() => setPaymentMode("online")}
               >
-                Online
+                <TbAlertTriangle className="text-red-500" /> Online (Coming
+                Soon)
               </p>
+              <span></span>
             </div>
             {/* <p className="text-sm text-green-500 hidden">
               Working on online payments.

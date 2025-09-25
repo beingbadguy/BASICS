@@ -11,7 +11,17 @@ export async function POST(req: NextRequest) {
     const origin = req.headers.get("origin") || "http://localhost:3000";
 
     // Parse request body if needed (optional)
-    const { productName, amount } = await req.json();
+    const {
+      productName,
+      amount,
+      phone,
+      totalAmount,
+      paymentMethod,
+      deliveryType,
+      address,
+      zip,
+      products,
+    } = await req.json();
 
     console.log("Request body:", { productName, amount });
 
@@ -30,8 +40,17 @@ export async function POST(req: NextRequest) {
         },
       ],
       mode: "payment",
-      success_url: `${origin}`,
-      cancel_url: `${origin}`,
+      success_url: `${origin}/success/{CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/payment-error`,
+      metadata: {
+        phone,
+        totalAmount: totalAmount.toString(),
+        paymentMethod,
+        deliveryType,
+        address,
+        zip,
+        products: JSON.stringify(products),
+      },
     });
 
     return NextResponse.json({ id: session.id });
