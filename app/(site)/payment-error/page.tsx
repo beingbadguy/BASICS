@@ -8,10 +8,10 @@ export default function PaymentFailed() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
+    <div className="min-h-[70vh] bg-gray-50 flex items-center justify-center px-4 py-8">
       <div className="max-w-md w-full">
         {/* Main Error Card */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center">
           {/* Error Icon */}
           <div className="flex justify-center mb-6">
             <div className="p-4 bg-gray-100 rounded-full">
@@ -51,7 +51,7 @@ export default function PaymentFailed() {
         </div>
 
         {/* Help Section */}
-        <div className="mt-6 bg-white rounded-xl border border-gray-200 p-6">
+        {/* <div className="mt-6 bg-white rounded-xl border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">
             Common Solutions
           </h3>
@@ -84,14 +84,14 @@ export default function PaymentFailed() {
               </a>
             </p>
           </div>
-        </div>
+        </div> */}
 
         {/* Security Notice */}
-        <div className="mt-4 text-center">
+        {/* <div className="mt-4 text-center">
           <p className="text-xs text-gray-500">
             🔒 Your payment information is secure and protected
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

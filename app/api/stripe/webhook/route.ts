@@ -1,4 +1,12 @@
 // app/api/webhook/route.ts
+import { fetchTokenDetails } from "@/lib/fetchTokenDetails";
+import Cart from "@/models/cart.model";
+import Order from "@/models/order.model";
+import User from "@/models/user.model";
+import {
+  OrderConfirmationMail,
+  orderPlacedMessageToAdmin,
+} from "@/services/sendMail";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -45,35 +53,76 @@ export async function POST(req: NextRequest) {
       try {
         // Session metadata se order details retrieve karo
         const metadata = session.metadata;
+        console.log("Session metadata:", metadata);
 
         if (!metadata) {
           console.error("No metadata found in session");
           return NextResponse.json({ received: true });
         }
+        const decoded = await fetchTokenDetails(req);
+        if (!decoded) {
+          console.error("User not authenticated");
+          return NextResponse.json({ received: true });
+        }
 
-        // Order create karo with all details
-        // const orderData = {
-        //   sessionId: session.id,
-        //   totalAmount: session.amount_total! / 100, // Convert from cents to rupees
-        //   paymentMethod: "online",
-        //   paymentStatus: "paid",
-        //   deliveryType: metadata.deliveryType,
-        //   address: metadata.address,
-        //   zip: metadata.zip,
-        //   phone: metadata.phone,
-        //   products: JSON.parse(metadata.products || "[]"),
-        //   stripePaymentIntentId: session.payment_intent,
-        // };
+        const user = await User.findOne({ _id: decoded?.userId });
+        await Cart.findOneAndDelete({ userId: decoded?.userId.toString() });
+        console.log("User found:", user);
 
-        // Direct database operation karo instead of fetch
-        // Ya phir internal function call karo
-        // const order = await createOrderInDatabase(orderData);
+        const {
+          totalAmount,
+          paymentMethod,
+          deliveryType,
+          address,
+          phone,
+          products,
+          zip,
+        } = metadata;
 
-        // console.log("Order saved successfully:", order._id);
+        const newOrder = new Order({
+          userId: decoded?.userId,
+          totalAmount,
+          paymentMethod,
+          deliveryType,
+          address,
+          phone,
+          status: "processing",
+          products: JSON.parse(products || "[]"),
+          paymentId: session.payment_intent as string,
+          zip,
+        });
+
+        await newOrder.save();
+
+        user.order.push(newOrder._id);
+        if (user.firstPurchase === false) user.firstPurchase = true;
+        user.cart = [];
+        await user.save();
+        console.log("Order saved and user updated:", newOrder, user);
+
+        // 🔔 Send confirmation email
+        await OrderConfirmationMail(user.email, user.name || "Customer", {
+          _id: newOrder._id.toString(),
+          totalAmount: newOrder.totalAmount,
+          address: newOrder.address,
+          paymentMethod: newOrder.paymentMethod,
+          deliveryType: newOrder.deliveryType,
+          products: newOrder.products,
+        });
+
+        await orderPlacedMessageToAdmin(user.email, user.name);
+        console.log("Order processing completed");
+
+        return NextResponse.json(
+          {
+            message: "Order placed successfully",
+            success: true,
+            order: newOrder,
+          },
+          { status: 201 }
+        );
       } catch (error) {
         console.error("Failed to save order:", error);
-        // Stripe ko success return karo even if order save failed
-        // Later you can handle this with retry logic
       }
     }
 
@@ -81,10 +130,23 @@ export async function POST(req: NextRequest) {
     if (event.type === "checkout.session.expired") {
       const session = event.data.object as Stripe.Checkout.Session;
       console.log("Payment expired for session:", session.id);
-      // Handle expired payment logic
+      return NextResponse.json(
+        {
+          message: "Failed to place order",
+          success: true,
+        },
+        { status: 201 }
+      );
     }
+    console.log("Unhandled event type:", event.type);
 
-    return NextResponse.json({ received: true });
+    return NextResponse.json(
+      {
+        message: "Order placed successfully",
+        success: true,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Webhook error:", error);
     return NextResponse.json(
@@ -93,17 +155,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-// Database operation function
-// async function createOrderInDatabase(orderData: any) {
-//   // Replace this with your actual database logic
-//   // Example with MongoDB/Mongoose:
-//   /*
-//   const Order = require('../../models/Order');
-//   const order = new Order(orderData);
-//   return await order.save();
-//   */
-
-//   // For now, return mock data
-//   return { _id: "temp_order_id", ...orderData };
-// }
