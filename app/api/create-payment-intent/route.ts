@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
         },
       ],
       mode: "payment",
-      success_url: `${origin}/success/{CHECKOUT_SESSION_ID}`,
+      success_url: `${origin}/online-success/{CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/payment-error`,
       metadata: {
         phone,
