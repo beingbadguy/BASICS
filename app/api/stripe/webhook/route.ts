@@ -59,15 +59,6 @@ export async function POST(req: NextRequest) {
           console.error("No metadata found in session");
           return NextResponse.json({ received: true });
         }
-        const decoded = await fetchTokenDetails(req);
-        if (!decoded) {
-          console.error("User not authenticated");
-          return NextResponse.json({ received: true });
-        }
-
-        const user = await User.findOne({ _id: decoded?.userId });
-        await Cart.findOneAndDelete({ userId: decoded?.userId.toString() });
-        console.log("User found:", user);
 
         const {
           totalAmount,
@@ -76,11 +67,23 @@ export async function POST(req: NextRequest) {
           address,
           phone,
           products,
+          _id,
           zip,
         } = metadata;
 
+        const user = await User.findOne({ _id: _id });
+        if (!user) {
+          console.error("User not found for ID:", _id);
+          return NextResponse.json(
+            { error: "User not found" },
+            { status: 404 }
+          );
+        }
+        await Cart.findOneAndDelete({ userId: _id?.toString() });
+        console.log("User found:", user);
+
         const newOrder = new Order({
-          userId: decoded?.userId,
+          userId: _id?.toString(),
           totalAmount,
           paymentMethod,
           deliveryType,
