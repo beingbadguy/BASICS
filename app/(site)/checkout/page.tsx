@@ -11,6 +11,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { MdOutlineDeliveryDining, MdOutlinePayment } from "react-icons/md";
 import { IoCashOutline } from "react-icons/io5";
 import { GiDeliveryDrone } from "react-icons/gi";
+// import { set } from "mongoose";
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
@@ -156,6 +157,7 @@ export default function CheckoutPage() {
   };
 
   const handleOrder = () => {
+    setOrderError("");
     if (paymentMode === "cod") {
       placeOrder();
     } else {
@@ -207,7 +209,8 @@ export default function CheckoutPage() {
       await stripe?.redirectToCheckout({ sessionId: id });
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log(error.response?.data.message);
+        console.log(error.response?.data.message.slice(0, 100));
+        setOrderError("Something went wrong. Please try again.");
       }
       console.log(error);
     } finally {

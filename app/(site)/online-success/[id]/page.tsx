@@ -17,8 +17,10 @@ export default function OrderConfirmationPage() {
           <div className="flex items-center gap-3">
             <CheckCircle className="size-6 sm:size-10 text-green-600" />
             <div>
-              <h1 className="text-xl font-bold tracking-tight">Order Placed</h1>
-              <p className=" text-gray-500">Thank you for your purchase! 🎉</p>
+              <h1 className="text-xl font-bold tracking-tight">
+                Payment Success
+              </h1>
+              <p className=" text-gray-500">We are processing your order! 🎉</p>
             </div>
           </div>
           <div className="text-right  text-[10px] sm:text-sm">
