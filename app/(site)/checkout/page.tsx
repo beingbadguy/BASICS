@@ -209,10 +209,11 @@ export default function CheckoutPage() {
       await stripe?.redirectToCheckout({ sessionId: id });
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log(error.response?.data.message.slice(0, 100));
+        // console.log(error.response?.data?.error);
         setOrderError("Something went wrong. Please try again.");
       }
-      console.log(error);
+      // console.log(error);
+      setOrderError("Something went wrong. Please try again.");
     } finally {
       setPlacingOrder(false);
     }
