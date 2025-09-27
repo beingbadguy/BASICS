@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     }).populate("products.productId");
     if (!wishlist) {
       return NextResponse.json(
-        { message: "Wishlist not found." },
+        { message: "Wishlist not found.", success: false, data: [] },
         { status: 404 }
       );
     }

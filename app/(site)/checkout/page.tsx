@@ -4,10 +4,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AiOutlineEdit, AiOutlineLoading3Quarters } from "react-icons/ai";
-import { TbAlertTriangle, TbTruckDelivery } from "react-icons/tb";
+import { TbTruckDelivery } from "react-icons/tb";
 import axios, { AxiosError } from "axios";
 import { VscLoading } from "react-icons/vsc";
 import { loadStripe } from "@stripe/stripe-js";
+import { MdOutlineDeliveryDining, MdOutlinePayment } from "react-icons/md";
+import { IoCashOutline } from "react-icons/io5";
+import { GiDeliveryDrone } from "react-icons/gi";
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
@@ -161,6 +164,23 @@ export default function CheckoutPage() {
   };
 
   const placeOnlineOrder = async () => {
+    if (!userCart?.products.length) {
+      setOrderError("Your cart is empty");
+      return;
+    }
+    if (!address || address.length < 5) {
+      setOrderError("Please enter a valid address.");
+      return;
+    }
+    if (!zip || zip.toString().length != 6) {
+      setOrderError("Please enter a valid zip code.");
+      return;
+    }
+    if (!phone || phone.toString().length != 10) {
+      setOrderError("Please enter a valid phone number.");
+      return;
+    }
+    setPlacingOrder(true);
     try {
       const stripe = await stripePromise;
       const response = await axios.post("/api/create-payment-intent", {
@@ -190,6 +210,8 @@ export default function CheckoutPage() {
         console.log(error.response?.data.message);
       }
       console.log(error);
+    } finally {
+      setPlacingOrder(false);
     }
   };
 
@@ -271,12 +293,13 @@ export default function CheckoutPage() {
             <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
               <TbTruckDelivery /> Delivery Type
             </h2>
-            <div className="flex gap-4 mt-2">
+            <div className="flex gap-4 mt-2 flex-wrap">
               <Button
                 variant={deliveryType === "normal" ? "default" : "outline"}
                 className="cursor-pointer"
                 onClick={() => setDeliveryType("normal")}
               >
+                <MdOutlineDeliveryDining />
                 Normal Delivery
               </Button>
               <Button
@@ -284,7 +307,7 @@ export default function CheckoutPage() {
                 onClick={() => setDeliveryType("fast")}
                 className="cursor-pointer"
               >
-                Fast Delivery
+                <GiDeliveryDrone /> Fast Delivery
               </Button>
             </div>
           </div>
@@ -298,10 +321,10 @@ export default function CheckoutPage() {
                   paymentMode === "cod"
                     ? "bg-black text-white hover:bg-black/80"
                     : "hover:bg-gray-100"
-                } text-sm text-gray-700 cursor-pointer border px-3 py-2 rounded-md`}
+                } text-sm text-gray-700 cursor-pointer border px-3 py-2 rounded-md flex items-center gap-1`}
                 onClick={() => setPaymentMode("cod")}
               >
-                Cash on Delivery
+                <IoCashOutline /> Cash on Delivery
               </p>
               <p
                 className={`${
@@ -311,8 +334,7 @@ export default function CheckoutPage() {
                 } text-sm text-gray-700 cursor-pointer border px-3 py-2 rounded-md flex items-center gap-1 flex-wrap`}
                 onClick={() => setPaymentMode("online")}
               >
-                <TbAlertTriangle className="text-red-500" /> Online (Coming
-                Soon)
+                <MdOutlinePayment /> Online (test mode)
               </p>
               <span></span>
             </div>

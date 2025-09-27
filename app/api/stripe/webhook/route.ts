@@ -12,6 +12,7 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
+  console.log("Stripe webhook called");
   try {
     // Raw body ko properly extract karo
     const body = await req.text();

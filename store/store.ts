@@ -132,6 +132,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       console.log("user cart is called");
       set({ userCart: response.data.cart });
     } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error.response?.data);
+      }
       console.error("Failed to add to cart", error);
     }
   },
@@ -139,11 +142,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   fetchUserWishlist: async () => {
     try {
       const response = await axios.get(`/api/wishlist`);
-      // console.log("user wishlist is called");
-      // console.log(response.data.wishlist);
       set({ userWishlist: response.data.wishlist });
     } catch (error) {
-      console.error("Failed to add to cart", error);
+      if (error instanceof AxiosError) {
+        console.log(error.response?.data?.message);
+      }
+      // console.error("Failed to add to cart", error?.message);
     }
   },
 }));

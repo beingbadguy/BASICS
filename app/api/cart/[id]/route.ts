@@ -94,7 +94,7 @@ export async function PUT(
     const cart = await Cart.findOne({ userId: decoded?.userId });
     if (!cart) {
       return NextResponse.json(
-        { message: "Cart not found", success: false },
+        { message: "Cart not found", success: false, data: [] },
         { status: 404 }
       );
     }
@@ -124,7 +124,7 @@ export async function DELETE(
     const cart = await Cart.findOne({ userId: decoded?.userId });
     if (!cart) {
       return NextResponse.json(
-        { message: "Cart not found", success: false },
+        { message: "Cart not found", success: false, data: [] },
         { status: 404 }
       );
     }

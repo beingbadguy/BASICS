@@ -18,8 +18,8 @@ export async function GET(request: NextRequest) {
     );
     if (!cart) {
       return NextResponse.json(
-        { message: "Cart not found", success: false },
-        { status: 404 }
+        { message: "Cart not found", success: false, data: [] },
+        { status: 200 }
       );
     }
     return NextResponse.json({ cart, success: true });
