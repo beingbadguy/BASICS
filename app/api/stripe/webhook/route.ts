@@ -77,7 +77,7 @@ const handleCheckoutSession = async (session: Stripe.Checkout.Session) => {
     address,
     phone,
     status: "processing",
-    products: JSON.parse(productsInCart || "[]"),
+    products: productsInCart || "[]",
     paymentId: session.payment_intent as string,
     zip,
   });
