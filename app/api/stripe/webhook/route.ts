@@ -64,6 +64,7 @@ const handleCheckoutSession = async (session: Stripe.Checkout.Session) => {
     console.error("No cart found for user ID:", _id);
     return; // Agar cart nahi mila, to aage mat badho
   }
+  console.log("Cart items found for user ID:", _id, products);
 
   // User ka cart khali karo
   await Cart.findOneAndDelete({ userId: _id });
