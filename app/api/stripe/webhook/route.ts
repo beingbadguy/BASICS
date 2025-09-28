@@ -66,6 +66,7 @@ const handleCheckoutSession = async (session: Stripe.Checkout.Session) => {
   }
   console.log("Cart items found for user ID:", _id, products);
   const productsInCart = products[0]?.products;
+  console.log("Products in cart:", productsInCart);
 
   // Naya order banao
   const newOrder = new Order({
