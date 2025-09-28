@@ -338,7 +338,7 @@ export default function CheckoutPage() {
                 } text-sm text-gray-700 cursor-pointer border px-3 py-2 rounded-md flex items-center gap-1 flex-wrap`}
                 onClick={() => setPaymentMode("online")}
               >
-                <MdOutlinePayment /> Online (test mode)
+                <MdOutlinePayment /> Online Payment
               </p>
               <span></span>
             </div>
