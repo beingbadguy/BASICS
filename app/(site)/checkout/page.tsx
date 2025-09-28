@@ -11,6 +11,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { MdOutlineDeliveryDining, MdOutlinePayment } from "react-icons/md";
 import { IoCashOutline } from "react-icons/io5";
 import { GiDeliveryDrone } from "react-icons/gi";
+import { LiaRupeeSignSolid } from "react-icons/lia";
 // import { set } from "mongoose";
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -318,7 +319,11 @@ export default function CheckoutPage() {
 
           {/* Payment Option */}
           <div className="border p-4 rounded shadow-sm bg-white">
-            <h2 className="text-lg font-semibold mb-2">Payment Mode</h2>
+            <h2 className="text-lg font-semibold mb-2 flex items-center gap-1">
+              {" "}
+              <LiaRupeeSignSolid />
+              Payment Mode
+            </h2>
             <div className="flex items-center gap-4 flex-wrap mt-2">
               <p
                 className={`${
