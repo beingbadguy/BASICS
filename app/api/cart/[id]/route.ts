@@ -10,15 +10,87 @@ type Product = {
   quantity: number;
 };
 
+// export async function POST(
+//   request: NextRequest,
+//   context: { params: { id: string } }
+// ) {
+//   await databaseConnection();
+//   try {
+//     const { id } = context.params;
+//     const { size } = await request.json();
+//     console.log(size);
+//     const decoded = await fetchTokenDetails(request);
+//     if (!decoded) {
+//       return NextResponse.json(
+//         { message: "You must log in to add product to cart", success: false },
+//         { status: 401 }
+//       );
+//     }
+//     if (!id) {
+//       return NextResponse.json(
+//         { message: "Product id is required", success: false },
+//         { status: 400 }
+//       );
+//     }
+//     const product = await Product.findById(id);
+//     if (!product) {
+//       return NextResponse.json(
+//         { message: "Product not found", success: false },
+//         { status: 404 }
+//       );
+//     }
+//     const user = await User.findById(decoded?.userId);
+//     const cart = await Cart.findOne({ userId: decoded?.userId });
+//     if (!cart) {
+//       const newCart = new Cart({
+//         userId: decoded?.userId,
+//         products: [
+//           {
+//             productId: id,
+//             quantity: 1,
+//             size: size || "",
+//           },
+//         ],
+//       });
+//       await newCart.save();
+//       user.cart.push(newCart._id);
+//       await user.save();
+
+//       return NextResponse.json({ message: "Product added to cart" });
+//     } else {
+//       const productAlreadyExists = cart.products.find((product: Product) => {
+//         return product.productId.toString() === id;
+//       });
+
+//       if (productAlreadyExists) {
+//         productAlreadyExists.quantity++;
+//         await cart.save();
+
+//         return NextResponse.json({ message: "Product already in cart" });
+//       } else {
+//         cart.products.push({ productId: id, quantity: 1 });
+//         await cart.save();
+//         return NextResponse.json({ message: "Product added to cart" });
+//       }
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     return NextResponse.json(
+//       { message: "Error fetching product", success: false },
+//       { status: 500 }
+//     );
+//   }
+// }
 export async function POST(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: { params: { id: string } }
 ) {
   await databaseConnection();
+
   try {
-    const { id } = await context.params;
+    const { id } = context.params;
     const { size } = await request.json();
-    console.log(size);
+
     const decoded = await fetchTokenDetails(request);
     if (!decoded) {
       return NextResponse.json(
@@ -26,53 +98,52 @@ export async function POST(
         { status: 401 }
       );
     }
+
+    // Run DB queries in parallel
+    const [product, user, cart] = await Promise.all([
+      Product.findById(id),
+      User.findById(decoded.userId),
+      Cart.findOne({ userId: decoded.userId }),
+    ]);
+
     if (!id) {
       return NextResponse.json(
         { message: "Product id is required", success: false },
         { status: 400 }
       );
     }
-    const product = await Product.findById(id);
+
     if (!product) {
       return NextResponse.json(
         { message: "Product not found", success: false },
         { status: 404 }
       );
     }
-    const user = await User.findById(decoded?.userId);
-    const cart = await Cart.findOne({ userId: decoded?.userId });
+
     if (!cart) {
       const newCart = new Cart({
-        userId: decoded?.userId,
-        products: [
-          {
-            productId: id,
-            quantity: 1,
-            size: size || "",
-          },
-        ],
+        userId: decoded.userId,
+        products: [{ productId: id, quantity: 1, size: size || "" }],
       });
-      await newCart.save();
-      user.cart.push(newCart._id);
-      await user.save();
+      await Promise.all([
+        newCart.save(),
+        user.updateOne({ $push: { cart: newCart._id } }),
+      ]);
 
       return NextResponse.json({ message: "Product added to cart" });
-    } else {
-      const productAlreadyExists = cart.products.find((product: Product) => {
-        return product.productId.toString() === id;
-      });
-
-      if (productAlreadyExists) {
-        productAlreadyExists.quantity++;
-        await cart.save();
-
-        return NextResponse.json({ message: "Product already in cart" });
-      } else {
-        cart.products.push({ productId: id, quantity: 1 });
-        await cart.save();
-        return NextResponse.json({ message: "Product added to cart" });
-      }
     }
+
+    const productAlreadyExists = cart.products.find(
+      (p: any) => p.productId.toString() === id
+    );
+    if (productAlreadyExists) {
+      productAlreadyExists.quantity++;
+    } else {
+      cart.products.push({ productId: id, quantity: 1 });
+    }
+
+    await cart.save();
+    return NextResponse.json({ message: "Product added to cart" });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
