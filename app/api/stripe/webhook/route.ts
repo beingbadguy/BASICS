@@ -65,9 +65,7 @@ const handleCheckoutSession = async (session: Stripe.Checkout.Session) => {
     return; // Agar cart nahi mila, to aage mat badho
   }
   console.log("Cart items found for user ID:", _id, products);
-
-  // User ka cart khali karo
-  await Cart.findOneAndDelete({ userId: _id });
+  const productsInCart = products[0]?.products;
 
   // Naya order banao
   const newOrder = new Order({
@@ -78,11 +76,14 @@ const handleCheckoutSession = async (session: Stripe.Checkout.Session) => {
     address,
     phone,
     status: "processing",
-    // products: JSON.parse(products || "[]"),
+    products: JSON.parse(productsInCart || "[]"),
     paymentId: session.payment_intent as string,
     zip,
   });
   await newOrder.save();
+
+  // User ka cart khali karo
+  await Cart.findOneAndDelete({ userId: _id });
 
   // User ke profile mein order ID add karo
   user.order.push(newOrder._id);
