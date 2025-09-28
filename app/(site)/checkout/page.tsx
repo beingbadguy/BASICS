@@ -195,14 +195,14 @@ export default function CheckoutPage() {
         deliveryType,
         address,
         zip,
-        products: userCart?.products.map((item) => ({
-          productId: item.productId._id,
-          quantity: item.quantity,
-          size: item.size || "",
-          title: item.productId.title,
-          price: item.productId.discountedPrice,
-          image: item.productId.image,
-        })),
+        // products: userCart?.products.map((item) => ({
+        //   productId: item.productId._id,
+        //   quantity: item.quantity,
+        //   size: item.size || "",
+        //   title: item.productId.title,
+        //   price: item.productId.discountedPrice,
+        //   image: item.productId.image,
+        // })),
       });
       const { id, data } = response.data;
       console.log(data);

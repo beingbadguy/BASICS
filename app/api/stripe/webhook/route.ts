@@ -32,7 +32,7 @@ const handleCheckoutSession = async (session: Stripe.Checkout.Session) => {
     deliveryType,
     address,
     phone,
-    products,
+    // products,
     _id,
     zip,
   } = metadata;
@@ -58,6 +58,13 @@ const handleCheckoutSession = async (session: Stripe.Checkout.Session) => {
 
   // ----- Start: Database Operations -----
 
+  const products = await Cart.find({ userId: _id });
+
+  if (!products || products.length === 0) {
+    console.error("No cart found for user ID:", _id);
+    return; // Agar cart nahi mila, to aage mat badho
+  }
+
   // User ka cart khali karo
   await Cart.findOneAndDelete({ userId: _id });
 
@@ -70,7 +77,7 @@ const handleCheckoutSession = async (session: Stripe.Checkout.Session) => {
     address,
     phone,
     status: "processing",
-    products: JSON.parse(products || "[]"),
+    // products: JSON.parse(products || "[]"),
     paymentId: session.payment_intent as string,
     zip,
   });

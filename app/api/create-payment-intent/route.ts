@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       address,
       zip,
       _id,
-      products,
+      // products,
     } = await req.json();
 
     console.log("Request body:", { productName, amount });
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
         deliveryType,
         address,
         zip,
-        products: JSON.stringify(products),
+        // products: JSON.stringify(products),
       },
     });
 
